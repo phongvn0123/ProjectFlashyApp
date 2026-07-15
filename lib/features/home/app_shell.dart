@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/widgets/coming_soon_screen.dart';
+import '../quiz/screens/quiz_list_screen.dart';
 import 'home_screen.dart';
 
 /// FOOTER / khung app (SCREENS §3) — thanh điều hướng dưới cùng 5 tab.
@@ -27,7 +28,7 @@ class _AppShellState extends State<AppShell> {
     HomeScreen(),
     ComingSoonScreen(title: 'Thư viện'),
     ComingSoonScreen(title: 'Lớp học'),
-    ComingSoonScreen(title: 'Quiz / Test'),
+    QuizListScreen(),
     ComingSoonScreen(title: 'Hồ sơ'),
   ];
 

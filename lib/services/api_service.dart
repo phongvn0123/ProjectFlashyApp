@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
-import '../utils/app_exception.dart';
+import '../core/utils/app_exception.dart';
 
 /// Lớp gọi Backend API dùng chung (bọc `dio`).
 ///
@@ -14,13 +15,16 @@ import '../utils/app_exception.dart';
 /// ```
 class ApiService {
   ApiService({String? baseUrl, Dio? dio})
-      : _dio = dio ??
-            Dio(BaseOptions(
+    : _dio =
+          dio ??
+          Dio(
+            BaseOptions(
               baseUrl: baseUrl ?? defaultBaseUrl,
               connectTimeout: const Duration(seconds: 15),
               receiveTimeout: const Duration(seconds: 15),
               contentType: Headers.jsonContentType,
-            )) {
+            ),
+          ) {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
@@ -34,8 +38,20 @@ class ApiService {
     );
   }
 
-  /// TODO: đổi sang URL backend thật của nhóm (hoặc đọc từ biến môi trường).
-  static const defaultBaseUrl = 'https://api.example.com';
+  /// Android Emulator dùng 10.0.2.2 để truy cập server chạy trên máy tính.
+  /// Có thể đổi khi chạy bằng `--dart-define=API_BASE_URL=http://<ip>:8080/api/`.
+  static const _configuredBaseUrl = String.fromEnvironment('API_BASE_URL');
+
+  static String get defaultBaseUrl {
+    if (_configuredBaseUrl.isNotEmpty) return _configuredBaseUrl;
+
+    // Android Emulator reaches the host through 10.0.2.2. A Windows build
+    // and its Dart backend normally run on the same computer.
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      return 'http://10.0.2.2:8080/api/';
+    }
+    return 'http://localhost:8080/api/';
+  }
 
   final Dio _dio;
   String? _authToken;
@@ -46,8 +62,11 @@ class ApiService {
   Future<dynamic> get(String path, {Map<String, dynamic>? query}) =>
       _request(() => _dio.get(path, queryParameters: query));
 
-  Future<dynamic> post(String path, {Object? body, Map<String, dynamic>? query}) =>
-      _request(() => _dio.post(path, data: body, queryParameters: query));
+  Future<dynamic> post(
+    String path, {
+    Object? body,
+    Map<String, dynamic>? query,
+  }) => _request(() => _dio.post(path, data: body, queryParameters: query));
 
   Future<dynamic> put(String path, {Object? body}) =>
       _request(() => _dio.put(path, data: body));

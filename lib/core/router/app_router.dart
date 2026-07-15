@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../dev/core_showcase_screen.dart';
 import '../../features/home/app_shell.dart';
+import '../../features/quiz/screens/quiz_list_screen.dart';
 import '../constants/app_routes.dart';
 import '../widgets/coming_soon_screen.dart';
 
@@ -65,10 +66,7 @@ final GoRouter appRouter = GoRouter(
     ),
 
     // --- Quiz ---
-    GoRoute(
-      path: AppRoutes.quizzes,
-      builder: (_, _) => const ComingSoonScreen(title: 'Quiz / Test'),
-    ),
+    GoRoute(path: AppRoutes.quizzes, builder: (_, _) => const QuizListScreen()),
 
     // --- Profile ---
     GoRoute(
