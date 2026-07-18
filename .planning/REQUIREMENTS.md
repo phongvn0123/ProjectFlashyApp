@@ -11,10 +11,10 @@ Nguồn: `SRS Document - PRM393_GR6.docx` (~60 use case) + 35 màn hình thiết
 
 ### Foundation — Nền móng kỹ thuật
 
-- [ ] **FND-01**: Ứng dụng khởi động và chạy được trên Android emulator
+- [x] **FND-01**: Ứng dụng khởi động và chạy được trên Android emulator
 - [ ] **FND-02**: ~~Ứng dụng khởi động và chạy được trên Windows desktop~~ **[ĐÃ RÚT 2026-07-18]** — mục tiêu Windows desktop đã bị loại bỏ khỏi phạm vi dự án; xem `.planning/STATE.md` Decisions 2026-07-18 để biết lý do đầy đủ
 - [ ] **FND-03**: SQLite mở và ghi được database trên Android qua `sqflite`
-- [ ] **FND-04**: Firebase khởi tạo thành công trên Android
+- [x] **FND-04**: Firebase khởi tạo thành công trên Android
 - [ ] **FND-05**: CSDL local có đủ 18 bảng theo ERD, kèm metadata đồng bộ (`server_id`, `dirty_at`, `synced_at`)
 - [ ] **FND-06**: Firestore có đủ 5 root collection + subcollection theo thiết kế, kèm security rules cơ bản
 - [ ] **FND-07**: Riverpod cung cấp 7 core provider dùng chung cho mọi module
@@ -176,10 +176,10 @@ Ghi nhận nhưng không nằm trong roadmap hiện tại.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FND-01 | Phase 0 - Platform Spike | Pending |
+| FND-01 | Phase 0 - Platform Spike | Complete |
 | FND-02 | Phase 0 - Platform Spike | **[ĐÃ RÚT 2026-07-18]** — xem STATE.md Decisions |
 | FND-03 | Phase 0 - Platform Spike | Pending |
-| FND-04 | Phase 0 - Platform Spike | Pending |
+| FND-04 | Phase 0 - Platform Spike | Complete |
 | FND-05 | Phase 1 - Shared Foundation | Pending |
 | FND-06 | Phase 1 - Shared Foundation | Pending |
 | FND-07 | Phase 1 - Shared Foundation | Pending |

@@ -158,6 +158,10 @@ Không cần — Firebase Emulator Suite dùng project giả `demo-spike-project
 - `minSdk = 24` (không phải 23) — nếu Plan 00-02/00-03 có acceptance criteria grep `minSdkVersion 23` hoặc `minSdk = 23`, cần điều chỉnh theo giá trị thực tế 24
 - Không có blocker nào chặn Plan 00-02
 
+## Self-Check: PASSED
+
+Tất cả 10 file được liệt kê trong `key-files` đã xác nhận tồn tại trên đĩa (`FOUND`). Tất cả 4 commit hash (`4b1eb2a`, `345e908`, `e84abb1`, `2b78ae5`) đã xác nhận có trong `git log`.
+
 ---
 *Phase: 00-platform-spike*
 *Completed: 2026-07-18*

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: ROADMAP.md and STATE.md created; REQUIREMENTS.md traceability table updated with 92/92 coverage
-last_updated: "2026-07-18T14:29:38.992Z"
-last_activity: 2026-07-18 -- Phase 0 planning complete
+stopped_at: Hoàn tất Plan 00-01 (platform scaffold), sẵn sàng Plan 00-02
+last_updated: "2026-07-18T15:20:49.496Z"
+last_activity: 2026-07-18
 progress:
   total_phases: 8
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-07-18)
 
 **Core value:** Học sinh học flashcard xong làm bài kiểm tra sinh ra từ chính bộ thẻ đó, và cả học sinh lẫn giáo viên đều nhìn thấy được kết quả trí nhớ — vòng lặp học → kiểm tra → thấy tiến độ phải chạy trọn vẹn.
-**Current focus:** Phase 0 — Platform Spike
+**Current focus:** Phase 00 — platform-spike
 
 ## Current Position
 
-Phase: 0 of 8 (Platform Spike)
-Plan: 0 of TBD in current phase
+Phase: 00 (platform-spike) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
-Last activity: 2026-07-18 -- Phase 0 planning complete
+Last activity: 2026-07-18
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [███░░░░░░░] 33%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
+| Phase 00-platform-spike P01 | 30 | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -65,6 +66,8 @@ Recent decisions affecting current work:
 - Roadmap: Phases 4, 5, 6 (Learning Mode, Classroom, Quiz) depend on Phase 1 only, not on Phases 2-3 completing — they code against Auth/Set repository interfaces per the stagger strategy and run concurrently with Phases 2-3.
 - 2026-07-18: Dropped the Windows desktop target — Memocard now ships Android-emulator-only. Rationale: the Windows-desktop requirement was self-imposed by the team, not a PRM393 instructor requirement; the dev machine lacks the MSVC C++ "Desktop development with C++" toolchain that Flutter's Windows target needs to compile its native CMake runner; research/SUMMARY.md already listed "renegotiate the Windows requirement" as a sanctioned fallback.
 - 2026-07-18: Switched `sqflite_common_ffi` → plain `sqflite` for local CSDL. Rationale: `sqflite_common_ffi` was only mandatory as the Windows-compatibility enabler; CLAUDE.md's Technology Stack table already lists `sqflite` itself as "Mandatory per PRM393", so dropping the FFI package while keeping `sqflite` still satisfies the course's local-database requirement.
+- [Phase 00-01]: sqflite pin xuống ^2.4.2 (thay vì ^2.4.3 trong CLAUDE.md) vì sqflite 2.4.3 yêu cầu Dart SDK ^3.12.0, toolchain hiện tại (Flutter 3.41.9) chỉ bundle Dart 3.11.5
+- [Phase 00-01]: minSdk = 24 (không phải 23) trong build.gradle.kts vì Flutter tool tự động revert mọi minSdk 16-23 về flutter.minSdkVersion (=24) ở mỗi lần build
 
 ### Pending Todos
 
@@ -94,6 +97,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-18
-Stopped at: ROADMAP.md and STATE.md created; REQUIREMENTS.md traceability table updated with 92/92 coverage
+Last session: 2026-07-18T15:20:49.486Z
+Stopped at: Hoàn tất Plan 00-01 (platform scaffold), sẵn sàng Plan 00-02
 Resume file: None
