@@ -12,9 +12,9 @@ Nguồn: `SRS Document - PRM393_GR6.docx` (~60 use case) + 35 màn hình thiết
 ### Foundation — Nền móng kỹ thuật
 
 - [ ] **FND-01**: Ứng dụng khởi động và chạy được trên Android emulator
-- [ ] **FND-02**: Ứng dụng khởi động và chạy được trên Windows desktop
-- [ ] **FND-03**: SQLite mở và ghi được database trên cả Android lẫn Windows qua `sqflite_common_ffi`
-- [ ] **FND-04**: Firebase khởi tạo thành công trên cả Android lẫn Windows
+- [ ] **FND-02**: ~~Ứng dụng khởi động và chạy được trên Windows desktop~~ **[ĐÃ RÚT 2026-07-18]** — mục tiêu Windows desktop đã bị loại bỏ khỏi phạm vi dự án; xem `.planning/STATE.md` Decisions 2026-07-18 để biết lý do đầy đủ
+- [ ] **FND-03**: SQLite mở và ghi được database trên Android qua `sqflite`
+- [ ] **FND-04**: Firebase khởi tạo thành công trên Android
 - [ ] **FND-05**: CSDL local có đủ 18 bảng theo ERD, kèm metadata đồng bộ (`server_id`, `dirty_at`, `synced_at`)
 - [ ] **FND-06**: Firestore có đủ 5 root collection + subcollection theo thiết kế, kèm security rules cơ bản
 - [ ] **FND-07**: Riverpod cung cấp 7 core provider dùng chung cho mọi module
@@ -177,7 +177,7 @@ Ghi nhận nhưng không nằm trong roadmap hiện tại.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | FND-01 | Phase 0 - Platform Spike | Pending |
-| FND-02 | Phase 0 - Platform Spike | Pending |
+| FND-02 | Phase 0 - Platform Spike | **[ĐÃ RÚT 2026-07-18]** — xem STATE.md Decisions |
 | FND-03 | Phase 0 - Platform Spike | Pending |
 | FND-04 | Phase 0 - Platform Spike | Pending |
 | FND-05 | Phase 1 - Shared Foundation | Pending |
@@ -270,10 +270,11 @@ Ghi nhận nhưng không nằm trong roadmap hiện tại.
 | TEAM-04 | Phase 7 - Integration & QA | Pending |
 
 **Coverage:**
-- v1 requirements: **92** total
-- Mapped to phases: 92/92 ✓
+- v1 requirements: **92** total — 91 active + 1 withdrawn (FND-02, **[ĐÃ RÚT 2026-07-18]**, xem STATE.md Decisions)
+- Mapped to phases: 92/92 ✓ (includes the withdrawn FND-02, tracked not deleted)
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-07-18*
 *Last updated: 2026-07-18 after roadmap creation — 92/92 requirements mapped across 8 phases (0-7)*
+*Last updated: 2026-07-18 (correction) — FND-02 withdrawn (Windows desktop target dropped); 91 active + 1 withdrawn = 92 total, still 92/92 mapped*
