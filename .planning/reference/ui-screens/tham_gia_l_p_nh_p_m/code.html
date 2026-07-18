@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tham gia lớp học</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#004e9f",
+                    "tertiary-fixed": "#ffdbcb",
+                    "background": "#f9f9ff",
+                    "on-surface": "#191c22",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "on-secondary-fixed-variant": "#474649",
+                    "surface-container-highest": "#e1e2eb",
+                    "on-primary-fixed-variant": "#00458e",
+                    "surface": "#f9f9ff",
+                    "primary-fixed-dim": "#aac7ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#001b3e",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#e4e2e4",
+                    "secondary-container": "#e1dfe1",
+                    "surface-container-low": "#f2f3fc",
+                    "on-error-container": "#93000a",
+                    "primary-fixed": "#d7e3ff",
+                    "surface-container": "#ecedf6",
+                    "on-tertiary-container": "#ffe3d6",
+                    "inverse-on-surface": "#eff0f9",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "on-primary-container": "#dfe8ff",
+                    "on-tertiary-fixed": "#341100",
+                    "on-surface-variant": "#414753",
+                    "tertiary-fixed-dim": "#ffb692",
+                    "tertiary-container": "#af4900",
+                    "secondary": "#5f5e60",
+                    "on-secondary-container": "#636264",
+                    "surface-variant": "#e1e2eb",
+                    "surface-tint": "#005cba",
+                    "surface-container-high": "#e6e8f1",
+                    "on-background": "#191c22",
+                    "tertiary": "#883700",
+                    "inverse-primary": "#aac7ff",
+                    "error-container": "#ffdad6",
+                    "inverse-surface": "#2e3037",
+                    "outline": "#727784",
+                    "on-tertiary-fixed-variant": "#793000",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary-container": "#0066cc",
+                    "surface-bright": "#f9f9ff",
+                    "surface-dim": "#d8d9e2",
+                    "outline-variant": "#c1c6d5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-md": "16px",
+                    "container-margin": "20px",
+                    "stack-lg": "32px",
+                    "gutter": "16px",
+                    "stack-sm": "8px",
+                    "section-padding": "48px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "headline-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["17px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-md": ["15px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "display-lg-mobile": ["28px", {"lineHeight": "1.1", "fontWeight": "700"}],
+                    "display-lg": ["34px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "label-lg": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f9f9ff; /* Parchment background */
+            font-family: 'Inter', sans-serif;
+        }
+        .code-input-char {
+            width: 3.5rem;
+            height: 4.5rem;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            border-radius: 0.75rem;
+            background-color: #ffffff;
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .code-input-char:focus {
+            outline: none;
+            border-color: #004e9f;
+            box-shadow: 0 0 0 4px rgba(0, 78, 159, 0.1);
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-on-background">
+<!-- Top Navigation Anchor (Suppressing Full Shell for Task Focus) -->
+<header class="w-full top-0 sticky bg-background py-4 px-6 z-40">
+<div class="max-w-[1200px] mx-auto flex items-center justify-between">
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors active:scale-95" onclick="window.history.back()">
+<span class="material-symbols-outlined text-on-surface">close</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm text-on-surface-variant">Tham gia lớp học</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center justify-center px-container-margin py-section-padding">
+<!-- Center Content Card -->
+<div class="w-full max-w-md flex flex-col items-center text-center">
+<!-- Atmospheric Icon/Illustration -->
+<div class="mb-stack-lg p-6 bg-primary-fixed rounded-full">
+<span class="material-symbols-outlined text-[48px] text-primary" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-stack-md text-on-surface">Mã lớp học của bạn?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg max-w-[320px]">
+                Nhập mã lớp do giáo viên cung cấp để tham gia vào lớp học.
+            </p>
+<!-- Code Input Container -->
+<div class="flex gap-2 mb-stack-lg" id="code-container">
+<input autofocus="" class="code-input-char uppercase" maxlength="1" type="text">
+<input class="code-input-char uppercase" maxlength="1" type="text">
+<input class="code-input-char uppercase" maxlength="1" type="text">
+<span class="flex items-center text-outline-variant font-bold">-</span>
+<input class="code-input-char uppercase" maxlength="1" type="text">
+<input class="code-input-char uppercase" maxlength="1" type="text">
+<input class="code-input-char uppercase" maxlength="1" type="text">
+</div>
+<!-- Validation/Feedback Area -->
+<div class="hidden mb-stack-md text-error flex items-center gap-1 font-label-md text-label-md" id="error-message">
+<span class="material-symbols-outlined text-[16px]">error</span>
+                Mã lớp không hợp lệ. Vui lòng kiểm tra lại.
+            </div>
+<!-- Primary Action -->
+<button class="w-full bg-primary-container text-white py-4 px-8 rounded-full font-label-lg text-label-lg transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 disabled:active:scale-100 shadow-sm" id="join-btn">
+                Tham gia
+            </button>
+<!-- Support Info -->
+<div class="mt-stack-lg pt-stack-lg border-t border-black/5 w-full">
+<p class="font-body-md text-body-md text-outline mb-2">Bạn không tìm thấy mã?</p>
+<a class="text-primary font-label-lg text-label-lg hover:underline transition-all" href="#">Liên hệ với giáo viên</a>
+</div>
+</div>
+</main>
+<!-- Visual Decoration (Soft Ambient Background) -->
+<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+<div class="absolute -top-[10%] -right-[5%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute -bottom-[10%] -left-[5%] w-[40%] h-[40%] rounded-full bg-tertiary/5 blur-[120px]"></div>
+</div>
+<script>
+        const inputs = document.querySelectorAll('.code-input-char');
+        const joinBtn = document.getElementById('join-btn');
+        const errorMsg = document.getElementById('error-message');
+
+        // Logic for auto-focusing next input
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+                checkCompleteness();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+
+            // Prevent typing more than one char if somehow passed
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pasteData = e.clipboardData.getData('text').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+                if (pasteData) {
+                    const chars = pasteData.split('');
+                    chars.forEach((char, i) => {
+                        if (inputs[i]) inputs[i].value = char;
+                    });
+                    inputs[Math.min(chars.length, inputs.length - 1)].focus();
+                    checkCompleteness();
+                }
+            });
+        });
+
+        function checkCompleteness() {
+            const code = Array.from(inputs).map(i => i.value).join('');
+            joinBtn.disabled = code.length !== 6;
+            errorMsg.classList.add('hidden'); // Hide error on type
+        }
+
+        joinBtn.addEventListener('click', () => {
+            const code = Array.from(inputs).map(i => i.value).join('');
+            // Mock validation
+            if (code === "CL892X") {
+                joinBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span>';
+                setTimeout(() => {
+                    alert('Bạn đã tham gia lớp học thành công!');
+                    window.location.reload();
+                }, 1500);
+            } else {
+                errorMsg.classList.remove('hidden');
+                // Shake effect
+                document.getElementById('code-container').classList.add('animate-bounce');
+                setTimeout(() => document.getElementById('code-container').classList.remove('animate-bounce'), 500);
+            }
+        });
+
+        // Initialize button state
+        checkCompleteness();
+    </script>
+</body></html>

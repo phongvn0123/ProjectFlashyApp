@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tiến độ học tập | Flashly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c1c6d5",
+                        "tertiary-container": "#af4900",
+                        "on-primary-fixed-variant": "#00458e",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2e3037",
+                        "error": "#ba1a1a",
+                        "secondary": "#5f5e60",
+                        "on-primary-container": "#dfe8ff",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#ecedf6",
+                        "surface-bright": "#f9f9ff",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "inverse-primary": "#aac7ff",
+                        "surface-tint": "#005cba",
+                        "surface-container-high": "#e6e8f1",
+                        "surface-dim": "#d8d9e2",
+                        "primary-container": "#0066cc",
+                        "primary": "#004e9f",
+                        "tertiary-fixed-dim": "#ffb692",
+                        "on-tertiary-fixed": "#341100",
+                        "primary-fixed-dim": "#aac7ff",
+                        "on-tertiary-fixed-variant": "#793000",
+                        "on-secondary-container": "#636264",
+                        "background": "#f5f5f7",
+                        "secondary-fixed": "#e4e2e4",
+                        "secondary-container": "#e1dfe1",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#001b3e",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f2f3fc",
+                        "surface": "#f9f9ff",
+                        "on-surface": "#191c22",
+                        "on-background": "#191c22",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e1e2eb",
+                        "outline": "#727784",
+                        "tertiary": "#883700",
+                        "surface-variant": "#e1e2eb",
+                        "on-tertiary-container": "#ffe3d6",
+                        "inverse-on-surface": "#eff0f9",
+                        "on-surface-variant": "#414753",
+                        "on-secondary-fixed-variant": "#474649",
+                        "primary-fixed": "#d7e3ff",
+                        "tertiary-fixed": "#ffdbcb",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#1b1b1d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "20px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "stack-sm": "8px",
+                        "gutter": "16px",
+                        "section-padding": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["17px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "1.2", "fontWeight": "500" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-md": ["15px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "1.1", "fontWeight": "700" }],
+                        "display-lg": ["34px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-lg": ["13px", { "lineHeight": "1.2", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #f5f5f7;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .parchment-glow {
+            background: linear-gradient(180deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 100%);
+        }
+        .hairline {
+            border: 0.5px solid rgba(0,0,0,0.1);
+        }
+        .study-shadow {
+            box-shadow: 0px 5px 30px rgba(0,0,0,0.08);
+        }
+        .chart-bar-grow {
+            transition: height 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d1d6;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface">
+<!-- TopAppBar -->
+<header class="bg-surface sticky top-0 z-40 border-b border-outline-variant/10">
+<div class="flex justify-between items-center px-container-margin py-stack-md w-full max-w-[1200px] mx-auto">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[28px]">school</span>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Flashly</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-high transition-opacity duration-200 hover:opacity-90">
+<span class="material-symbols-outlined text-on-surface">notifications</span>
+</button>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto pb-32">
+<!-- Header & Filters -->
+<section class="px-container-margin pt-stack-lg pb-stack-md">
+<h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-stack-md">Tiến độ học tập</h2>
+<div class="flex items-center gap-3 overflow-x-auto pb-2 custom-scrollbar no-scrollbar">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full font-label-lg whitespace-nowrap shadow-sm transition-transform active:scale-95">
+                    Tất cả
+                </button>
+<button class="px-6 py-2 bg-surface hairline rounded-full font-label-lg whitespace-nowrap flex items-center gap-2 hover:bg-surface-container-low transition-colors">
+                    Theo bộ <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+<button class="px-6 py-2 bg-surface hairline rounded-full font-label-lg whitespace-nowrap flex items-center gap-2 hover:bg-surface-container-low transition-colors">
+                    7 ngày <span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+</section>
+<!-- Aggregate Stats Cards -->
+<section class="px-container-margin grid grid-cols-3 gap-gutter mb-section-padding">
+<!-- Card 1 -->
+<div class="bg-surface hairline rounded-[18px] p-stack-md flex flex-col items-center justify-center text-center study-shadow">
+<span class="text-display-lg font-bold text-primary leading-none">24</span>
+<span class="font-label-md text-on-surface-variant mt-2 uppercase tracking-wider">Buổi học</span>
+</div>
+<!-- Card 2 -->
+<div class="bg-primary-container text-on-primary-container rounded-[18px] p-stack-md flex flex-col items-center justify-center text-center shadow-lg">
+<span class="text-display-lg font-bold leading-none">18</span>
+<span class="font-label-md mt-2 uppercase tracking-wider opacity-80">Bộ thẻ</span>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface hairline rounded-[18px] p-stack-md flex flex-col items-center justify-center text-center study-shadow">
+<div class="flex items-center gap-1">
+<span class="text-display-lg font-bold text-on-surface leading-none">412</span>
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-label-md text-on-surface-variant mt-2 uppercase tracking-wider">Thẻ ✓</span>
+</div>
+</section>
+<!-- Main Chart Section -->
+<section class="px-container-margin mb-section-padding">
+<div class="flex justify-between items-end mb-stack-md">
+<h3 class="font-label-lg text-on-surface-variant uppercase tracking-widest">Tỉ lệ thuộc theo ngày</h3>
+<span class="font-label-md text-primary font-semibold">+12% so với tuần trước</span>
+</div>
+<div class="bg-surface hairline rounded-[18px] p-stack-lg study-shadow">
+<div class="h-64 flex items-end justify-between gap-2">
+<!-- Monday -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-lg relative group">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg chart-bar-grow" style="height: 45%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-primary text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">45%</div>
+</div>
+<span class="font-label-md text-on-surface-variant">T2</span>
+</div>
+<!-- Tuesday -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-lg relative group">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg chart-bar-grow" style="height: 60%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-primary text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">60%</div>
+</div>
+<span class="font-label-md text-on-surface-variant">T3</span>
+</div>
+<!-- Wednesday -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-lg relative group">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg chart-bar-grow" style="height: 30%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-primary text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">30%</div>
+</div>
+<span class="font-label-md text-on-surface-variant">T4</span>
+</div>
+<!-- Thursday -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-lg relative group">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg chart-bar-grow" style="height: 85%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-primary text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">85%</div>
+</div>
+<span class="font-label-md text-on-surface-variant">T5</span>
+</div>
+<!-- Friday -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-lg relative group">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg chart-bar-grow" style="height: 55%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-primary text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">55%</div>
+</div>
+<span class="font-label-md text-on-surface-variant">T6</span>
+</div>
+<!-- Saturday -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-lg relative group">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg chart-bar-grow" style="height: 70%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-primary text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">70%</div>
+</div>
+<span class="font-label-md text-on-surface-variant">T7</span>
+</div>
+<!-- Sunday -->
+<div class="flex-1 flex flex-col items-center gap-3">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-lg relative group">
+<div class="absolute bottom-0 left-0 right-0 bg-primary rounded-t-lg chart-bar-grow" style="height: 95%;"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-inverse-surface text-on-primary text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">95%</div>
+</div>
+<span class="font-label-md text-on-surface-variant">CN</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent History Section -->
+<section class="px-container-margin">
+<h3 class="font-label-lg text-on-surface-variant uppercase tracking-widest mb-stack-md">Lịch sử gần đây</h3>
+<div class="space-y-stack-sm">
+<!-- Item 1 -->
+<div class="bg-surface hairline rounded-lg p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<div>
+<h4 class="font-body-lg font-semibold text-on-surface">IELTS Vocab 1</h4>
+<p class="font-label-md text-on-surface-variant">Hôm nay · 14:30</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="font-headline-sm text-primary">87%</p>
+<p class="font-label-md text-on-surface-variant">6:12</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface hairline rounded-lg p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">code</span>
+</div>
+<div>
+<h4 class="font-body-lg font-semibold text-on-surface">Java thuật ngữ</h4>
+<p class="font-label-md text-on-surface-variant">Hôm qua</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="font-headline-sm text-on-surface">72%</p>
+<p class="font-label-md text-on-surface-variant">4:05</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface hairline rounded-lg p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">architecture</span>
+</div>
+<div>
+<h4 class="font-body-lg font-semibold text-on-surface">Toán hình học</h4>
+<p class="font-label-md text-on-surface-variant">2 ngày trước</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="font-headline-sm text-on-surface">95%</p>
+<p class="font-label-md text-on-surface-variant">3:20</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- View All Button -->
+<button class="w-full py-4 mt-stack-md font-label-lg text-primary flex items-center justify-center gap-2 hover:bg-primary/5 rounded-lg transition-colors">
+                Xem tất cả lịch sử
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe bg-surface/80 backdrop-blur-md border-t border-outline-variant/10 h-[88px]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant group" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:scale-110 transition-transform">home</span>
+<span class="font-label-md text-label-md mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant group" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:scale-110 transition-transform">library_books</span>
+<span class="font-label-md text-label-md mt-1">Library</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant group" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:scale-110 transition-transform">groups</span>
+<span class="font-label-md text-label-md mt-1">Classes</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 group" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">quiz</span>
+<span class="font-label-md text-label-md">Quizzes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant group" href="#">
+<span class="material-symbols-outlined text-[24px] group-hover:scale-110 transition-transform">person</span>
+<span class="font-label-md text-label-md mt-1">Profile</span>
+</a>
+</nav>
+<!-- Floating Action Button (Supressed on this details/stats page per rules, but included if needed as context) -->
+<!-- Determined to suppress based on Task-Focused/Details screen rule -->
+<script>
+        // Micro-interaction for bar charts
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.chart-bar-grow');
+            bars.forEach(bar => {
+                const finalHeight = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = finalHeight;
+                }, 300);
+            });
+        });
+
+        // Subtle parallax or scroll effect for cards
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            const header = document.querySelector('header');
+            if (scroll > 10) {
+                header.classList.add('shadow-sm');
+                header.style.backgroundColor = 'rgba(249, 249, 255, 0.95)';
+            } else {
+                header.classList.remove('shadow-sm');
+                header.style.backgroundColor = '#f9f9ff';
+            }
+        });
+    </script>
+</body></html>

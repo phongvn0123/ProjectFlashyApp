@@ -1,0 +1,298 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Thư viện - StudySync</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "surface-container-high": "#e6e8f1",
+                        "surface-variant": "#e1e2eb",
+                        "surface-tint": "#005cba",
+                        "primary-container": "#0066cc",
+                        "on-tertiary-fixed-variant": "#793000",
+                        "tertiary-fixed": "#ffdbcb",
+                        "secondary-fixed": "#e4e2e4",
+                        "surface-container": "#ecedf6",
+                        "surface-dim": "#d8d9e2",
+                        "on-primary-fixed-variant": "#00458e",
+                        "primary-fixed-dim": "#aac7ff",
+                        "tertiary": "#883700",
+                        "outline": "#727784",
+                        "surface-container-highest": "#e1e2eb",
+                        "tertiary-container": "#af4900",
+                        "inverse-surface": "#2e3037",
+                        "background": "#f9f9ff",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#dfe8ff",
+                        "inverse-primary": "#aac7ff",
+                        "on-tertiary-container": "#ffe3d6",
+                        "on-primary-fixed": "#001b3e",
+                        "tertiary-fixed-dim": "#ffb692",
+                        "outline-variant": "#c1c6d5",
+                        "on-secondary-fixed-variant": "#474649",
+                        "inverse-on-surface": "#eff0f9",
+                        "on-error-container": "#93000a",
+                        "on-surface": "#191c22",
+                        "on-secondary-container": "#636264",
+                        "error-container": "#ffdad6",
+                        "secondary": "#5f5e60",
+                        "secondary-container": "#e1dfe1",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9ff",
+                        "primary": "#004e9f",
+                        "surface": "#f9f9ff",
+                        "on-background": "#191c22",
+                        "primary-fixed": "#d7e3ff",
+                        "surface-container-low": "#f2f3fc",
+                        "on-surface-variant": "#414753",
+                        "on-tertiary-fixed": "#341100",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "section-padding": "48px",
+                        "stack-md": "16px",
+                        "stack-sm": "8px",
+                        "container-margin": "20px",
+                        "stack-lg": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "display-lg": ["34px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["17px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-lg": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["15px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "display-lg-mobile": ["28px", {"lineHeight": "1.1", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .parchment-bg {
+            background-color: #f2f3fc;
+        }
+        .hairline-border {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .active-flashcard-shadow {
+            box-shadow: 0 5px 30px 0 rgba(0,0,0,0.22);
+        }
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-[88px]">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 sticky z-40 bg-background border-b border-black/10 transition-opacity">
+<div class="max-w-[1200px] mx-auto px-gutter py-4 flex justify-between items-center">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface">Thư viện</h1>
+<button class="bg-primary-container text-on-primary rounded-full px-6 py-2 flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all font-label-lg text-label-lg shadow-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                Tạo
+            </button>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-gutter pt-6">
+<!-- Search Section -->
+<section class="mb-8">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="search">search</span>
+<input class="w-full h-12 pl-12 pr-4 bg-surface-container-low rounded-xl border-none focus:ring-2 focus:ring-primary/20 transition-all font-body-md text-body-md" placeholder="Tìm bộ thẻ..." type="text">
+</div>
+</section>
+<!-- Filter Chips -->
+<section class="flex gap-stack-sm overflow-x-auto pb-4 mb-6 no-scrollbar">
+<button class="px-5 py-2 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg whitespace-nowrap">Tất cả</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg whitespace-nowrap hover:bg-surface-container-highest transition-colors">Của tôi</button>
+<button class="px-5 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg whitespace-nowrap flex items-center gap-1 hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="favorite">favorite</span>
+                Yêu thích
+            </button>
+</section>
+<!-- Flashcard Set List -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+<!-- Card 1: IELTS Vocabulary -->
+<div class="group bg-surface hairline-border p-6 rounded-[18px] hover:shadow-md transition-all cursor-pointer relative flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-primary-container/10 rounded-xl">
+<span class="material-symbols-outlined text-primary" data-icon="language">language</span>
+</div>
+<button class="text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[24px]" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-2 text-on-surface">IELTS Vocabulary 1</h3>
+<div class="flex items-center gap-3 text-on-surface-variant font-label-md text-label-md mb-6">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="layers">layers</span> 120 thẻ
+                        </span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="public">public</span> Công khai
+                        </span>
+</div>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="w-[65%] h-full bg-primary"></div>
+</div>
+<p class="mt-2 font-label-md text-label-md text-outline">Đã học 65%</p>
+</div>
+<!-- Card 2: Toán học -->
+<div class="group bg-surface hairline-border p-6 rounded-[18px] hover:shadow-md transition-all cursor-pointer relative flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-tertiary-container/10 rounded-xl">
+<span class="material-symbols-outlined text-tertiary" data-icon="architecture">architecture</span>
+</div>
+<button class="text-on-surface-variant hover:text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[24px]" data-icon="favorite">favorite</span>
+</button>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-2 text-on-surface">Toán - Định nghĩa hình học</h3>
+<div class="flex items-center gap-3 text-on-surface-variant font-label-md text-label-md mb-6">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="layers">layers</span> 45 thẻ
+                        </span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span> Riêng tư
+                        </span>
+</div>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="w-[10%] h-full bg-tertiary"></div>
+</div>
+<p class="mt-2 font-label-md text-label-md text-outline">Đã học 10%</p>
+</div>
+<!-- Card 3: Java Programming -->
+<div class="group bg-surface hairline-border p-6 rounded-[18px] hover:shadow-md transition-all cursor-pointer relative flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-secondary-container rounded-xl">
+<span class="material-symbols-outlined text-secondary" data-icon="code">code</span>
+</div>
+<button class="text-on-surface-variant hover:text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[24px]" data-icon="favorite">favorite</span>
+</button>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-2 text-on-surface">Lập trình Java thuật ngữ</h3>
+<div class="flex items-center gap-3 text-on-surface-variant font-label-md text-label-md mb-6">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="layers">layers</span> 80 thẻ
+                        </span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="public">public</span> Công khai
+                        </span>
+</div>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+<div class="w-[0%] h-full bg-secondary"></div>
+</div>
+<p class="mt-2 font-label-md text-label-md text-outline">Chưa bắt đầu</p>
+</div>
+<!-- Decorative Illustration Card -->
+<div class="lg:col-span-3 h-48 rounded-[18px] bg-primary overflow-hidden relative group">
+<div class="absolute inset-0 bg-gradient-to-r from-primary to-primary-container opacity-90 z-10"></div>
+<div class="relative z-20 h-full flex flex-col justify-center px-8 text-on-primary">
+<h4 class="font-headline-md text-headline-md mb-2">Khám phá cộng đồng</h4>
+<p class="font-body-md text-body-md opacity-90 max-w-md">Hàng ngàn bộ thẻ học thuật được chia sẻ mỗi ngày từ các sinh viên ưu tú nhất.</p>
+<button class="mt-4 w-fit px-6 py-2 bg-white text-primary rounded-full font-label-lg text-label-lg hover:bg-opacity-90 transition-all">Khám phá ngay</button>
+</div>
+<img alt="Students studying" class="absolute inset-0 w-full h-full object-cover grayscale mix-blend-overlay group-hover:scale-105 transition-transform duration-700" data-alt="A candid, high-quality editorial photograph of students collaborating in a bright, modern university library. The scene is bathed in natural sunlight from large windows, creating a warm and focused atmosphere. The color palette is dominated by clean whites, soft grays, and deep blues. The composition is dynamic, showing intellectual engagement and productive academic culture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs44bMFhROaaddtB5MvuUoIoIyKSFPuZa52vjjXwZ9lY3xxhpEyh9rNGTqsnQ01zZ4AIaRZ6pfQyLPul2kzdpf4LsyzKKLbWw-bCKEG6To6hq2eEwMINc5iPQZoCeqoyneBciHGqD51kxQoCAfQaimkQrbzwr3L_dqkp7jTsJ0mVKjJbefX3qAueq5cWEoAQwrzRM92kG0jnqZggn4BfAUvnVgcoK2hGFZA9kXdhZRvdnXoyn3FMbK7PByyrxDzCGjJnFpic9LfyQ2">
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 h-[88px] bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-black/5 dark:border-white/5 flex justify-around items-center px-container-margin pb-safe">
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-md text-label-md">Trang chủ</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim font-semibold hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="style" style="font-variation-settings: 'FILL' 1;">style</span>
+<span class="font-label-md text-label-md">Thư viện</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-md text-label-md">Lớp học</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="quiz">quiz</span>
+<span class="font-label-md text-label-md">Bài kiểm tra</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Cá nhân</span>
+</a>
+</nav>
+<script>
+        // Simple micro-interaction for chips
+        document.querySelectorAll('section button').forEach(button => {
+            button.addEventListener('click', function() {
+                if(this.parentElement.classList.contains('overflow-x-auto')) {
+                    this.parentElement.querySelectorAll('button').forEach(btn => {
+                        btn.classList.remove('bg-primary-container', 'text-on-primary');
+                        btn.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                    });
+                    this.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                    this.classList.add('bg-primary-container', 'text-on-primary');
+                }
+            });
+        });
+
+        // Toggle heart fill on click
+        document.querySelectorAll('[data-icon="favorite"]').forEach(heart => {
+            heart.parentElement.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isFilled = heart.style.fontVariationSettings.includes("'FILL' 1");
+                heart.style.fontVariationSettings = isFilled ? "'FILL' 0" : "'FILL' 1";
+                if (!isFilled) {
+                    heart.classList.add('text-primary');
+                } else {
+                    heart.classList.remove('text-primary');
+                }
+            });
+        });
+    </script>
+</body></html>

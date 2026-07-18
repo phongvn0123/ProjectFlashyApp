@@ -1,0 +1,255 @@
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#1b1b1d",
+                      "surface-container-high": "#e6e8f1",
+                      "primary-container": "#0066cc",
+                      "on-tertiary-fixed-variant": "#793000",
+                      "surface-variant": "#e1e2eb",
+                      "surface-tint": "#005cba",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#c8c6c8",
+                      "tertiary": "#883700",
+                      "outline": "#727784",
+                      "tertiary-container": "#af4900",
+                      "surface-container-highest": "#e1e2eb",
+                      "inverse-surface": "#2e3037",
+                      "tertiary-fixed": "#ffdbcb",
+                      "surface-container": "#ecedf6",
+                      "secondary-fixed": "#e4e2e4",
+                      "surface-dim": "#d8d9e2",
+                      "primary-fixed-dim": "#aac7ff",
+                      "on-primary-fixed-variant": "#00458e",
+                      "tertiary-fixed-dim": "#ffb692",
+                      "inverse-on-surface": "#eff0f9",
+                      "outline-variant": "#c1c6d5",
+                      "on-secondary-fixed-variant": "#474649",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-container": "#ffe3d6",
+                      "on-primary-fixed": "#001b3e",
+                      "inverse-primary": "#aac7ff",
+                      "on-primary-container": "#dfe8ff",
+                      "on-error": "#ffffff",
+                      "background": "#f9f9ff",
+                      "primary-fixed": "#d7e3ff",
+                      "surface-container-low": "#f2f3fc",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-fixed": "#341100",
+                      "on-surface-variant": "#414753",
+                      "on-surface": "#191c22",
+                      "secondary": "#5f5e60",
+                      "on-secondary-container": "#636264",
+                      "error-container": "#ffdad6",
+                      "primary": "#004e9f",
+                      "surface-bright": "#f9f9ff",
+                      "secondary-container": "#e1dfe1",
+                      "on-primary": "#ffffff",
+                      "surface": "#f9f9ff",
+                      "on-background": "#191c22",
+                      "surface-tile-1": "#272729"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "1.125rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "stack-md": "16px",
+                      "section-padding": "48px",
+                      "stack-lg": "32px",
+                      "stack-sm": "8px",
+                      "container-margin": "20px"
+              },
+              "fontFamily": {
+                      "display-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "headline-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg-mobile": ["28px", {"lineHeight": "1.1", "fontWeight": "700"}],
+                      "body-md": ["15px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                      "label-lg": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["17px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "display-lg": ["34px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.2", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen">
+<!-- Top App Bar Content -->
+<header class="w-full top-0 sticky z-40 bg-background/80 backdrop-blur-md border-b border-black/5">
+<div class="max-w-[1200px] mx-auto px-container-margin md:px-gutter py-4 flex justify-between items-center">
+<div class="flex items-center gap-3">
+<img alt="Profile Picture" class="w-10 h-10 rounded-full object-cover hairline-border" data-alt="A clean, professional portrait of a smiling young Vietnamese student with a friendly expression. The photograph is shot in a bright studio with soft, diffused lighting and a minimalist pastel background that matches the app's parchment aesthetic. The style is modern, high-fidelity, and editorial." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7MHz04AVBuVHE_pntMIBbjzFhQ9GovVo8uUEuPMwlMvc46Ukxm7p5ovXpx6M1lT1VC7bYyBOQqgXVE8Csjnzp5Lku57tNWLQT7OQZT92hSdbg6N3sWuocqXRFyWun73WxvMFx-IsZqYOhgnbD8x_aOFvFOo-5p0f1JBMMYeOoIEZ05gJrLd4XQdM8b9ScQIt5fH_foz-xyIcA5PXfU4x8Fr5MYDIUB17YKG8yb2Xh_ieJLu0KK5zeVayh-kj2PBKdGIfy9OEil_SU">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Chào, Trang 👋</h1>
+<p class="font-label-md text-label-md text-on-surface-variant">Hôm nay học gì nào?</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-container-margin md:px-gutter pb-32">
+<!-- Quick Stats Section -->
+<section class="mt-stack-lg grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest hairline-border rounded-lg p-6 flex flex-col items-center justify-center text-center">
+<span class="font-display-lg text-display-lg text-primary">12</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Bộ thẻ</span>
+</div>
+<div class="bg-surface-container-lowest hairline-border rounded-lg p-6 flex flex-col items-center justify-center text-center">
+<span class="font-display-lg text-display-lg text-primary">87%</span>
+<span class="font-label-lg text-label-lg text-on-surface-variant uppercase tracking-wider">Đã thuộc</span>
+</div>
+</section>
+<!-- Tiếp tục học Section -->
+<section class="mt-section-padding">
+<div class="flex justify-between items-center mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Tiếp tục học</h2>
+<button class="text-primary-container font-label-lg text-label-lg hover:underline transition-all">Xem tất cả</button>
+</div>
+<div class="bg-surface-tile-1 rounded-lg p-6 text-white relative overflow-hidden group cursor-pointer active:scale-[0.98] transition-transform duration-200">
+<!-- Atmospheric background element -->
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-primary-container/20 rounded-full blur-3xl group-hover:bg-primary-container/30 transition-colors"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-md text-label-md text-white/60 mb-1 uppercase tracking-widest">DECK CỦA BẠN</p>
+<h3 class="font-headline-md text-headline-md mb-4">IELTS Vocab 1</h3>
+</div>
+<span class="material-symbols-outlined text-white/40">more_vert</span>
+</div>
+<div class="mt-4">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-lg text-label-lg text-white/80">45/120 thẻ</span>
+<span class="font-label-lg text-label-lg text-primary-fixed-dim">38%</span>
+</div>
+<div class="w-full bg-white/10 h-2 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full w-[38%] rounded-full shadow-[0_0_8px_rgba(0,102,204,0.5)]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Lớp của bạn Section -->
+<section class="mt-section-padding">
+<div class="flex justify-between items-center mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Lớp của bạn</h2>
+</div>
+<div class="bg-surface-container-lowest hairline-border rounded-lg p-6 flex items-center gap-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-body-lg text-body-lg font-semibold text-on-surface">Lớp 12A - Tiếng Anh</h3>
+<p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1 mt-0.5">
+<span class="text-primary-container font-medium">GV: Mr. Nam</span>
+<span class="mx-1 opacity-40">·</span>
+<span class="bg-error-container text-on-error-container px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">3 bài mới</span>
+</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</div>
+</section>
+<!-- Extra: Gần đây Section -->
+<section class="mt-section-padding">
+<div class="flex justify-between items-center mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Gần đây</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest hairline-border rounded-lg p-5 flex items-center gap-4">
+<div class="w-10 h-10 bg-tertiary-container/10 rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-tertiary">history_edu</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">Sinh học 12 - Di truyền</h4>
+<p class="font-label-md text-label-md text-on-surface-variant">Lần cuối: 2 giờ trước</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest hairline-border rounded-lg p-5 flex items-center gap-4">
+<div class="w-10 h-10 bg-secondary-container/30 rounded-full flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary">psychology</span>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-on-surface">Triết học Mác-Lênin</h4>
+<p class="font-label-md text-label-md text-on-surface-variant">Lần cuối: Hôm qua</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 h-[88px] bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-black/5 dark:border-white/5 flex justify-around items-center px-container-margin pb-safe">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim font-semibold active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md">Trang chủ</span>
+</a>
+<!-- Library -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform duration-150 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">style</span>
+<span class="font-label-md text-label-md">Thư viện</span>
+</a>
+<!-- Classes -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform duration-150 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-md text-label-md">Lớp học</span>
+</a>
+<!-- Quiz -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform duration-150 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="font-label-md text-label-md">Bài kiểm tra</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container dark:text-secondary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform duration-150 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Cá nhân</span>
+</a>
+</nav>
+<!-- Contextual Floating Action Button -->
+<button class="fixed bottom-28 right-6 w-14 h-14 bg-primary-container text-white rounded-full flex items-center justify-center shadow-xl active:scale-90 transition-transform z-40">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+<script>
+        // Simple micro-interaction for active state feedback
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Not performing actual navigation, just UI feedback
+                document.querySelectorAll('nav a').forEach(l => {
+                    l.classList.remove('text-primary', 'dark:text-primary-fixed-dim', 'font-semibold');
+                    l.classList.add('text-on-secondary-container', 'dark:text-secondary-fixed-dim');
+                    const icon = l.querySelector('.material-symbols-outlined');
+                    if(icon) icon.style.fontVariationSettings = "'FILL' 0";
+                });
+                this.classList.add('text-primary', 'dark:text-primary-fixed-dim', 'font-semibold');
+                this.classList.remove('text-on-secondary-container', 'dark:text-secondary-fixed-dim');
+                const activeIcon = this.querySelector('.material-symbols-outlined');
+                if(activeIcon) activeIcon.style.fontVariationSettings = "'FILL' 1";
+            });
+        });
+    </script>

@@ -1,0 +1,211 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Thành viên - Chi tiết lớp học</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#004e9f",
+                    "on-secondary": "#ffffff",
+                    "inverse-surface": "#2e3037",
+                    "tertiary-container": "#af4900",
+                    "on-primary-container": "#dfe8ff",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#001b3e",
+                    "on-tertiary-fixed-variant": "#793000",
+                    "primary-fixed": "#d7e3ff",
+                    "on-secondary-fixed-variant": "#474649",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#414753",
+                    "secondary-container": "#e1dfe1",
+                    "tertiary-fixed-dim": "#ffb692",
+                    "surface-container-high": "#e6e8f1",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#00458e",
+                    "primary-fixed-dim": "#aac7ff",
+                    "inverse-on-surface": "#eff0f9",
+                    "tertiary": "#883700",
+                    "error": "#ba1a1a",
+                    "secondary-fixed": "#e4e2e4",
+                    "on-tertiary-fixed": "#341100",
+                    "surface-container-low": "#f2f3fc",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "background": "#f9f9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "on-secondary-container": "#636264",
+                    "tertiary-fixed": "#ffdbcb",
+                    "outline-variant": "#c1c6d5",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-container": "#ffe3d6",
+                    "surface-bright": "#f9f9ff",
+                    "surface-container": "#ecedf6",
+                    "error-container": "#ffdad6",
+                    "surface-tint": "#005cba",
+                    "surface-container-highest": "#e1e2eb",
+                    "surface": "#f9f9ff",
+                    "secondary": "#5f5e60",
+                    "outline": "#727784",
+                    "surface-dim": "#d8d9e2",
+                    "inverse-primary": "#aac7ff",
+                    "on-surface": "#191c22",
+                    "surface-variant": "#e1e2eb",
+                    "primary-container": "#0066cc",
+                    "on-background": "#191c22"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "stack-lg": "32px",
+                    "stack-md": "16px",
+                    "container-margin": "20px",
+                    "stack-sm": "8px",
+                    "section-padding": "48px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["34px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-lg": ["17px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-md": ["15px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "label-lg": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hairline-border { border: 0.5px solid rgba(0,0,0,0.1); }
+        .safe-bottom { padding-bottom: calc(88px + 24px); }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-background dark:bg-surface-dim border-b border-black/10 dark:border-white/10 no shadows">
+<div class="max-w-[1200px] mx-auto px-gutter py-4 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed-dim hover:opacity-90 transition-opacity active:opacity-80">arrow_back</button>
+<h1 class="font-display-lg text-display-lg dark:text-on-background font-bold tracking-tight">Chi tiết lớp học</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant dark:text-outline-variant hover:opacity-90 transition-opacity">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant dark:text-outline-variant hover:opacity-90 transition-opacity">settings</button>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<main class="max-w-[1200px] mx-auto px-gutter pb-safe">
+<!-- Tab Navigation (Secondary Header) -->
+<div class="flex gap-8 border-b border-black/5 mb-stack-lg sticky top-[74px] bg-background/80 backdrop-blur-md z-30 py-4">
+<button class="font-label-lg text-label-lg pb-2 text-on-surface-variant hover:text-primary transition-colors">Tổng quan</button>
+<button class="font-label-lg text-label-lg pb-2 border-b-2 border-primary text-primary">Thành viên</button>
+<button class="font-label-lg text-label-lg pb-2 text-on-surface-variant hover:text-primary transition-colors">Bài tập</button>
+<button class="font-label-lg text-label-lg pb-2 text-on-surface-variant hover:text-primary transition-colors">Báo cáo</button>
+</div>
+<section class="space-y-stack-md safe-bottom">
+<!-- Section Header -->
+<div class="flex justify-between items-center mb-stack-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Danh sách học sinh (2)</h2>
+<div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low rounded-full">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md w-32 md:w-48" placeholder="Tìm thành viên..." type="text">
+</div>
+</div>
+<!-- Member List - Bento/Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<!-- Member Card 1 -->
+<div class="hairline-border bg-surface-container-lowest p-stack-md rounded-[18px] flex items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-fixed flex items-center justify-center">
+<img alt="Student Portrait" class="w-full h-full object-cover" data-alt="A professional, minimalist headshot of a young male student named Nguyễn Văn An with a friendly expression. He is wearing a clean white polo shirt against a soft, neutral grey studio background. The lighting is bright and airy, reflecting a modern academic and clean corporate aesthetic consistent with high-end educational apps." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJmJmpszClbFHctKgdZH9_GnvZeE4eVE7oRRw0hqpzUmnj4D495uAZaCU8yGpUDb6Q3o8nhhMCi-v09hL021CEny3cbyFbaATfF2RomXmIhmI_g-eiU2Ljj78_wOwzoVaSUkLiAU95PRIhIIF5RXFnnC-VVn2yg5spEfXHtYeuqPqGb3xz7KalhuNnXedtLRkR4I7ZN8bWD8V3vqw3h4vouLqVEwSW_Bnj1yitt6ueJiBbsrHSMSfYh-jJ4_uPict8nfEig4UNXJc5">
+</div>
+<div>
+<p class="font-headline-sm text-label-lg text-on-surface">Nguyễn Văn An (Student)</p>
+<p class="font-body-md text-label-md text-on-surface-variant">nv.an@student.edu.vn</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-all">more_vert</button>
+</div>
+<!-- Member Card 2 -->
+<div class="hairline-border bg-surface-container-lowest p-stack-md rounded-[18px] flex items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-tertiary-fixed flex items-center justify-center">
+<img alt="Student Portrait" class="w-full h-full object-cover" data-alt="A close-up studio portrait of a young female student named Trần Thị Bình. She has a professional and confident look, wearing a subtle blue sweater. The background is a clean, minimalist off-white surface with soft, diffused lighting that emphasizes a high-quality, professional design system aesthetic. The mood is calm, intellectual, and focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVVriwOIp4pQ9mDHeJ9QHurOM3bsDWOj3Cr6nlJCGVzMNKHdGEtl91Ga4UOEkRdf7ixopCtDYU-O9lGLl_37Y6VRbNB08Qh6gPrrhSOroHO5rHCkpuWpjEpARLC0zCryyzB4Wbf3lkS-hn0ylGErX57zkNsLw--7GaQftmrqaaMLZq-XtjqTBnUFZsNL3g5hr9sV_dEU-ge13m41WYlDhR7kZ7i27_R0DT8h--MgrYIIe7dCtImKT7dwjQ4zsONYki74F5Ar2tJu2v">
+</div>
+<div>
+<p class="font-headline-sm text-label-lg text-on-surface">Trần Thị Bình (Student)</p>
+<p class="font-body-md text-label-md text-on-surface-variant">tt.binh@student.edu.vn</p>
+</div>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-all">more_vert</button>
+</div>
+<!-- Invite Placeholder -->
+<div class="border-2 border-dashed border-outline-variant bg-transparent p-stack-md rounded-[18px] flex items-center justify-center gap-3 cursor-pointer hover:bg-primary/5 transition-colors group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">person_add</span>
+<span class="font-label-lg text-label-lg text-outline group-hover:text-primary transition-colors">Mời qua email</span>
+</div>
+</div>
+<!-- Info Section -->
+<div class="mt-12 p-stack-lg bg-surface-container rounded-lg border border-black/5">
+<div class="flex items-start gap-4">
+<div class="p-3 bg-primary/10 rounded-full">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">info</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-2">Quản lý lớp học</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                            Với tư cách là giáo viên, bạn có quyền thêm hoặc xóa thành viên khỏi lớp học này. Mọi thay đổi sẽ được cập nhật ngay lập tức và thông báo sẽ được gửi đến email của học sinh.
+                        </p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Area (Bottom) -->
+<div class="fixed bottom-0 left-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-black/5 dark:border-white/5 h-[88px] flex items-center justify-center px-container-margin">
+<div class="max-w-[1200px] w-full flex justify-center">
+<button class="flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-full font-label-lg text-label-lg shadow-lg active:scale-95 transition-transform duration-150 hover:opacity-90">
+<span class="material-symbols-outlined">person_add</span>
+                Thêm thành viên
+            </button>
+</div>
+</div>
+<!-- BottomNavBar (Hidden on desktop, logic from JSON) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 h-[88px] bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-black/5 dark:border-white/5 flex justify-around items-center px-container-margin pb-safe hidden">
+<!-- Not rendered here to prioritize the primary "Add Member" action button in this specific context -->
+</nav>
+<script>
+        // Simple micro-interaction for member cards
+        document.querySelectorAll('.hairline-border').forEach(card => {
+            card.addEventListener('click', () => {
+                console.log('Member card clicked');
+            });
+        });
+    </script>
+</body></html>

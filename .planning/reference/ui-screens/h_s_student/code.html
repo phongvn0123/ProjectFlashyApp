@@ -1,0 +1,255 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Hồ sơ cá nhân - Flashly</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#341100",
+                    "on-primary-container": "#dfe8ff",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "inverse-on-surface": "#eff0f9",
+                    "surface-container": "#ecedf6",
+                    "on-tertiary-container": "#ffe3d6",
+                    "primary-fixed": "#d7e3ff",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f2f3fc",
+                    "secondary-fixed": "#e4e2e4",
+                    "secondary-container": "#e1dfe1",
+                    "error": "#ba1a1a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-fixed": "#001b3e",
+                    "primary-fixed-dim": "#aac7ff",
+                    "surface": "#f9f9ff",
+                    "surface-container-highest": "#e1e2eb",
+                    "on-primary-fixed-variant": "#00458e",
+                    "on-secondary-fixed-variant": "#474649",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "on-surface": "#191c22",
+                    "background": "#f9f9ff",
+                    "tertiary-fixed": "#ffdbcb",
+                    "primary": "#004e9f",
+                    "outline-variant": "#c1c6d5",
+                    "surface-dim": "#d8d9e2",
+                    "surface-bright": "#f9f9ff",
+                    "primary-container": "#0066cc",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#793000",
+                    "on-secondary": "#ffffff",
+                    "outline": "#727784",
+                    "inverse-surface": "#2e3037",
+                    "inverse-primary": "#aac7ff",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#883700",
+                    "on-background": "#191c22",
+                    "surface-tint": "#005cba",
+                    "surface-container-high": "#e6e8f1",
+                    "surface-variant": "#e1e2eb",
+                    "on-secondary-container": "#636264",
+                    "secondary": "#5f5e60",
+                    "tertiary-container": "#af4900",
+                    "tertiary-fixed-dim": "#ffb692",
+                    "on-surface-variant": "#414753"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "32px",
+                    "gutter": "16px",
+                    "stack-sm": "8px",
+                    "section-padding": "48px",
+                    "stack-md": "16px",
+                    "container-margin": "20px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["15px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "body-lg": ["17px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "label-lg": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "display-lg-mobile": ["28px", {"lineHeight": "1.1", "fontWeight": "700"}],
+                    "display-lg": ["34px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f9f9ff;
+            color: #191c22;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .parchment-bg {
+            background-color: #f9f9ff;
+        }
+        .ink-muted {
+            color: #414753;
+        }
+        .action-blue {
+            color: #0066cc;
+        }
+        .hairline-border {
+            border: 0.5px solid rgba(0,0,0,0.1);
+        }
+        .bottom-nav-blur {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor (As per Shared Components) -->
+<header class="w-full top-0 sticky z-40 bg-background/80 backdrop-blur-md border-b border-black/10">
+<div class="max-w-[1200px] mx-auto px-container-margin py-4 flex justify-between items-center">
+<span class="font-display-lg-mobile text-display-lg-mobile font-bold text-on-surface">Cá nhân</span>
+<div class="flex gap-4">
+<button class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity p-2">notifications</button>
+<button class="material-symbols-outlined text-primary hover:opacity-90 transition-opacity p-2">settings</button>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto pb-32">
+<!-- Profile Header Section -->
+<section class="parchment-bg py-section-padding px-container-margin flex flex-col items-center text-center">
+<div class="relative mb-stack-md">
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden hairline-border bg-surface-container">
+<img alt="Avatar Nguyễn Văn An" class="w-full h-full object-cover" data-alt="A high-quality editorial-style portrait of a friendly young Vietnamese male student with short black hair, wearing a clean white minimalist shirt. The lighting is soft and natural, coming from a large window, creating a calm and intellectual atmosphere. The background is a blurred university library setting with warm wood tones, consistent with a premium academic focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE1hnWkqRQpQu52xIm9JHvD8m3f8mu7v2nUrONhqSKsEo5tw0y7IwdQEOm2URlDB241Dw12cdY8321urS9cGH9yEvxBzJzydhx-cDJ7E_LB4zROOinc5lZXcSi8DiquVYFKRMUUQhmaGpQkEyBfqOITiPQhC2wBn3_mr0X6yTAoopwQUbazp9DkRhkuHIccVJJKqSLN7CtnIOtoO59M0641qDlO4ZaPQMrMTxbfXmRQbyxcG5gdAog8M6ndgVAP0-FQ69K_tERBSDk">
+</div>
+<button class="absolute bottom-1 right-1 bg-primary-container text-on-primary p-2 rounded-full shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-on-surface mb-1">Nguyễn Văn An</h1>
+<p class="font-label-lg text-label-lg uppercase tracking-wider text-primary">Học sinh</p>
+</section>
+<!-- Information & Settings Bento Grid -->
+<section class="px-container-margin grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<!-- Thông tin cá nhân -->
+<div class="bg-surface-container-lowest hairline-border p-stack-md rounded-[18px]">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-md">Thông tin cá nhân</h2>
+<div class="space-y-stack-md">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md ink-muted uppercase tracking-tighter">Email</span>
+<span class="font-body-lg text-body-lg text-on-surface">nv.an@student.edu.vn</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md ink-muted uppercase tracking-tighter">Username</span>
+<span class="font-body-lg text-body-lg text-on-surface">an_nguyen</span>
+</div>
+</div>
+</div>
+<!-- Settings List -->
+<div class="bg-surface-container-lowest hairline-border p-stack-md rounded-[18px] flex flex-col gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-stack-sm">Cài đặt</h2>
+<a class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">person_edit</span>
+<span class="font-body-lg text-body-lg text-on-surface">Chỉnh sửa hồ sơ</span>
+</div>
+<span class="material-symbols-outlined ink-muted group-hover:translate-x-1 transition-transform">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">lock_reset</span>
+<span class="font-body-lg text-body-lg text-on-surface">Đổi mật khẩu</span>
+</div>
+<span class="material-symbols-outlined ink-muted group-hover:translate-x-1 transition-transform">chevron_right</span>
+</a>
+<a class="flex items-center justify-between p-3 rounded-xl hover:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary">settings_applications</span>
+<span class="font-body-lg text-body-lg text-on-surface">Cài đặt ứng dụng</span>
+</div>
+<span class="material-symbols-outlined ink-muted group-hover:translate-x-1 transition-transform">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Danger Zone -->
+<section class="mt-stack-lg px-container-margin flex flex-col items-center">
+<button class="w-full md:max-w-xs flex items-center justify-center gap-2 py-4 px-6 rounded-full font-label-lg text-label-lg text-error hover:bg-error/5 active:bg-error/10 transition-colors border border-transparent">
+<span class="material-symbols-outlined">logout</span>
+                Đăng xuất
+            </button>
+<p class="mt-4 font-label-md text-label-md ink-muted">Flashly v2.4.0 • Built for Excellence</p>
+</section>
+</main>
+<!-- Bottom Navigation (As per Shared Components JSON) -->
+<nav class="fixed bottom-0 w-full z-50 h-[88px] bg-surface/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-black/5 flex justify-around items-center px-container-margin pb-safe md:hidden">
+<!-- Trang chủ -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:bg-surface-container-low transition-colors active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="font-label-md text-label-md">Trang chủ</span>
+</a>
+<!-- Thư viện -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:bg-surface-container-low transition-colors active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]">style</span>
+<span class="font-label-md text-label-md">Thư viện</span>
+</a>
+<!-- Lớp học -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:bg-surface-container-low transition-colors active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]">groups</span>
+<span class="font-label-md text-label-md">Lớp học</span>
+</a>
+<!-- Bài kiểm tra -->
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:bg-surface-container-low transition-colors active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]">quiz</span>
+<span class="font-label-md text-label-md">Bài kiểm tra</span>
+</a>
+<!-- Cá nhân (ACTIVE) -->
+<a class="flex flex-col items-center justify-center text-primary font-semibold active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-md text-label-md">Cá nhân</span>
+</a>
+</nav>
+<!-- Desktop Navigation Side Anchors -->
+<div class="hidden md:flex fixed left-0 top-0 h-full w-20 flex-col items-center py-stack-lg gap-8 border-r border-black/5 parchment-bg">
+<div class="w-10 h-10 bg-primary-container rounded-xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-white">bolt</span>
+</div>
+<a class="material-symbols-outlined ink-muted hover:text-primary transition-colors" href="#">home</a>
+<a class="material-symbols-outlined ink-muted hover:text-primary transition-colors" href="#">style</a>
+<a class="material-symbols-outlined ink-muted hover:text-primary transition-colors" href="#">groups</a>
+<a class="material-symbols-outlined ink-muted hover:text-primary transition-colors" href="#">quiz</a>
+<a class="material-symbols-outlined text-primary" href="#" style="font-variation-settings: 'FILL' 1;">person</a>
+</div>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button, a').forEach(elem => {
+            elem.addEventListener('click', function(e) {
+                if (this.tagName === 'A' && this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body></html>

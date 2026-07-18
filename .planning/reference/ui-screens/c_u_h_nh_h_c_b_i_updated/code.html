@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#eff0f9",
+                        "surface-container-highest": "#e1e2eb",
+                        "on-tertiary-fixed-variant": "#793000",
+                        "primary": "#004e9f",
+                        "outline-variant": "#c1c6d5",
+                        "on-primary-container": "#dfe8ff",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "on-tertiary-fixed": "#341100",
+                        "surface-bright": "#f9f9ff",
+                        "surface-tint": "#005cba",
+                        "outline": "#727784",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e6e8f1",
+                        "on-surface": "#191c22",
+                        "on-secondary-fixed-variant": "#474649",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "surface-container-low": "#f2f3fc",
+                        "on-tertiary-container": "#ffe3d6",
+                        "surface-dim": "#d8d9e2",
+                        "on-primary-fixed-variant": "#00458e",
+                        "tertiary-fixed": "#ffdbcb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f9f9ff",
+                        "on-secondary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "on-secondary-container": "#636264",
+                        "surface-container": "#ecedf6",
+                        "secondary-container": "#e1dfe1",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2e3037",
+                        "secondary": "#5f5e60",
+                        "primary-fixed": "#d7e3ff",
+                        "on-surface-variant": "#414753",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#aac7ff",
+                        "on-primary-fixed": "#001b3e",
+                        "inverse-primary": "#aac7ff",
+                        "tertiary-container": "#af4900",
+                        "tertiary": "#883700",
+                        "secondary-fixed": "#e4e2e4",
+                        "on-background": "#191c22",
+                        "surface-variant": "#e1e2eb",
+                        "primary-container": "#0066cc",
+                        "tertiary-fixed-dim": "#ffb692",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-lg": "32px",
+                        "section-padding": "48px",
+                        "gutter": "16px",
+                        "container-margin": "20px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["34px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-lg": ["17px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-lg": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["15px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "display-lg-mobile": ["28px", {"lineHeight": "1.1", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .hairline-border { border: 1px solid rgba(0,0,0,0.1); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .custom-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .custom-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #e1dfe1; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #0066cc; }
+        input:checked + .slider:before { transform: translateX(20px); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col items-center">
+<!-- Top Navigation Bar -->
+<header class="w-full max-w-[1200px] bg-background sticky top-0 z-40 px-gutter py-4 border-b border-black/5 flex items-center gap-4">
+<button aria-label="Go back" class="w-10 h-10 flex items-center justify-center rounded-full active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-sm text-headline-sm text-on-surface">Chọn cách học</h1>
+<span class="font-label-md text-label-md text-on-surface-variant">IELTS Vocab 1</span>
+</div>
+</header>
+<main class="w-full max-w-[1200px] flex-1 px-container-margin pb-32">
+<!-- Animated Background Element (Atmospheric) -->
+<div class="relative w-full h-1 overflow-hidden opacity-20 mt-4">
+
+</div>
+<div class="mt-stack-lg space-y-stack-lg max-w-[600px] mx-auto">
+<!-- SECTION: CHẾ ĐỘ HỌC -->
+<section class="space-y-stack-sm">
+<h2 class="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase px-1">CHẾ ĐỘ HỌC</h2>
+<div class="space-y-stack-md">
+<!-- Radio Card 1 (Selected) -->
+<label class="block relative cursor-pointer group">
+<input checked="" class="peer hidden" name="study_mode" type="radio" value="all"/>
+<div class="flex items-center justify-between p-stack-md rounded-DEFAULT hairline-border bg-surface-container-lowest peer-checked:border-primary peer-checked:bg-primary-container/[0.04] transition-all">
+<div class="flex items-center gap-4">
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-primary">
+<div class="w-3 h-3 rounded-full bg-primary opacity-0 peer-checked:group-[]:opacity-100 transition-opacity"></div>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Học tất cả (120 thẻ)</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 peer-checked:group-[]:opacity-100 text-primary">check_circle</span>
+</div>
+</label>
+<!-- Radio Card 2 (Unselected) -->
+<label class="block relative cursor-pointer group">
+<input class="peer hidden" name="study_mode" type="radio" value="remaining"/>
+<div class="flex items-center justify-between p-stack-md rounded-DEFAULT hairline-border bg-surface-container-lowest peer-checked:border-primary peer-checked:bg-primary-container/[0.04] transition-all">
+<div class="flex items-center gap-4">
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center peer-checked:group-[]:border-primary">
+<div class="w-3 h-3 rounded-full bg-primary opacity-0 peer-checked:group-[]:opacity-100 transition-opacity"></div>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Chỉ ôn thẻ chưa thuộc (16)</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 peer-checked:group-[]:opacity-100 text-primary">check_circle</span>
+</div>
+</label>
+</div>
+</section>
+<!-- SECTION: MẶT HIỆN TRƯỚC -->
+<section class="space-y-stack-sm">
+<h2 class="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase px-1">MẶT HIỆN TRƯỚC</h2>
+<div class="flex gap-stack-md">
+<button class="flex-1 py-3 px-6 rounded-full bg-primary text-on-primary font-label-lg text-label-lg transition-transform active:scale-95 shadow-sm">
+                        Thuật ngữ
+                    </button>
+<button class="flex-1 py-3 px-6 rounded-full bg-surface-container text-on-surface-variant font-label-lg text-label-lg transition-transform active:scale-95 hairline-border">
+                        Định nghĩa
+                    </button>
+</div>
+</section>
+<!-- SECTION: TUỲ CHỌN -->
+<section class="space-y-stack-sm">
+<h2 class="font-label-lg text-label-lg text-on-surface-variant tracking-widest uppercase px-1">TUỲ CHỌN</h2>
+<div class="hairline-border rounded-DEFAULT bg-surface-container-lowest overflow-hidden">
+<!-- Row 1: Shuffle -->
+<div class="flex items-center justify-between p-stack-md border-b border-black/5 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-primary">
+<span class="material-symbols-outlined">shuffle</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Xáo trộn thứ tự thẻ</span>
+</div>
+<label class="custom-switch">
+<input checked="" type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+<!-- Row 2: Repeat -->
+<div class="flex items-center justify-between p-stack-md hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant">
+<span class="material-symbols-outlined">replay</span>
+</div>
+<span class="font-body-lg text-body-lg text-on-surface">Lặp lại thẻ chưa thuộc</span>
+</div>
+<label class="custom-switch">
+<input type="checkbox"/>
+<span class="slider"></span>
+</label>
+</div>
+</div>
+</section>
+<!-- Decorative Illustration -->
+<div class="pt-stack-lg flex justify-center opacity-80">
+<div class="w-48 h-48 rounded-xl overflow-hidden hairline-border relative grayscale group hover:grayscale-0 transition-all duration-500">
+<img class="w-full h-full object-cover" data-alt="A focused, artistic portrait of an antique scholar's desk with a soft morning light streaming through a window. On the desk sits a neat pile of parchment cards, a vintage inkwell, and a quill. The style is professional, high-fidelity editorial photography with a soft bokeh background and deep primary blue accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjdjHVD75gGwk3qhZT6_OvWdrPg3KcuZ2NqIKqdjZmOulvQP0vP5RURCJXkafwJ8g2Z5XcDsnISaAuhndEJ9od-2hyomvkL0ymxZFNLBTut15UK_XsqHmp6tfgAcjIMVCe3rbA8U3T8iEroZIjv19udWOiY95qpN6lvhq6BZmHcVQQZFPrHdAh9HneCSbbIUTafzNYJkzUFurBE7RMzJrqbDbcWbnGsj1Y1qVdFF3CT3O1a-Clg9S_egWMqDmWoj5K7xAd0XQOzHlq"/>
+<div class="absolute inset-0 bg-primary/10 mix-blend-multiply"></div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Primary CTA -->
+<footer class="fixed bottom-0 w-full max-w-[1200px] p-container-margin bg-background/80 backdrop-blur-md z-50">
+<button class="w-full max-w-[600px] mx-auto flex items-center justify-center py-5 bg-primary text-on-primary rounded-full font-headline-sm text-headline-sm shadow-lg active:scale-[0.98] transition-all hover:bg-primary-container">
+            Bắt đầu học
+        </button>
+</footer>
+<script>
+        // Micro-interactions for switches and radio cards
+        document.querySelectorAll('label.cursor-pointer').forEach(label => {
+            label.addEventListener('click', () => {
+                // Future expansion: sound effects or haptic feedback simulation
+            });
+        });
+
+        // Simple scale effect for CTA on scroll
+        const cta = document.querySelector('footer button');
+        window.addEventListener('scroll', () => {
+            const scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+            if (scrollPercent > 0.1) {
+                cta.classList.add('shadow-xl');
+            } else {
+                cta.classList.remove('shadow-xl');
+            }
+        });
+    </script>
+</body></html>

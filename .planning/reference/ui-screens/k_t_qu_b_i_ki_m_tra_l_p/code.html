@@ -1,0 +1,297 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Kết quả: Unit 5 Test</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#341100",
+                    "surface-container-low": "#f2f3fc",
+                    "surface-variant": "#e1e2eb",
+                    "secondary": "#5f5e60",
+                    "outline": "#727784",
+                    "on-primary-fixed": "#001b3e",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#ecedf6",
+                    "secondary-fixed": "#e4e2e4",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "inverse-primary": "#aac7ff",
+                    "tertiary": "#883700",
+                    "on-primary-container": "#dfe8ff",
+                    "background": "#f9f9ff",
+                    "surface-tint": "#005cba",
+                    "surface-container-high": "#e6e8f1",
+                    "primary-container": "#0066cc",
+                    "primary": "#004e9f",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed-variant": "#00458e",
+                    "error": "#ba1a1a",
+                    "surface-container-highest": "#e1e2eb",
+                    "on-tertiary-container": "#ffe3d6",
+                    "on-tertiary-fixed-variant": "#793000",
+                    "primary-fixed": "#d7e3ff",
+                    "on-surface": "#191c22",
+                    "inverse-on-surface": "#eff0f9",
+                    "surface-bright": "#f9f9ff",
+                    "error-container": "#ffdad6",
+                    "on-background": "#191c22",
+                    "on-surface-variant": "#414753",
+                    "inverse-surface": "#2e3037",
+                    "on-secondary-fixed-variant": "#474649",
+                    "on-secondary-fixed": "#1b1b1d",
+                    "tertiary-fixed-dim": "#ffb692",
+                    "tertiary-fixed": "#ffdbcb",
+                    "secondary-fixed-dim": "#c8c6c8",
+                    "tertiary-container": "#af4900",
+                    "on-primary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#e1dfe1",
+                    "surface-dim": "#d8d9e2",
+                    "primary-fixed-dim": "#aac7ff",
+                    "outline-variant": "#c1c6d5",
+                    "on-secondary-container": "#636264",
+                    "surface": "#f9f9ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-sm": "8px",
+                    "stack-md": "16px",
+                    "section-padding": "48px",
+                    "container-margin": "20px",
+                    "stack-lg": "32px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                    "display-lg-mobile": ["28px", {"lineHeight": "1.1", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-md": ["15px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "label-lg": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "body-lg": ["17px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["34px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9ff; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .parchment-bg { background-color: #fcfcf7; }
+        .study-shadow { box-shadow: 0 5px 30px rgba(0,0,0,0.12); }
+        .hairline { border: 1px solid rgba(0,0,0,0.1); }
+        .chart-bar { transition: height 1s ease-out; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- Top AppBar (from Shared Components JSON) -->
+<header class="w-full top-0 sticky z-50 bg-background border-b border-black/10 transition-opacity hover:opacity-90 active:opacity-80">
+<div class="max-w-[1200px] mx-auto px-gutter py-4 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<h1 class="font-display-lg text-display-lg font-bold text-on-surface">Kết quả: Unit 5 Test</h1>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors" title="Chia sẻ">
+<span class="material-symbols-outlined text-primary">share</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container transition-colors" title="Cài đặt">
+<span class="material-symbols-outlined text-primary">settings</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-container-margin py-stack-lg">
+<!-- Overview Stats Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-stack-lg">
+<!-- Summary Tile 1 -->
+<div class="bg-primary text-on-primary p-stack-lg rounded-lg study-shadow flex flex-col justify-between">
+<div>
+<p class="font-label-lg text-label-lg opacity-80 mb-2 uppercase tracking-wider">Điểm Trung bình</p>
+<h2 class="font-display-lg text-display-lg">7.8/10</h2>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-label-md text-label-md">+0.4 so với Unit 4</span>
+</div>
+</div>
+<!-- Summary Tile 2 -->
+<div class="parchment-bg hairline p-stack-lg rounded-lg flex flex-col justify-between">
+<div>
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-2 uppercase tracking-wider">Hoàn thành</p>
+<h2 class="font-display-lg text-display-lg text-on-surface">28/30</h2>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2 mt-4">
+<div class="bg-primary h-2 rounded-full" style="width: 93%;"></div>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mt-2">Còn 2 học sinh chưa nộp</p>
+</div>
+<!-- Summary Tile 3 (Simple Chart Area) -->
+<div class="parchment-bg hairline p-stack-lg rounded-lg">
+<p class="font-label-lg text-label-lg text-on-surface-variant mb-4 uppercase tracking-wider">Phân bổ điểm</p>
+<div class="flex items-end justify-between h-24 gap-1">
+<!-- Bars -->
+<div class="flex flex-col items-center flex-1">
+<div class="bg-outline-variant w-full rounded-t-sm chart-bar" style="height: 10%;"></div>
+<span class="text-[10px] mt-1">1-3</span>
+</div>
+<div class="flex flex-col items-center flex-1">
+<div class="bg-outline-variant w-full rounded-t-sm chart-bar" style="height: 25%;"></div>
+<span class="text-[10px] mt-1">4-6</span>
+</div>
+<div class="flex flex-col items-center flex-1">
+<div class="bg-primary w-full rounded-t-sm chart-bar" style="height: 80%;"></div>
+<span class="text-[10px] mt-1 font-bold text-primary">7-8</span>
+</div>
+<div class="flex flex-col items-center flex-1">
+<div class="bg-primary-container w-full rounded-t-sm chart-bar" style="height: 45%;"></div>
+<span class="text-[10px] mt-1">9-10</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Detailed Student List Section -->
+<section class="parchment-bg hairline rounded-lg overflow-hidden mb-stack-lg">
+<div class="p-stack-md border-b border-black/5 flex justify-between items-center bg-white/50">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Danh sách chi tiết</h3>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-label-lg focus:ring-2 focus:ring-primary/20 w-48 md:w-64" placeholder="Tìm kiếm học sinh..." type="text">
+</div>
+</div>
+<div class="divide-y divide-black/5">
+<!-- Student Item 1 -->
+<div class="p-stack-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors cursor-pointer group">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden hairline">
+<img alt="Student Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjWwNurP3Z624pRh-CXLify5BOLe9i81vf4Y7u7cHFebAIOndesfR92FTGAkr4EVSUDuI-C67dQIft_Cl9Qm1JUz2Q2dvoC_b83F0PQHDC02gv-Ag6AG5kQtKU0ar4ldTb_W792zKcWeGXRLAQIGxWCovPwTc9fO-ePJOwMXQ8Dw9GRTwPM_8iGuQsbXe5scReXCEnKtdW9xMnm3kcMrRUYL_OqFyjAPF1ur6L4mhfx9wNRkZMs5M4AAGlCrAhzbC_JxjmkzkLgvxd">
+</div>
+<div>
+<p class="font-body-lg text-body-lg font-semibold text-on-surface">Nguyễn Văn An</p>
+<p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 12 phút
+                            </p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-primary font-bold">9.5</p>
+<span class="font-label-md text-label-md text-on-tertiary-container bg-tertiary-container px-2 py-0.5 rounded-full">Xuất sắc</span>
+</div>
+</div>
+<!-- Student Item 2 -->
+<div class="p-stack-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden hairline">
+<img alt="Student Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgwupsqf8YT5ag0PXreF0TklP2rbEhSK4l8-mbZYnCo-0bdgie5bFdxFkyPk6IX67AlybJZ85Yz7xbX-oyqW8jgTGgVeREPrUy0tY7KwZISaWi_4wzcW2x1fDd2RHha9PmPD2A43b9zGG4e_X-rvKcBaxx3I36nX4GLtdA50ytiIXhAwzy3JkNf4jFW6lx6wmcon56uXyLF_QZPNrkDEFowAGwyWKJvJcytqQHYW42fZPC9DzgLR6opwSaXWv6TpnKzExhEb9nE6oD">
+</div>
+<div>
+<p class="font-body-lg text-body-lg font-semibold text-on-surface">Trần Thị Bình</p>
+<p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 15 phút
+                            </p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-on-surface font-bold">8.0</p>
+<span class="font-label-md text-label-md text-on-secondary-container bg-secondary-container px-2 py-0.5 rounded-full">Khá</span>
+</div>
+</div>
+<!-- Student Item 3 -->
+<div class="p-stack-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden hairline">
+<img alt="Student Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCijT-dyNvlK8FbAgDIW1zQsi2gYHptbJiiW_Clnby1RFI2Us19QCi-Ao7wfLUPG4oMp1OV8zShcEflqFO3KhkiD4TMPcECBSzRfFJTulnkOkYScqY16SDMyy-RLdyzxgWH5vJ3dYIVlNJefLw14e-CP7bPlGAP0pQxiXFjxOFEqMN-0vhZdkqcDvs8Htmy-NTwz0Aoj-KsXurfQX7IWl3GpIhc9IYJ_lk5_lYy8D1RtYWI5WFwtqVUurmLyKN7QAEkZRnLCv2TLp1">
+</div>
+<div>
+<p class="font-body-lg text-body-lg font-semibold text-on-surface">Lê Văn Cường</p>
+<p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 18 phút
+                            </p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-on-surface font-bold">6.5</p>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-2 py-0.5 rounded-full">Trung bình</span>
+</div>
+</div>
+<!-- Student Item 4 -->
+<div class="p-stack-md flex items-center justify-between hover:bg-surface-container-lowest transition-colors cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden hairline">
+<img alt="Student Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO8jZpdFnOZeENbTZwjdP7-SlDlpVDnd6hWibzriwA3TrOBkzIcL8HZsdMgjgxFIYSK7BmdVp6tJHSEQaxfxTXmDMJEYzwFoUTIhNVu6PcJPLmw98rW5iuM2Sl5GaXHpVSaGhnoLN9NzJVC9upIAxm2z98eUNilX5Ucwa2AzE5pQoecWdMRENQPCDPaqssErUTRkdDXDj2KA5BN_b3AETI60_LNBpqColHkpPOJIKrBdmwUA1L5XE9mXzgqKvkruyAXkZ9hSPCXNJd">
+</div>
+<div>
+<p class="font-body-lg text-body-lg font-semibold text-on-surface">Phạm Mỹ Dung</p>
+<p class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 14 phút
+                            </p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-headline-md text-primary font-bold">9.0</p>
+<span class="font-label-md text-label-md text-on-tertiary-container bg-tertiary-container px-2 py-0.5 rounded-full">Xuất sắc</span>
+</div>
+</div>
+</div>
+<div class="p-stack-md bg-white/50 text-center">
+<button class="text-primary font-label-lg text-label-lg hover:underline">Xem tất cả 28 học sinh</button>
+</div>
+</section>
+</main>
+<!-- Bottom Action Area -->
+<div class="fixed bottom-0 left-0 w-full p-4 md:p-6 bg-surface/80 backdrop-blur-md border-t border-black/5 flex justify-center z-50">
+<button class="w-full max-w-[400px] bg-primary text-on-primary py-4 rounded-full font-headline-sm text-headline-sm study-shadow hover:opacity-90 active:scale-95 transition-all">
+            Xong
+        </button>
+</div>
+<!-- Background Pattern Effect -->
+<div class="fixed inset-0 pointer-events-none -z-10 opacity-20">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="#004e9f" stroke-width="0.5"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<script>
+        // Simple micro-interaction for chart bars
+        document.addEventListener('DOMContentLoaded', () => {
+            const bars = document.querySelectorAll('.chart-bar');
+            bars.forEach(bar => {
+                const finalHeight = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = finalHeight;
+                }, 300);
+            });
+        });
+    </script>
+</body></html>

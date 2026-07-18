@@ -1,0 +1,294 @@
+<!DOCTYPE html><html class="light" lang="vi"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .study-shadow {
+            box-shadow: 0 5px 30px -5px rgba(0,0,0,0.22);
+        }
+        .hairline-border {
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        /* Custom parchment background segmenting */
+        .bg-parchment {
+            background-color: #ecedf6; /* Matching surface-container */
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#341100",
+                        "surface-container-low": "#f2f3fc",
+                        "surface-variant": "#e1e2eb",
+                        "secondary": "#5f5e60",
+                        "outline": "#727784",
+                        "on-primary-fixed": "#001b3e",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#ecedf6",
+                        "secondary-fixed": "#e4e2e4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#aac7ff",
+                        "tertiary": "#883700",
+                        "on-primary-container": "#dfe8ff",
+                        "background": "#f9f9ff",
+                        "surface-tint": "#005cba",
+                        "surface-container-high": "#e6e8f1",
+                        "primary-container": "#0066cc",
+                        "primary": "#004e9f",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#00458e",
+                        "error": "#ba1a1a",
+                        "surface-container-highest": "#e1e2eb",
+                        "on-tertiary-container": "#ffe3d6",
+                        "on-tertiary-fixed-variant": "#793000",
+                        "primary-fixed": "#d7e3ff",
+                        "on-surface": "#191c22",
+                        "inverse-on-surface": "#eff0f9",
+                        "surface-bright": "#f9f9ff",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c22",
+                        "on-surface-variant": "#414753",
+                        "inverse-surface": "#2e3037",
+                        "on-secondary-fixed-variant": "#474649",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "tertiary-fixed-dim": "#ffb692",
+                        "tertiary-fixed": "#ffdbcb",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "tertiary-container": "#af4900",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#e1dfe1",
+                        "surface-dim": "#d8d9e2",
+                        "primary-fixed-dim": "#aac7ff",
+                        "outline-variant": "#c1c6d5",
+                        "on-secondary-container": "#636264",
+                        "surface": "#f9f9ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-md": "16px",
+                        "section-padding": "48px",
+                        "container-margin": "20px",
+                        "stack-lg": "32px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "display-lg-mobile": ["28px", {"lineHeight": "1.1", "fontWeight": "700"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-md": ["15px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "label-lg": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "body-lg": ["17px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display-lg": ["34px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- Top Navigation Anchor (Shared Component: TopAppBar) -->
+<header class="w-full top-0 sticky z-40 bg-background border-b border-black/10 transition-opacity duration-200">
+<div class="max-w-[1200px] mx-auto px-gutter py-4 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<button class="hover:opacity-90 active:scale-95 transition-all text-on-surface">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-display-lg text-headline-sm font-bold text-on-surface">Câu hỏi (3/20)</h1>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="hidden md:flex px-6 py-2.5 rounded-full font-label-lg text-label-lg bg-surface-container text-primary hover:opacity-90 active:opacity-80 transition-all">
+                    Lưu nháp
+                </button>
+<button class="px-6 py-2.5 rounded-full font-label-lg text-label-lg bg-primary-container text-white hover:opacity-90 active:opacity-80 transition-all">
+                    Hoàn tất
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto px-gutter mt-stack-lg space-y-stack-lg">
+<!-- Step Indicator -->
+<div class="flex items-center gap-2 px-2">
+<div class="h-1.5 w-12 rounded-full bg-primary-container"></div>
+<div class="h-1.5 w-12 rounded-full bg-primary-container"></div>
+<div class="h-1.5 w-12 rounded-full bg-surface-variant"></div>
+<span class="ml-2 font-label-md text-label-md text-on-surface-variant">Bước 2: Nội dung câu hỏi</span>
+</div>
+<!-- Question List (Previous Questions) -->
+<section class="space-y-stack-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Danh sách câu hỏi</h2>
+<button class="flex items-center gap-1 text-primary font-label-lg text-label-lg hover:underline">
+<span class="material-symbols-outlined text-[18px]">sort</span>
+                    Sắp xếp
+                </button>
+</div>
+<!-- Question Card 1 -->
+<div class="hairline-border bg-surface-bright rounded-DEFAULT p-stack-md flex gap-4 group hover:bg-surface-container-low transition-colors">
+<div class="flex-none w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-label-lg text-on-surface-variant">1</div>
+<div class="flex-1">
+<p class="font-body-lg text-body-lg text-on-surface mb-2">"Hello" trong tiếng Việt có nghĩa là gì?</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label-md text-label-md border border-primary/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Xin chào
+                        </span>
+<span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md">Tạm biệt</span>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity text-outline">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</div>
+<!-- Question Card 2 -->
+<div class="hairline-border bg-surface-bright rounded-DEFAULT p-stack-md flex gap-4 group hover:bg-surface-container-low transition-colors">
+<div class="flex-none w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-label-lg text-on-surface-variant">2</div>
+<div class="flex-1">
+<p class="font-body-lg text-body-lg text-on-surface mb-2">Chọn từ trái nghĩa với "Big":</p>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 rounded-full bg-primary/10 text-primary font-label-md text-label-md border border-primary/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Small
+                        </span>
+<span class="px-3 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-md text-label-md">Large</span>
+</div>
+</div>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity text-outline">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</div>
+</section>
+<!-- Active Question Editor (Parchment Feel) -->
+<section class="bg-surface-container rounded-lg p-6 md:p-10 study-shadow border-2 border-primary/10 relative overflow-hidden">
+<!-- Decorative Background Element -->
+<div class="absolute top-0 right-0 p-8 opacity-5">
+<span class="material-symbols-outlined text-[120px]">edit_note</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center justify-between mb-stack-lg">
+<div class="px-4 py-1.5 rounded-full bg-primary-container text-white font-label-lg text-label-lg">
+                        Đang soạn thảo
+                    </div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center hover:bg-white transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">image</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center hover:bg-white transition-colors text-error">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<div class="mb-stack-lg">
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-2">Câu hỏi 3</label>
+<textarea class="w-full bg-white/80 border-none rounded-DEFAULT p-4 font-headline-md text-headline-md text-on-surface focus:ring-2 focus:ring-primary/20 min-h-[120px] resize-none transition-all" placeholder="Nhập câu hỏi của bạn...">"Apple" nghĩa là gì?</textarea>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Option A - Correct -->
+<div class="relative group">
+<div class="flex items-center w-full p-4 rounded-full bg-white border-2 border-primary ring-4 ring-primary/5 transition-all">
+<span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold mr-3">A</span>
+<input class="flex-1 bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-on-surface" type="text" value="Quả táo">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<p class="absolute -bottom-6 left-6 font-label-md text-label-md text-primary font-semibold">Đáp án đúng</p>
+</div>
+<!-- Option B -->
+<div class="relative group">
+<div class="flex items-center w-full p-4 rounded-full bg-white border border-outline-variant hover:border-primary/50 transition-all">
+<span class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-bold mr-3">B</span>
+<input class="flex-1 bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-on-surface" type="text" value="Quả cam">
+<button class="opacity-0 group-hover:opacity-100 transition-opacity text-outline hover:text-primary">
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+</div>
+</div>
+<!-- Option C -->
+<div class="relative group">
+<div class="flex items-center w-full p-4 rounded-full bg-white border border-outline-variant hover:border-primary/50 transition-all">
+<span class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-bold mr-3">C</span>
+<input class="flex-1 bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-on-surface" placeholder="Thêm lựa chọn..." type="text">
+<button class="opacity-0 group-hover:opacity-100 transition-opacity text-outline hover:text-primary">
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+</div>
+</div>
+<!-- Option D -->
+<div class="relative group">
+<div class="flex items-center w-full p-4 rounded-full bg-white border border-outline-variant hover:border-primary/50 transition-all">
+<span class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center font-bold mr-3">D</span>
+<input class="flex-1 bg-transparent border-none p-0 focus:ring-0 font-body-lg text-body-lg text-on-surface" placeholder="Thêm lựa chọn..." type="text">
+<button class="opacity-0 group-hover:opacity-100 transition-opacity text-outline hover:text-primary">
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Buttons -->
+<div class="flex flex-col md:flex-row items-center justify-center gap-stack-md pt-stack-lg">
+<button class="w-full md:w-auto px-8 py-4 rounded-full border-2 border-dashed border-primary text-primary font-label-lg text-label-lg hover:bg-primary/5 transition-colors flex items-center justify-center gap-2 group">
+<span class="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
+                Thêm câu hỏi mới
+            </button>
+<button class="w-full md:w-auto px-8 py-4 rounded-full bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">library_books</span>
+                Chọn từ bộ thẻ
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Shared Component: BottomNavBar) -->
+<!-- Suppressed on this Task-Focused screen to prioritize content focus -->
+<div class="fixed bottom-6 right-6 z-50 md:hidden">
+<button class="w-14 h-14 rounded-2xl bg-primary-container text-white shadow-lg flex items-center justify-center active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[32px]">check</span>
+</button>
+</div>
+<!-- Background Pattern -->
+<div class="fixed inset-0 -z-10 opacity-20 pointer-events-none">
+<div class="absolute inset-0" style="background-image: radial-gradient(#0066cc 0.5px, transparent 0.5px); background-size: 24px 24px;"></div>
+</div>
+<script>
+        // Simple micro-interactions
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('focus', function() {
+                this.closest('.rounded-full, .rounded-DEFAULT').classList.add('ring-2', 'ring-primary/10');
+            });
+            el.addEventListener('blur', function() {
+                this.closest('.rounded-full, .rounded-DEFAULT').classList.remove('ring-2', 'ring-primary/10');
+            });
+        });
+    </script>
+</body></html>
