@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Permissive baseline for local Firebase Emulator Suite use only
+    // (Phase 0 spike scope). Production security rules are deferred to
+    // Phase 1 — see 00-01-PLAN.md Open Question #2 resolution.
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
