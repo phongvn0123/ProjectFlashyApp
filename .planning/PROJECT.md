@@ -25,7 +25,7 @@ Học sinh học flashcard xong làm bài kiểm tra sinh ra từ chính bộ th
 **Nền móng kỹ thuật (bắt buộc của môn học)**
 - [ ] Backend qua API call — Firebase Firestore + REST call từ Flutter
 - [ ] Firebase Authentication cho đăng ký/đăng nhập/phiên
-- [ ] CSDL local bằng `sqflite_common_ffi` (chạy được cả Android lẫn Windows)
+- [ ] CSDL local bằng `sqflite` thuần (Android) — yêu cầu bắt buộc của môn học, không còn phụ thuộc `sqflite_common_ffi` (xem STATE.md Decisions 2026-07-18)
 - [ ] Lập trình bất đồng bộ (async/await, Future, Stream) xuyên suốt tầng data
 - [ ] Riverpod quản lý toàn bộ trạng thái ứng dụng
 - [ ] SharedPreferences lưu phiên đăng nhập + role, và theme/ngôn ngữ
@@ -44,7 +44,7 @@ Học sinh học flashcard xong làm bài kiểm tra sinh ra từ chính bộ th
 
 ### Out of Scope
 
-- **Firebase Cloud Messaging (FCM)** — FCM không hỗ trợ Flutter Windows desktop, xung đột với yêu cầu chạy trên Windows. Thay bằng local notification / thông báo in-app đọc từ bảng `ClassActivity`.
+- **Firebase Cloud Messaging (FCM)** — FCM không hỗ trợ Flutter Windows desktop, xung đột với yêu cầu chạy trên Windows. Thay bằng local notification / thông báo in-app đọc từ bảng `ClassActivity`. **[Ghi chú 2026-07-18]:** Lý do gốc (xung đột yêu cầu Windows) không còn hiệu lực vì dự án đã bỏ mục tiêu Windows desktop; quyết định về mặt kỹ thuật có thể xem xét lại, nhưng KHÔNG mở lại FCM trong phạm vi này — Notifications (NOTF-01..03) vẫn deferred sang v2 (xem STATE.md Pending Todos).
 - **Đồng bộ 2 chiều SQLite ↔ Firestore** — quá phức tạp cho phạm vi môn học. SQLite chỉ đóng vai trò cache offline-first, Firestore là nguồn sự thật duy nhất.
 - **Push notification thời gian thực khi giáo viên giao bài** — hệ quả của việc bỏ FCM. Học sinh thấy bài mới khi mở app / pull-to-refresh.
 - **Học sinh chỉnh sửa bộ thẻ do giáo viên giao** — chỉ chủ sở hữu mới sửa được; học sinh muốn sửa thì phải Duplicate Set.
@@ -75,10 +75,9 @@ Các enum quan trọng: `User.role` = admin|teacher|student, `User.status` = act
 
 - **Tech stack**: Flutter + Android Studio — yêu cầu bắt buộc của môn PRM393.
 - **Tech stack**: Riverpod cho state management — yêu cầu bắt buộc, không dùng Provider/Bloc/GetX.
-- **Tech stack**: `sqflite_common_ffi` cho CSDL local — yêu cầu bắt buộc để chạy được trên Windows, không dùng `sqflite` thuần.
+- **Tech stack**: `sqflite` thuần cho CSDL local — yêu cầu bắt buộc của PRM393. (Trước đây bắt buộc dùng `sqflite_common_ffi` chỉ vì lý do hỗ trợ nền tảng desktop đã bị loại bỏ; bản thân `sqflite` đã là gói "Mandatory per PRM393" nên yêu cầu môn học vẫn được đáp ứng đầy đủ — xem STATE.md Decisions 2026-07-18 để biết lý do đầy đủ.)
 - **Tech stack**: Firebase (Auth + Firestore) — yêu cầu bắt buộc về BaaS và API call.
 - **Tech stack**: SharedPreferences — yêu cầu bắt buộc, dùng cho phiên đăng nhập + role và theme/ngôn ngữ.
-- **Compatibility**: Phải build và chạy được trên cả Android emulator lẫn Windows desktop — quyết định loại bỏ FCM.
 - **Team**: 5 thành viên, mỗi người phải sở hữu ≥ 4 màn hình để có đủ dấu vết đóng góp khi chấm điểm.
 - **Design**: Bám theo 32 màn hình Stitch có sẵn — không tự do redesign, chỉ bổ sung màn Admin theo cùng ngôn ngữ thiết kế.
 - **Dependencies**: 5 người dùng chung 1 Firebase project (free tier Spark) — cần thống nhất security rules và tránh đụng schema.
@@ -87,7 +86,7 @@ Các enum quan trọng: `User.role` = admin|teacher|student, `User.status` = act
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Firebase Auth có, FCM không | FCM không hỗ trợ Flutter Windows desktop; giữ Windows là yêu cầu cứng. Notification làm bằng local notification + `ClassActivity` in-app | — Pending |
+| Firebase Auth có, FCM không | FCM không hỗ trợ Flutter Windows desktop; giữ Windows là yêu cầu cứng. Notification làm bằng local notification + `ClassActivity` in-app | **[REVERSED 2026-07-18]** Lý do gốc (giữ Windows là yêu cầu cứng) không còn hiệu lực — dự án đã bỏ mục tiêu Windows desktop (xem Decision "Dropped Windows desktop target" trong STATE.md). FCM vẫn KHÔNG được bật lại trong phạm vi này vì Notifications (NOTF-01..03) đã deferred sang v2. |
 | Firestore làm backend thay vì tự viết REST API | Không phải deploy/duy trì server riêng, 5 người dùng chung 1 project free tier, vẫn thoả yêu cầu "BackEnd call API" | — Pending |
 | SQLite = cache offline-first, Firestore = nguồn sự thật | Thể hiện rõ repository pattern + lập trình bất đồng bộ (2 yêu cầu của môn), tránh bài toán sync 2 chiều | — Pending |
 | Làm đủ 15 UC Admin dù zip UI không có màn Admin | Bám sát SRS 100% để không bị trừ điểm phạm vi; chấp nhận tự thiết kế thêm ~6 màn | — Pending |
