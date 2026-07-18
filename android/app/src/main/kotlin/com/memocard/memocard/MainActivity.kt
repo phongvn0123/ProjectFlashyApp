@@ -1,4 +1,4 @@
-package com.memocard.spike.spike_platform
+package com.memocard.memocard
 
 import io.flutter.embedding.android.FlutterActivity
 

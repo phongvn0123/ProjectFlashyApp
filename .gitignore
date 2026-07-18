@@ -44,5 +44,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Firebase config — never commit, contains project-linked identifiers
-android/app/google-services.json
+# Firebase (Waves 2-3 will produce these — must never be committed)
+**/google-services.json
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/

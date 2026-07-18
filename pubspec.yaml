@@ -1,4 +1,4 @@
-name: spike_platform
+name: memocard
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -35,19 +35,39 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
-  # Firebase (MANDATORY per CLAUDE.md Technology Stack — pinned versions)
+  # State management (MANDATORY per PRM393 / CLAUDE.md)
+  flutter_riverpod: ^3.3.2
+  riverpod_annotation: ^4.0.3
+
+  # Local database (MANDATORY per PRM393 / CLAUDE.md)
+  # Pinned to ^2.4.2, NOT ^2.4.3 — sqflite 2.4.3 requires Dart SDK ^3.12.0,
+  # unavailable on Flutter 3.41.9 (bundles Dart 3.11.5). See Phase 0 finding.
+  sqflite: ^2.4.2
+
+  # Firebase (MANDATORY per PRM393 / CLAUDE.md)
   firebase_core: ^4.12.1
   firebase_auth: ^6.5.6
   cloud_firestore: ^6.7.1
 
-  # Local SQLite (MANDATORY per CLAUDE.md — plain sqflite, no FFI-based variant)
-  # NOTE: CLAUDE.md pins ^2.4.3, but sqflite 2.4.3 requires Dart SDK ^3.12.0 while
-  # the installed toolchain (Flutter 3.41.9) bundles Dart 3.11.5. Pinned to the
-  # nearest resolvable version (^2.4.2) instead — see 00-01-SUMMARY.md deviations.
-  sqflite: ^2.4.2
+  # Persistent local storage (MANDATORY per PRM393 / CLAUDE.md)
+  shared_preferences: ^2.5.5
+
+  # Navigation
+  go_router: ^17.3.0
+
+  # Data models & serialization
+  # freezed_annotation bumped to ^3.0.0 (CLAUDE.md pins ^2.4.4, which conflicts
+  # with freezed ^3.2.5 + riverpod_generator ^4.0.4, both of which require
+  # freezed_annotation ^3.0.0 transitively via riverpod_analyzer_utils). See
+  # deviation note in 01-01-SUMMARY.md.
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+
+  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -56,6 +76,23 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+
+  # Code generation (dev-only) — DEFERRED, see deviation note in
+  # 01-01-SUMMARY.md: riverpod_generator ^4.0.4 (CLAUDE.md pin) requires
+  # analyzer ^12.0.0 -> meta ^1.18.0, but the Flutter 3.41.9 SDK's bundled
+  # flutter_test pins meta to 1.17.0. Every riverpod_generator 4.x version
+  # low enough to avoid that conflict instead pins riverpod to an exact
+  # patch (3.2.0/3.2.1) incompatible with the MANDATORY flutter_riverpod
+  # ^3.3.2 pin. No task in Phase 1 Plan 01 uses @riverpod/@freezed codegen
+  # (SKELETON.md: "no @riverpod codegen in Phase 1" — plain Provider is
+  # used instead), so these dev-only tools are deferred to whichever later
+  # plan first introduces a generated provider/model, at which point the
+  # compatible version set must be re-resolved against the toolchain then
+  # available (or the toolchain upgraded).
+  # riverpod_generator: ^4.0.4
+  # freezed: ^3.2.5
+  # json_serializable: ^6.14.0
+  # build_runner: ^2.15.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

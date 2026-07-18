@@ -3,11 +3,10 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.memocard.spike.spike_platform"
+    namespace = "com.memocard.memocard"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -22,16 +21,12 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.memocard.spike.spike_platform"
+        applicationId = "com.memocard.memocard"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        // Explicit minSdk lock — Firebase SDK requires API 23 minimum (per
-        // 00-RESEARCH.md Pitfall 3). NOTE (deviation): Flutter 3.41.9's own
-        // MinSdkVersionMigration silently rewrites any explicit `minSdk` value
-        // in the 16-23 range back to `flutter.minSdkVersion` on every build/run
-        // (this SDK's own floor is already 24, above Firebase's requirement).
-        // 23 is therefore unstable here — pinned to 24 instead, which is both
-        // >= Firebase's floor and immune to that auto-migration.
+        // Explicit minSdk = 24 (Phase 0 finding): Flutter's MinSdkVersionMigration
+        // silently reverts any value 16-23 back to flutter.minSdkVersion (=24) on
+        // every build, so pin the explicit value here instead of the alias.
         minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
