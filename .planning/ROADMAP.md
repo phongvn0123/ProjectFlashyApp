@@ -29,35 +29,27 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal**: Prove that Firebase (firebase_core 4.12.1, firebase_auth 6.5.6, cloud_firestore 6.7.1) and sqflite both initialize and work on Android emulator, before any production code depends on that assumption
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
-**Requirements**: FND-01, FND-02, FND-03, FND-04
+**Requirements**: FND-01, FND-03, FND-04 (FND-02 — Windows desktop — withdrawn 2026-07-18; see REQUIREMENTS.md line 15/180 and STATE.md Decisions)
 **Success Criteria** (what must be TRUE):
 
   1. A throwaway spike app launches without crashing on an Android emulator
   2. The spike app opens a local database and writes/reads a row via `sqflite` on Android
   3. The spike app initializes Firebase, signs up a test user via Firebase Auth, and writes/reads one Firestore document on Android
 
-**Plans**: 5 plans
+**Plans**: 3 plans
 
 Plans:
 **Wave 1**
 
-- [ ] 00-01-PLAN.md — Scaffold spike_platform project, pin Firebase/SQLite deps, verify Firebase CLI
+- [ ] 00-01-PLAN.md — Scaffold spike_platform (Android-only), pin Firebase/sqflite deps, Android config (minSdk 23, cleartext debug-only), dummy Firebase options, Firebase Emulator Suite config
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 00-02-PLAN.md — Implement SQLite + Firebase emulator round-trip services, wire single spike screen
+- [ ] 00-02-PLAN.md — Implement sqlite_service.dart + firebase_service.dart round-trip logic, wire main.dart spike screen (auto-run + re-run buttons)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 00-03-PLAN.md — Windows desktop verification run (STALE — Phase 0 pending replan for Android-only scope, see STATE.md Decisions 2026-07-18)
-
-**Wave 4** *(blocked on Wave 3 completion)*
-
-- [ ] 00-04-PLAN.md — Android emulator verification run (captured evidence + visual check)
-
-**Wave 5** *(blocked on Wave 4 completion)*
-
-- [ ] 00-05-PLAN.md — Write SPIKE-FINDINGS.md go/no-go verdict + credential-hygiene pass
+- [ ] 00-03-PLAN.md — Regression/credential-hygiene checks, automated Android emulator verification run (captured console log + screenshot), write SPIKE-FINDINGS.md go/no-go verdict
 
 ### Phase 1: Shared Foundation
 
@@ -194,7 +186,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 (Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0. Platform Spike | 0/5 | Not started | - |
+| 0. Platform Spike | 0/3 | Not started | - |
 | 1. Shared Foundation | 0/TBD | Not started | - |
 | 2. Auth, Profile & Admin | 0/TBD | Not started | - |
 | 3. Flashcard Set | 0/TBD | Not started | - |

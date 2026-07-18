@@ -64,5 +64,6 @@
   "agent_skills": {},
   "features": {},
   "mode": "yolo",
-  "granularity": "standard"
+  "granularity": "standard",
+  "response_language": "Vietnamese"
 }
