@@ -136,6 +136,31 @@ class AppTheme {
           vertical: 12,
         ),
       ),
+      // DESIGN.md Components > Navigation: "Icons are 24px, using
+      // inkMuted48 for inactive and Action Blue for active states."
+      // Material 3's NavigationBar defaults to secondaryContainer/
+      // onSecondaryContainer for the selected state, which does not match
+      // Academic Precision — override explicitly.
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: AppColors.kSurfaceContainerLowest,
+        indicatorColor: AppColors.kPrimaryContainer.withValues(alpha: 0.12),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            color: selected ? colorScheme.primary : AppColors.kOnSurfaceVariant,
+            size: 24,
+          );
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: selected ? colorScheme.primary : AppColors.kOnSurfaceVariant,
+          );
+        }),
+      ),
     );
   }
 
@@ -201,6 +226,29 @@ class AppTheme {
           horizontal: 16,
           vertical: 12,
         ),
+      ),
+      // See light() for rationale — Academic Precision navigation icons use
+      // Action Blue (colorScheme.primary here is the dark-theme equivalent,
+      // inversePrimary #aac7ff) for the active state.
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: AppColors.kInverseSurface,
+        indicatorColor: colorScheme.primary.withValues(alpha: 0.16),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return IconThemeData(
+            color: selected ? colorScheme.primary : AppColors.kOutlineVariant,
+            size: 24,
+          );
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          final selected = states.contains(WidgetState.selected);
+          return TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: selected ? colorScheme.primary : AppColors.kOutlineVariant,
+          );
+        }),
       ),
     );
   }
