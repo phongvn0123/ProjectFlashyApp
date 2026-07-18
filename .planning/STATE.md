@@ -4,12 +4,12 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: ROADMAP.md and STATE.md created; REQUIREMENTS.md traceability table updated with 92/92 coverage
-last_updated: "2026-07-18T11:05:25.425Z"
-last_activity: 2026-07-18 -- Completed quick task 260718-sfh: dropped Windows desktop target, switched to plain sqflite; Phase 0 plans now stale pending replan
+last_updated: "2026-07-18T14:29:38.992Z"
+last_activity: 2026-07-18 -- Phase 0 planning complete
 progress:
   total_phases: 8
   completed_phases: 0
-  total_plans: 5
+  total_plans: 3
   completed_plans: 0
   percent: 0
 ---
@@ -75,7 +75,8 @@ Recent decisions affecting current work:
 - **[RESOLVED/WITHDRAWN 2026-07-18]** Phase 0: Firebase native Windows support for firebase_core 4.12.1 / firebase_auth 6.5.6 / cloud_firestore 6.7.1 was MEDIUM confidence per research/SUMMARY.md and needed spike verification before Phase 1. This blocker no longer applies — the team dropped the Windows desktop target entirely (self-imposed requirement, not a PRM393 instructor requirement; the dev machine lacks the MSVC C++ "Desktop development with C++" toolchain Flutter's Windows target needs). SUMMARY.md's own fallback list already sanctioned "renegotiate the Windows requirement" as an acceptable outcome. Firebase now only needs to prove itself on Android emulator.
 - Phase 2: 6 of the 10 Admin screens have no existing design in the Stitch export and must be designed by Person 1 following `academic_precision/DESIGN.md` before/during implementation.
 - Firestore Spark free-tier quota (50K reads/day, 20K writes/day) is shared across 5 developers testing concurrently — SUMMARY.md recommends the Firestore Emulator for daily dev to avoid exhausting it.
-- **Phase 0 plans are STALE as of 2026-07-18.** The 5 committed plans (`phases/00-platform-spike/00-01..05-PLAN.md`) were written for the dual-platform scope: Wave 3 is a Windows verification run that can no longer execute, and Waves 1-2 specify `sqflite_common_ffi` + `databaseFactoryFfi`, which contradicts the switch to plain `sqflite`. Phase 0 must be re-planned before execution — running these as-is would generate wrong code from the first line.
+- **[RESOLVED 2026-07-18]** Phase 0 plans were STALE (5 plans written for the dual-platform scope: a Windows verification wave that could no longer execute, plus `sqflite_common_ffi` + `databaseFactoryFfi` in Waves 1-2). Phase 0 has now been **re-planned Android-only**: the 5 stale plans were deleted (recoverable at `6c86368`) and replaced with 3 new plans covering FND-01/FND-03/FND-04. The new plans pin plain `sqflite ^2.4.3`, target the Firebase Emulator Suite via `10.0.2.2`, and carry regression `grep` assertions proving `sqflite_common_ffi`/`databaseFactoryFfi` are absent from the built code. Verified by gsd-plan-checker (VERIFICATION PASSED, 12 dimensions).
+- Phase 0 execution has two **environment prerequisites** that are not code and cannot be satisfied by the executor: (1) an AVD using a **Google APIs** system image — plain AOSP lacks Google Play Services and Firebase Auth will fail; (2) `firebase-tools` installed globally so `firebase emulators:start` can run. Plan 00-03 checks the AVD tag and returns NO-GO if it is wrong.
 
 ### Quick Tasks Completed
 
