@@ -83,13 +83,13 @@ Nguồn: `SRS Document - PRM393_GR6.docx` (~60 use case) + 35 màn hình thiết
 
 ### Classroom — Người 4
 
-- [ ] **CLS-01**: Giáo viên tạo lớp học với tên, mô tả, trường *(UC36)*
+- [ ] **CLS-01**: Giáo viên tạo lớp học với tên, mô tả, trường; hệ thống tự sinh mã tham gia 6 chữ số duy nhất *(UC36, UC41)*
 - [ ] **CLS-02**: Giáo viên cập nhật thông tin lớp *(UC37)*
 - [ ] **CLS-03**: Giáo viên xoá lớp sau khi xác nhận *(UC38)*
 - [ ] **CLS-04**: Giáo viên xem danh sách lớp mình dạy *(UC39)*
 - [ ] **CLS-05**: Học sinh xem danh sách lớp mình tham gia *(UC39)*
 - [ ] **CLS-06**: Người dùng xem chi tiết lớp với 3 tab: thành viên, bộ thẻ, hoạt động *(UC40)*
-- [ ] **CLS-07**: Giáo viên sinh và bật/tắt mã tham gia lớp *(UC41)*
+- [ ] **CLS-07**: Giáo viên xem mã tham gia của lớp và bật/tắt cho phép tham gia bằng mã; giáo viên không tự đặt được mã *(UC41)*
 - [ ] **CLS-08**: Học sinh nhập mã lớp và xác nhận để tham gia *(UC42)*
 - [ ] **CLS-09**: Hệ thống báo lỗi khi mã lớp sai, đã tắt, hoặc học sinh đã ở trong lớp *(UC42 alt flow)*
 - [ ] **CLS-10**: Học sinh rời khỏi lớp *(UC43)*
@@ -174,17 +174,106 @@ Ghi nhận nhưng không nằm trong roadmap hiện tại.
 
 ## Traceability
 
-Điền trong bước tạo roadmap.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| *(chờ roadmap)* | — | Pending |
+| FND-01 | Phase 0 - Platform Spike | Pending |
+| FND-02 | Phase 0 - Platform Spike | Pending |
+| FND-03 | Phase 0 - Platform Spike | Pending |
+| FND-04 | Phase 0 - Platform Spike | Pending |
+| FND-05 | Phase 1 - Shared Foundation | Pending |
+| FND-06 | Phase 1 - Shared Foundation | Pending |
+| FND-07 | Phase 1 - Shared Foundation | Pending |
+| FND-08 | Phase 1 - Shared Foundation | Pending |
+| FND-09 | Phase 1 - Shared Foundation | Pending |
+| FND-10 | Phase 1 - Shared Foundation | Pending |
+| FND-11 | Phase 1 - Shared Foundation | Pending |
+| FND-12 | Phase 1 - Shared Foundation | Pending |
+| AUTH-01 | Phase 2 - Auth, Profile & Admin | Pending |
+| AUTH-02 | Phase 2 - Auth, Profile & Admin | Pending |
+| AUTH-03 | Phase 2 - Auth, Profile & Admin | Pending |
+| AUTH-04 | Phase 2 - Auth, Profile & Admin | Pending |
+| AUTH-05 | Phase 2 - Auth, Profile & Admin | Pending |
+| AUTH-06 | Phase 2 - Auth, Profile & Admin | Pending |
+| PROF-01 | Phase 2 - Auth, Profile & Admin | Pending |
+| PROF-02 | Phase 2 - Auth, Profile & Admin | Pending |
+| PROF-03 | Phase 2 - Auth, Profile & Admin | Pending |
+| PROF-04 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-01 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-02 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-03 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-04 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-05 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-06 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-07 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-08 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-09 | Phase 2 - Auth, Profile & Admin | Pending |
+| ADM-10 | Phase 2 - Auth, Profile & Admin | Pending |
+| SET-01 | Phase 3 - Flashcard Set | Pending |
+| SET-02 | Phase 3 - Flashcard Set | Pending |
+| SET-03 | Phase 3 - Flashcard Set | Pending |
+| SET-04 | Phase 3 - Flashcard Set | Pending |
+| SET-05 | Phase 3 - Flashcard Set | Pending |
+| SET-06 | Phase 3 - Flashcard Set | Pending |
+| SET-07 | Phase 3 - Flashcard Set | Pending |
+| SET-08 | Phase 3 - Flashcard Set | Pending |
+| SET-09 | Phase 3 - Flashcard Set | Pending |
+| SET-10 | Phase 3 - Flashcard Set | Pending |
+| SET-11 | Phase 3 - Flashcard Set | Pending |
+| SET-12 | Phase 3 - Flashcard Set | Pending |
+| LRN-01 | Phase 4 - Learning Mode | Pending |
+| LRN-02 | Phase 4 - Learning Mode | Pending |
+| LRN-03 | Phase 4 - Learning Mode | Pending |
+| LRN-04 | Phase 4 - Learning Mode | Pending |
+| LRN-05 | Phase 4 - Learning Mode | Pending |
+| LRN-06 | Phase 4 - Learning Mode | Pending |
+| LRN-07 | Phase 4 - Learning Mode | Pending |
+| LRN-08 | Phase 4 - Learning Mode | Pending |
+| LRN-09 | Phase 4 - Learning Mode | Pending |
+| LRN-10 | Phase 4 - Learning Mode | Pending |
+| LRN-11 | Phase 4 - Learning Mode | Pending |
+| LRN-12 | Phase 4 - Learning Mode | Pending |
+| LRN-13 | Phase 4 - Learning Mode | Pending |
+| CLS-01 | Phase 5 - Classroom | Pending |
+| CLS-02 | Phase 5 - Classroom | Pending |
+| CLS-03 | Phase 5 - Classroom | Pending |
+| CLS-04 | Phase 5 - Classroom | Pending |
+| CLS-05 | Phase 5 - Classroom | Pending |
+| CLS-06 | Phase 5 - Classroom | Pending |
+| CLS-07 | Phase 5 - Classroom | Pending |
+| CLS-08 | Phase 5 - Classroom | Pending |
+| CLS-09 | Phase 5 - Classroom | Pending |
+| CLS-10 | Phase 5 - Classroom | Pending |
+| CLS-11 | Phase 5 - Classroom | Pending |
+| CLS-12 | Phase 5 - Classroom | Pending |
+| CLS-13 | Phase 5 - Classroom | Pending |
+| CLS-14 | Phase 5 - Classroom | Pending |
+| CLS-15 | Phase 5 - Classroom | Pending |
+| CLS-16 | Phase 5 - Classroom | Pending |
+| QUZ-01 | Phase 6 - Quiz / Test | Pending |
+| QUZ-02 | Phase 6 - Quiz / Test | Pending |
+| QUZ-03 | Phase 6 - Quiz / Test | Pending |
+| QUZ-04 | Phase 6 - Quiz / Test | Pending |
+| QUZ-05 | Phase 6 - Quiz / Test | Pending |
+| QUZ-06 | Phase 6 - Quiz / Test | Pending |
+| QUZ-07 | Phase 6 - Quiz / Test | Pending |
+| QUZ-08 | Phase 6 - Quiz / Test | Pending |
+| QUZ-09 | Phase 6 - Quiz / Test | Pending |
+| QUZ-10 | Phase 6 - Quiz / Test | Pending |
+| QUZ-11 | Phase 6 - Quiz / Test | Pending |
+| QUZ-12 | Phase 6 - Quiz / Test | Pending |
+| QUZ-13 | Phase 6 - Quiz / Test | Pending |
+| QUZ-14 | Phase 6 - Quiz / Test | Pending |
+| QUZ-15 | Phase 6 - Quiz / Test | Pending |
+| TEAM-01 | Phase 7 - Integration & QA | Pending |
+| TEAM-02 | Phase 7 - Integration & QA | Pending |
+| TEAM-03 | Phase 7 - Integration & QA | Pending |
+| TEAM-04 | Phase 7 - Integration & QA | Pending |
 
 **Coverage:**
 - v1 requirements: **92** total
-- Mapped to phases: 0 ⚠️
-- Unmapped: 92 ⚠️
+- Mapped to phases: 92/92 ✓
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-07-18*
-*Last updated: 2026-07-18 after initial definition*
+*Last updated: 2026-07-18 after roadmap creation — 92/92 requirements mapped across 8 phases (0-7)*

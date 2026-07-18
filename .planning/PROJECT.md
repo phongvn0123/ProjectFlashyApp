@@ -95,6 +95,7 @@ Các enum quan trọng: `User.role` = admin|teacher|student, `User.status` = act
 | Gộp Auth + Profile + Admin vào 1 người | Cùng thao tác trên bảng `User`, gộp lại tránh 2 người tranh cùng 1 bảng. Bù lại người này nhận 10 màn nhưng 6 màn Admin chỉ là CRUD list đơn giản | — Pending |
 | Có Phase nền móng chung trước khi 5 người tách nhánh | App shell, routing, theme, Firebase config, SQLite schema, base repository, Riverpod providers phải chuẩn hoá trước, nếu không 5 người sẽ code lệch và conflict nặng | — Pending |
 | Chỉ hỗ trợ câu hỏi trắc nghiệm 4 đáp án | ERD `QuizOption.is_correct` cho phép chấm tự động; tự luận không chấm tự động được | — Pending |
+| Mã tham gia lớp tự sinh 6 chữ số, giáo viên không tự đặt | Tránh giáo viên đặt mã trùng hoặc dễ đoán. `Classroom.join_code` là unique key trong ERD — khi sinh phải kiểm tra trùng và sinh lại nếu đụng. Giáo viên chỉ bật/tắt qua `is_join_enabled` | — Pending |
 
 ## Evolution
 
