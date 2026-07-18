@@ -2,7 +2,7 @@
 
 ## Overview
 
-Memocard ships in three movements. First, a tiny throwaway spike (Phase 0) proves the two riskiest technical claims — Firebase and `sqflite_common_ffi` both working on Android emulator AND Windows desktop — before any real code is written. Second, one shared foundation (Phase 1) is built serially by 1-2 people: the 18-table SQLite cache, the Firestore schema + security rules, 7 core Riverpod providers, GoRouter shell, theme, and base repository pattern that all five developers will build on. Once that foundation locks, five vertical feature modules (Phases 2-6) run in parallel, one per developer, each owning their `lib/features/<module>/` end-to-end (UI + state + data): Auth/Profile/Admin, Flashcard Set, Learning Mode, Classroom, and Quiz/Test. Modules that depend on identity or content (Learning Mode, Classroom, Quiz) code against repository interfaces from day one so they aren't blocked waiting for concrete Auth/Set implementations. Finally, an integration phase (Phase 7) wires the five modules into one working E2E flow, verifies offline behavior and security rules with real role identities, confirms the 5-person contribution trail, and rehearses the demo on a clean machine.
+Memocard ships in three movements. First, a tiny throwaway spike (Phase 0) proves the riskiest technical claim — Firebase working correctly on Android emulator — before any real code is written (SQLite persistence now uses plain `sqflite`, which needs no separate desktop-FFI validation since the project targets Android only). Second, one shared foundation (Phase 1) is built serially by 1-2 people: the 18-table SQLite cache, the Firestore schema + security rules, 7 core Riverpod providers, GoRouter shell, theme, and base repository pattern that all five developers will build on. Once that foundation locks, five vertical feature modules (Phases 2-6) run in parallel, one per developer, each owning their `lib/features/<module>/` end-to-end (UI + state + data): Auth/Profile/Admin, Flashcard Set, Learning Mode, Classroom, and Quiz/Test. Modules that depend on identity or content (Learning Mode, Classroom, Quiz) code against repository interfaces from day one so they aren't blocked waiting for concrete Auth/Set implementations. Finally, an integration phase (Phase 7) wires the five modules into one working E2E flow, verifies offline behavior and security rules with real role identities, confirms the 5-person contribution trail, and rehearses the demo on a clean machine.
 
 ## Phases
 
@@ -13,7 +13,7 @@ Memocard ships in three movements. First, a tiny throwaway spike (Phase 0) prove
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 0: Platform Spike** - Prove Firebase and sqflite_common_ffi both work on Android emulator and Windows desktop before building anything real
+- [ ] **Phase 0: Platform Spike** - Prove Firebase and sqflite both work on Android emulator before building anything real
 - [ ] **Phase 1: Shared Foundation** - Build the core/ layer (schema, providers, routing, theme, base repository, team docs) that all 5 developers build on
 - [ ] **Phase 2: Auth, Profile & Admin (Person 1)** - Users can register/login/manage their profile; admins can fully manage the user base
 - [ ] **Phase 3: Flashcard Set (Person 2)** - Users can create, browse, edit, duplicate, and favorite flashcard sets
@@ -26,16 +26,15 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### Phase 0: Platform Spike
 
-**Goal**: Prove that Firebase (firebase_core 4.12.1, firebase_auth 6.5.6, cloud_firestore 6.7.1) and sqflite_common_ffi 2.4.2 both initialize and work on Android emulator AND Windows desktop, before any production code depends on that assumption
+**Goal**: Prove that Firebase (firebase_core 4.12.1, firebase_auth 6.5.6, cloud_firestore 6.7.1) and sqflite both initialize and work on Android emulator, before any production code depends on that assumption
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
 **Requirements**: FND-01, FND-02, FND-03, FND-04
 **Success Criteria** (what must be TRUE):
 
   1. A throwaway spike app launches without crashing on an Android emulator
-  2. The same spike app launches without crashing on Windows desktop
-  3. The spike app opens a local database and writes/reads a row via `sqflite_common_ffi` on both Android and Windows
-  4. The spike app initializes Firebase, signs up a test user via Firebase Auth, and writes/reads one Firestore document on both Android and Windows
+  2. The spike app opens a local database and writes/reads a row via `sqflite` on Android
+  3. The spike app initializes Firebase, signs up a test user via Firebase Auth, and writes/reads one Firestore document on Android
 
 **Plans**: 5 plans
 
@@ -50,7 +49,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 00-03-PLAN.md — Windows desktop verification run (captured evidence + visual check)
+- [ ] 00-03-PLAN.md — Windows desktop verification run (STALE — Phase 0 pending replan for Android-only scope, see STATE.md Decisions 2026-07-18)
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -68,7 +67,7 @@ Plans:
 **Requirements**: FND-05, FND-06, FND-07, FND-08, FND-09, FND-10, FND-11, FND-12
 **Success Criteria** (what must be TRUE):
 
-  1. The local SQLite database contains all 18 ERD tables plus sync metadata (`server_id`, `dirty_at`, `synced_at`) on every table, openable on both Android and Windows
+  1. The local SQLite database contains all 18 ERD tables plus sync metadata (`server_id`, `dirty_at`, `synced_at`) on every table, openable on Android
   2. Firestore has all 5 root collections + subcollections defined per `FIREBASE_SCHEMA.md`, with baseline security rules deployed and the Firestore Emulator runnable locally for development
   3. A feature screen can read current user, role, connectivity, and theme from the 7 shared Riverpod core providers without any feature redefining them
   4. The app launches into a 5-tab bottom nav shell via GoRouter, applies the "Academic Precision" light/dark theme, and redirects unauthenticated users to login automatically
@@ -184,7 +183,7 @@ Plans:
   2. Disabling the network mid-session and reconnecting shows study progress still works offline against the SQLite cache and syncs correctly once back online
   3. Firestore security rules deny cross-role and cross-user access when tested with student, teacher, and admin identities in the Rules Playground
   4. A reviewer can open the contribution docs and git history and see, via branch names, commit messages, and `lib/features/<module>/` folder ownership, exactly which of the 5 people built which module, with no cross-module imports
-  5. The app builds and runs the full journey above on a freshly cloned, clean machine for both the Android APK and the Windows executable
+  5. The app builds and runs the full journey above on a freshly cloned, clean machine for the Android APK
 
 **Plans**: TBD
 
