@@ -13,7 +13,22 @@ Future<void> main() async {
 
   // Initialize Firebase with emulator-safe dummy options (never a real
   // Firebase project — see firebase_options_spike.dart).
-  await Firebase.initializeApp(options: spikeFirebaseOptions);
+  //
+  // Guard against "[DEFAULT] already exists": the Google Services Gradle
+  // plugin auto-initializes a native default FirebaseApp from
+  // android/app/google-services.json via a ContentProvider before Dart's
+  // main() runs. `Firebase.apps` starts empty on the Dart side regardless
+  // of native state, so an isEmpty check cannot detect this — the native
+  // plugin call itself throws. That native app already uses the same
+  // demo-spike-project identity as spikeFirebaseOptions, so treating
+  // 'duplicate-app' as non-fatal and continuing is safe.
+  try {
+    await Firebase.initializeApp(options: spikeFirebaseOptions);
+  } on FirebaseException catch (e) {
+    if (e.code != 'duplicate-app') {
+      rethrow;
+    }
+  }
 
   // Point Auth and Firestore at the local Firebase Emulator Suite.
   FirebaseAuth.instance.useAuthEmulator(kAuthEmulatorHost, kAuthEmulatorPort);
