@@ -33,7 +33,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. The same spike app launches without crashing on Windows desktop
   3. The spike app opens a local database and writes/reads a row via `sqflite_common_ffi` on both Android and Windows
   4. The spike app initializes Firebase, signs up a test user via Firebase Auth, and writes/reads one Firestore document on both Android and Windows
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 00-01-PLAN.md — Scaffold spike_platform project, pin Firebase/SQLite deps, verify Firebase CLI
+- [ ] 00-02-PLAN.md — Implement SQLite + Firebase emulator round-trip services, wire single spike screen
+- [ ] 00-03-PLAN.md — Windows desktop verification run (captured evidence + visual check)
+- [ ] 00-04-PLAN.md — Android emulator verification run (captured evidence + visual check)
+- [ ] 00-05-PLAN.md — Write SPIKE-FINDINGS.md go/no-go verdict + credential-hygiene pass
 
 ### Phase 1: Shared Foundation
 **Goal**: One locked `core/` layer exists — schema, Firestore design, providers, routing, theme, base repository, team docs — so all 5 developers can build features in parallel without diverging or conflicting
@@ -149,7 +156,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 (Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0. Platform Spike | 0/TBD | Not started | - |
+| 0. Platform Spike | 0/5 | Not started | - |
 | 1. Shared Foundation | 0/TBD | Not started | - |
 | 2. Auth, Profile & Admin | 0/TBD | Not started | - |
 | 3. Flashcard Set | 0/TBD | Not started | - |
