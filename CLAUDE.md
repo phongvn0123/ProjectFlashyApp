@@ -13,10 +13,9 @@ Memocard là ứng dụng flashcard di động (Flutter/Android Studio) dành ch
 
 - **Tech stack**: Flutter + Android Studio — yêu cầu bắt buộc của môn PRM393.
 - **Tech stack**: Riverpod cho state management — yêu cầu bắt buộc, không dùng Provider/Bloc/GetX.
-- **Tech stack**: `sqflite_common_ffi` cho CSDL local — yêu cầu bắt buộc để chạy được trên Windows, không dùng `sqflite` thuần.
+- **Tech stack**: `sqflite` thuần cho CSDL local — yêu cầu bắt buộc của PRM393. (Trước đây bắt buộc dùng `sqflite_common_ffi` chỉ vì lý do hỗ trợ nền tảng desktop đã bị loại bỏ; bản thân `sqflite` đã là gói "Mandatory per PRM393" nên yêu cầu môn học vẫn được đáp ứng đầy đủ — xem ghi chú lịch sử 2026-07-18 trong mục Technology Stack bên dưới.)
 - **Tech stack**: Firebase (Auth + Firestore) — yêu cầu bắt buộc về BaaS và API call.
 - **Tech stack**: SharedPreferences — yêu cầu bắt buộc, dùng cho phiên đăng nhập + role và theme/ngôn ngữ.
-- **Compatibility**: Phải build và chạy được trên cả Android emulator lẫn Windows desktop — quyết định loại bỏ FCM.
 - **Team**: 5 thành viên, mỗi người phải sở hữu ≥ 4 màn hình để có đủ dấu vết đóng góp khi chấm điểm.
 - **Design**: Bám theo 32 màn hình Stitch có sẵn — không tự do redesign, chỉ bổ sung màn Admin theo cùng ngôn ngữ thiết kế.
 - **Dependencies**: 5 người dùng chung 1 Firebase project (free tier Spark) — cần thống nhất security rules và tránh đụng schema.
