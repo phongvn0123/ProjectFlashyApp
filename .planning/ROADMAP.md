@@ -13,7 +13,7 @@ Memocard ships in three movements. First, a tiny throwaway spike (Phase 0) prove
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 0: Platform Spike** - Prove Firebase and sqflite both work on Android emulator before building anything real
+- [x] **Phase 0: Platform Spike** - Prove Firebase and sqflite both work on Android emulator before building anything real (completed 2026-07-18)
 - [ ] **Phase 1: Shared Foundation** - Build the core/ layer (schema, providers, routing, theme, base repository, team docs) that all 5 developers build on
 - [ ] **Phase 2: Auth, Profile & Admin (Person 1)** - Users can register/login/manage their profile; admins can fully manage the user base
 - [ ] **Phase 3: Flashcard Set (Person 2)** - Users can create, browse, edit, duplicate, and favorite flashcard sets
@@ -49,7 +49,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 00-03-PLAN.md — Regression/credential-hygiene checks, automated Android emulator verification run (captured console log + screenshot), write SPIKE-FINDINGS.md go/no-go verdict
+- [x] 00-03-PLAN.md — Regression/credential-hygiene checks, automated Android emulator verification run (captured console log + screenshot), write SPIKE-FINDINGS.md go/no-go verdict
 
 ### Phase 1: Shared Foundation
 
@@ -186,7 +186,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 (Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0. Platform Spike | 2/3 | In Progress|  |
+| 0. Platform Spike | 3/3 | Complete   | 2026-07-18 |
 | 1. Shared Foundation | 0/TBD | Not started | - |
 | 2. Auth, Profile & Admin | 0/TBD | Not started | - |
 | 3. Flashcard Set | 0/TBD | Not started | - |
