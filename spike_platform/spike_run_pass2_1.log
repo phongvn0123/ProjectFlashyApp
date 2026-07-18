@@ -1,0 +1,160 @@
+Resolving dependencies...
+Downloading packages...
+  matcher 0.12.19 (0.12.20 available)
+  meta 1.17.0 (1.19.0 available)
+  sqflite 2.4.2+1 (2.4.3 available)
+  sqflite_android 2.4.2+3 (2.4.3 available)
+  sqflite_common 2.5.8 (2.5.11 available)
+  sqflite_darwin 2.4.2 (2.4.3+1 available)
+  sqflite_platform_interface 2.4.0 (2.4.1 available)
+  synchronized 3.4.0+1 (3.4.1 available)
+  test_api 0.7.10 (0.7.13 available)
+  vector_math 2.2.0 (2.4.0 available)
+Got dependencies!
+10 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Launching lib\main.dart on sdk gphone16k x86 64 in debug mode...
+Running Gradle task 'assembleDebug'...                             11.5s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...           3.2s
+D/FlutterJNI(11799): Beginning load of flutter...
+D/FlutterJNI(11799): flutter (null) was loaded normally!
+I/flutter (11799): [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+D/FlutterRenderer(11799): Width is zero. 0,0
+D/VRI[MainActivity](11799): WindowInsets changed: 1080x2400 statusBars:[0,128,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,160,0,84] 
+D/FlutterRenderer(11799): Width is zero. 0,0
+I/Surface (11799): Creating surface for consumer unnamed-11799-0 with slotExpansion=1 for 64 slots
+I/Surface (11799): Creating surface for consumer VRI[MainActivity]#0(BLAST Consumer)0 with slotExpansion=1 for 64 slots
+D/FlutterJNI(11799): Sending viewport metrics to the engine.
+Syncing files to device sdk gphone16k x86 64...                 
+I/Surface (11799): Creating surface for consumer unnamed-11799-1 with slotExpansion=1 for 64 slots
+I/Surface (11799): Creating surface for consumer fb556fb SurfaceView[com.memocard.spike.spike_platform/com.memocard.spike.spike_platform.MainActivity]#1(BLAST Consumer)1 with slotExpansion=1 for 64 slots
+Syncing files to device sdk gphone16k x86 64...                     68ms
+
+Flutter run key commands.
+r Hot reload. 
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on sdk gphone16k x86 64 is available at: http://127.0.0.1:56633/ZamSNCn8hAk=/
+The Flutter DevTools debugger and profiler on sdk gphone16k x86 64 is available at: http://127.0.0.1:56633/ZamSNCn8hAk=/devtools/?uri=ws://127.0.0.1:56633/ZamSNCn8hAk=/ws
+I/.spike_platform(11799): Compiler allocated 5239KB to compile void android.view.ViewRootImpl.performTraversals(long)
+I/Choreographer(11799): Skipped 90 frames!  The application may be doing too much work on its main thread.
+D/WindowLayoutComponentImpl(11799): Register WindowLayoutInfoListener on Context=com.memocard.spike.spike_platform.MainActivity@6a9fb56, of which baseContext=android.app.ContextImpl@9ccf4c7
+D/ProfileInstaller(11799): Installing profile for com.memocard.spike.spike_platform
+D/FlutterJNI(11799): Sending viewport metrics to the engine.
+I/Choreographer(11799): Skipped 92 frames!  The application may be doing too much work on its main thread.
+D/FlutterJNI(11799): Sending viewport metrics to the engine.
+D/InsetsController(11799): hide(ime())
+I/ImeTracker(11799): com.memocard.spike.spike_platform:4fa1f6ee: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+I/flutter (11799): [SPIKE] SQLITE PASS: {id: 1, value: hello-from-android}
+I/FirebaseAuth(11799): Creating user with spike_test_user@example.com with empty reCAPTCHA token
+W/System  (11799): Ignoring header X-Firebase-Locale because its value was null.
+W/System  (11799): Ignoring header X-Firebase-Locale because its value was null.
+I/.spike_platform(11799): Background concurrent mark compact GC freed 4009KB AllocSpace bytes, 15(576KB) LOS objects, 49% free, 3399KB/6799KB, paused 1.598ms,8.244ms total 55.881ms
+D/FirebaseAuth(11799): Notifying id token listeners about user ( FLG4DaRM22prUnNDHsTCPc1wuuv4 ).
+D/FirebaseAuth(11799): Notifying auth state listeners about user ( FLG4DaRM22prUnNDHsTCPc1wuuv4 ).
+W/DynamiteModule(11799): Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
+I/DynamiteModule(11799): Considering local module com.google.android.gms.providerinstaller.dynamite:0 and remote module com.google.android.gms.providerinstaller.dynamite:0
+W/ProviderInstaller(11799): Failed to load providerinstaller module: No acceptable module com.google.android.gms.providerinstaller.dynamite found. Local version is 0 and remote version is 0.
+D/ApplicationLoaders(11799): Returning zygote-cached class loader: /system/framework/org.apache.http.legacy.jar
+D/ApplicationLoaders(11799): Returning zygote-cached class loader: /system/framework/com.android.location.provider.jar
+D/ApplicationLoaders(11799): Returning zygote-cached class loader: /system/framework/com.android.media.remotedisplay.jar
+D/ApplicationLoaders(11799): Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+D/ApplicationLoaders(11799): Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+D/nativeloader(11799): Configuring clns-10 for other apk /apex/com.google.android.gmssystem/priv-app/PrebuiltGmsCoreVic@CP21.260330.005/PrebuiltGmsCoreVic.apk. target_sdk_version=37, uses_libraries=, library_path=/apex/com.google.android.gmssystem/priv-app/PrebuiltGmsCoreVic@CP21.260330.005/lib/x86_64:/apex/com.google.android.gmssystem/priv-app/PrebuiltGmsCoreVic@CP21.260330.005/PrebuiltGmsCoreVic.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+D/nativeloader(11799): InitApexLibraries:
+D/nativeloader(11799):   com_android_adservices: libhpke_jni.so:libtflite_support_classifiers_native.so
+D/nativeloader(11799):   com_android_appsearch: libappsearchservice.so:libicing_anywhere.so
+D/nativeloader(11799):   com_android_art: libartservice.so
+D/nativeloader(11799):   com_android_bt: libbluetooth_jni.so
+D/nativeloader(11799):   com_android_conscrypt: libjavacrypto.so
+D/nativeloader(11799):   com_android_extservices: libtflite_support_classifiers_native.so
+D/nativeloader(11799):   com_android_mediaprovider: libpdfclient.so
+D/nativeloader(11799):   com_android_nfcservices: libnfc_nci_jni.so
+D/nativeloader(11799):   com_android_npumanager: libnpumanager_service_jni.so
+D/nativeloader(11799):   com_android_ondevicepersonalization: libfcp_cpp_dep_jni.so:libfcp_hpke_jni.so
+D/nativeloader(11799):   com_android_os_statsd: libstats_jni.so
+D/nativeloader(11799):   com_android_tethering: libandroid_net_connectivity_com_android_net_module_util_jni.so:libandroid_net_connectivity_com_android_net_module_util_jni_CommonConnectivityJni.so:libcrypto_httpengine.so:libframework-connectivity-jni.so:libframework-connectivity-tiramisu-jni.so:libhttpengine.so:libservice-connectivity.so:libservice-thread-jni.so
+D/nativeloader(11799):   com_android_uwb: libuwb_uci_jni_rust.so
+D/nativeloader(11799):   com_android_virt: Mi
+I/.spike_platform(11799): Background young concurrent mark compact GC freed 1537KB AllocSpace bytes, 3(160KB) LOS objects, 9% free, 6145KB/6799KB, paused 4.965ms,18.449ms total 89.866ms
+E/GoogleApiManager(11799): Failed to get service from broker. 
+E/GoogleApiManager(11799): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager(11799): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3392)
+E/GoogleApiManager(11799): 	at android.os.Parcel.createException(Parcel.java:3376)
+E/GoogleApiManager(11799): 	at android.os.Parcel.readException(Parcel.java:3359)
+E/GoogleApiManager(11799): 	at android.os.Parcel.readException(Parcel.java:3301)
+E/GoogleApiManager(11799): 	at bhqq.a(:com.google.android.gms@261136038@26.11.36 (260800-892401869):36)
+E/GoogleApiManager(11799): 	at bhor.z(:com.google.android.gms@261136038@26.11.36 (260800-892401869):143)
+E/GoogleApiManager(11799): 	at bgut.run(:com.google.android.gms@261136038@26.11.36 (260800-892401869):42)
+E/GoogleApiManager(11799): 	at android.os.Handler.handleCallback(Handler.java:1095)
+E/GoogleApiManager(11799): 	at android.os.Handler.dispatchMessageImpl(Handler.java:135)
+E/GoogleApiManager(11799): 	at android.os.Handler.dispatchMessage(Handler.java:125)
+E/GoogleApiManager(11799): 	at cwwb.mr(:com.google.android.gms@261136038@26.11.36 (260800-892401869):1)
+E/GoogleApiManager(11799): 	at cwwb.dispatchMessage(:com.google.android.gms@261136038@26.11.36 (260800-892401869):5)
+E/GoogleApiManager(11799): 	at android.os.Looper.loopOnce(Looper.java:296)
+E/GoogleApiManager(11799): 	at android.os.Looper.loop(Looper.java:397)
+E/GoogleApiManager(11799): 	at android.os.HandlerThread.run(HandlerThread.java:139)
+W/GoogleApiManager(11799): Not showing notification since connectionResult is not user-facing: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar(11799): Failed to register com.google.android.gms.providerinstaller#com.memocard.spike.spike_platform
+W/FlagRegistrar(11799): ggtz: 17: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar(11799): 	at ggub.a(:com.google.android.gms@261136038@26.11.36 (260800-892401869):13)
+W/FlagRegistrar(11799): 	at hggj.d(:com.google.android.gms@261136038@26.11.36 (260800-892401869):3)
+W/FlagRegistrar(11799): 	at hggl.run(:com.google.android.gms@261136038@26.11.36 (260800-892401869):130)
+W/FlagRegistrar(11799): 	at hgis.execute(:com.google.android.gms@261136038@26.11.36 (260800-892401869):1)
+W/FlagRegistrar(11799): 	at hggt.f(:com.google.android.gms@261136038@26.11.36 (260800-892401869):1)
+W/FlagRegistrar(11799): 	at hggt.m(:com.google.android.gms@261136038@26.11.36 (260800-892401869):99)
+W/FlagRegistrar(11799): 	at hggt.r(:com.google.android.gms@261136038@26.11.36 (260800-892401869):17)
+W/FlagRegistrar(11799): 	at fymg.hB(:com.google.android.gms@261136038@26.11.36 (260800-892401869):35)
+W/FlagRegistrar(11799): 	at flah.run(:com.google.android.gms@261136038@26.11.36 (260800-892401869):12)
+W/FlagRegistrar(11799): 	at hgis.execute(:com.google.android.gms@261136038@26.11.36 (260800-892401869):1)
+W/FlagRegistrar(11799): 	at flai.b(:com.google.android.gms@261136038@26.11.36 (260800-892401869):18)
+W/FlagRegistrar(11799): 	at flax.b(:com.google.android.gms@261136038@26.11.36 (260800-892401869):34)
+W/FlagRegistrar(11799): 	at flaz.d(:com.google.android.gms@261136038@26.11.36 (260800-892401869):25)
+W/FlagRegistrar(11799): 	at bgsc.c(:com.google.android.gms@261136038@26.11.36 (260800-892401869):9)
+W/FlagRegistrar(11799): 	at bgur.q(:com.google.android.gms@261136038@26.11.36 (260800-892401869):48)
+W/FlagRegistrar(11799): 	at bgur.d(:com.google.android.gms@261136038@26.11.36 (260800-892401869):10)
+W/FlagRegistrar(11799): 	at bgur.g(:com.google.android.gms@261136038@26.11.36 (260800-892401869):191)
+W/FlagRegistrar(11799): 	at bgur.onConnectionFailed(:com.google.android.gms@261136038@26.11.36 (260800-892401869):2)
+W/FlagRegistrar(11799): 	at bgut.run(:com.google.android.gms@261136038@26.11.36 (260800-892401869):70)
+W/FlagRegistrar(11799): 	at android.os.Handler.handleCallback(Handler.java:1095)
+W/FlagRegistrar(11799): 	at android.os.Handler.dispatchMessageImpl(Handler.java:135)
+W/FlagRegistrar(11799): 	at android.os.Handler.dispatchMessage(Handler.java:125)
+W/FlagRegistrar(11799): 	at cwwb.mr(:com.google.android.gms@261136038@26.11.36 (260800-892401869):1)
+W/FlagRegistrar(11799): 	at cwwb.dispatchMessage(:com.google.android.gms@261136038@26.11.36 (260800-892401869):5)
+W/FlagRegistrar(11799): 	at android.os.Looper.loopOnce(Looper.java:296)
+W/FlagRegistrar(11799): 	at android.os.Looper.loop(Looper.java:397)
+W/FlagRegistrar(11799): 	at android.os.HandlerThread.run(HandlerThread.java:139)
+W/FlagRegistrar(11799): Caused by: bgqj: 17: API: Phenotype.API is not available on this device. Connection failed with: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}
+W/FlagRegistrar(11799): 	at bhod.a(:com.google.android.gms@261136038@26.11.36 (260800-892401869):15)
+W/FlagRegistrar(11799): 	at bgsf.a(:com.google.android.gms@261136038@26.11.36 (260800-892401869):1)
+W/FlagRegistrar(11799): 	at bgsc.c(:com.google.android.gms@261136038@26.11.36 (260800-892401869):5)
+W/FlagRegistrar(11799): 	... 13 more
+D/nativeloader(11799): Load /apex/com.google.android.gmssystem/priv-app/PrebuiltGmsCoreVic@CP21.260330.005/PrebuiltGmsCoreVic.apk!/lib/x86_64/libconscrypt_gmscore_jni.so using class loader ns clns-10 (caller=/apex/com.google.android.gmssystem/priv-app/PrebuiltGmsCoreVic@CP21.260330.005/PrebuiltGmsCoreVic.apk): ok
+V/NativeCrypto(11799): Registering com/google/android/gms/org/conscrypt/NativeCrypto's 334 native methods...
+I/.spike_platform(11799): Background concurrent mark compact GC freed 1008KB AllocSpace bytes, 1(1200KB) LOS objects, 49% free, 4129KB/8258KB, paused 1.498ms,16.014ms total 99.581ms
+I/ggtn    (11799): Unable to retrieve flag snapshot for com.google.android.gms.providerinstaller#com.memocard.spike.spike_platform, using defaults.
+I/ProviderInstaller(11799): Installed default security provider GmsCore_OpenSSL
+I/flutter (11799): [SPIKE] FIREBASE PASS: {value: hello-firebase}
+E/GoogleApiManager(11799): Failed to get service from broker. 
+E/GoogleApiManager(11799): java.lang.SecurityException: Unknown calling package name 'com.google.android.gms'.
+E/GoogleApiManager(11799): 	at android.os.Parcel.createExceptionOrNull(Parcel.java:3392)
+E/GoogleApiManager(11799): 	at android.os.Parcel.createException(Parcel.java:3376)
+E/GoogleApiManager(11799): 	at android.os.Parcel.readException(Parcel.java:3359)
+E/GoogleApiManager(11799): 	at android.os.Parcel.readException(Parcel.java:3301)
+E/GoogleApiManager(11799): 	at bhqq.a(:com.google.android.gms@261136038@26.11.36 (260800-892401869):36)
+E/GoogleApiManager(11799): 	at bhor.z(:com.google.android.gms@261136038@26.11.36 (260800-892401869):143)
+E/GoogleApiManager(11799): 	at bgut.run(:com.google.android.gms@261136038@26.11.36 (260800-892401869):42)
+E/GoogleApiManager(11799): 	at android.os.Handler.handleCallback(Handler.java:1095)
+E/GoogleApiManager(11799): 	at android.os.Handler.dispatchMessageImpl(Handler.java:135)
+E/GoogleApiManager(11799): 	at android.os.Handler.dispatchMessage(Handler.java:125)
+E/GoogleApiManager(11799): 	at cwwb.mr(:com.google.android.gms@261136038@26.11.36 (260800-892401869):1)
+E/GoogleApiManager(11799): 	at cwwb.dispatchMessage(:com.google.android.gms@261136038@26.11.36 (260800-892401869):5)
+E/GoogleApiManager(11799): 	at android.os.Looper.loopOnce(Looper.java:296)
+E/GoogleApiManager(11799): 	at android.os.Looper.loop(Looper.java:397)
+E/GoogleApiManager(11799): 	at android.os.HandlerThread.run(HandlerThread.java:139)
+W/GoogleApiManager(11799): Not showing notification since connectionResult is not user-facing: ConnectionResult{statusCode=DEVELOPER_ERROR, resolution=null, message=null, clientMethodKey=null}

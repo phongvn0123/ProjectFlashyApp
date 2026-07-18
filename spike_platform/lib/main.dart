@@ -31,7 +31,15 @@ Future<void> main() async {
   }
 
   // Point Auth and Firestore at the local Firebase Emulator Suite.
-  FirebaseAuth.instance.useAuthEmulator(kAuthEmulatorHost, kAuthEmulatorPort);
+  //
+  // useAuthEmulator returns a Future and MUST be awaited: without the await,
+  // the first auth call can race ahead of the emulator redirect and hit the
+  // real Firebase backend with the dummy API key, making the spike's PASS
+  // result non-deterministic. useFirestoreEmulator is synchronous.
+  await FirebaseAuth.instance.useAuthEmulator(
+    kAuthEmulatorHost,
+    kAuthEmulatorPort,
+  );
   FirebaseFirestore.instance.useFirestoreEmulator(
     kFirestoreEmulatorHost,
     kFirestoreEmulatorPort,
