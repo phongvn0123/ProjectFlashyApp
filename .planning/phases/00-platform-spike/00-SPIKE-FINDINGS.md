@@ -100,3 +100,44 @@ Phase 1 (shared foundation) có đủ căn cứ kỹ thuật để bắt đầu.
 - `sqflite` phải pin `^2.4.2` (không phải `^2.4.3` như CLAUDE.md) do giới hạn Dart SDK của toolchain hiện tại.
 - `minSdk = 24` (không phải 23).
 - Khi Phase 1 tích hợp Firebase thật (không phải dummy config), cần áp dụng lại pattern bắt `FirebaseException` `duplicate-app` nếu `google-services.json` thật cũng kích hoạt auto-init native (rất có thể sẽ xảy ra tương tự).
+
+---
+
+## CR-01 Fix & 3-Run Stability Evidence (Post-review hardening)
+
+Code review sau khi spike PASS lần đầu phát hiện **CR-01**: `useAuthEmulator()` bị gọi mà không `await`, khiến kết quả `FIREBASE PASS` là một race condition (có thể tình cờ pass) thay vì bằng chứng xác định. Đồng thời **CR-03** ghi nhận `firebase.json` có block `"firestore"` ở top-level có thể khiến một lệnh `firebase deploy` chạy nhầm đẩy rules mở toang lên project Firebase chung của team.
+
+### Fix đã áp dụng
+
+1. **CR-01 — `spike_platform/lib/main.dart`:** Thêm `await` trước `FirebaseAuth.instance.useAuthEmulator(...)` (dòng 39). Trước đây gọi fire-and-forget nên lệnh Auth/Firestore đầu tiên có thể chạy trước khi redirect sang emulator hoàn tất, khiến app hit vào backend Firebase thật với API key giả — làm PASS không đáng tin cậy. `useFirestoreEmulator` vẫn giữ nguyên vì API này đồng bộ (synchronous), không cần await.
+2. **CR-03 — `spike_platform/firebase.json`:** Xoá block `"firestore"` ở top-level (trỏ tới `firestore.rules`/`firestore.indexes.json`) — chỉ giữ lại block `"emulators"`. `firestore.rules` vẫn còn trên đĩa kèm header giải thích nhưng cố tình không được wire vào config, để một `firebase deploy` chạy nhầm không thể đẩy rules (kể cả rules mở toang) lên project Firebase Spark chung của 5 người. Emulator Suite không cần file rules để chạy — khi không có config nào chỉ định rules, nó tự mặc định allow toàn bộ read/write, đúng như log xác nhận: `Did not find a Cloud Firestore rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes.`
+
+### Bằng chứng ổn định qua 3 lần chạy độc lập
+
+Sau fix, `flutter analyze` chạy lại vẫn sạch (`No issues found!`). Firebase Emulator Suite (`auth` 9099 + `firestore` 8080, dùng JDK 21 từ Android Studio JBR) được khởi động lại, và app được chạy **3 lần riêng biệt** trên `emulator-5554`, mỗi lần thoát sạch (`taskkill /T /F` trên process tree `flutter run`, sau đó `adb shell am force-stop` gói app) trước khi chạy lần kế tiếp.
+
+| Run | SQLITE | FIREBASE | Log file |
+|-----|--------|----------|----------|
+| 1 | PASS | PASS | `spike_platform/spike_run_pass2_1.log` |
+| 2 | PASS | PASS | `spike_platform/spike_run_pass2_2.log` |
+| 3 | PASS | PASS | `spike_platform/spike_run_pass2_3.log` |
+
+Dòng log thật của từng lần chạy:
+
+```
+# Run 1 (spike_run_pass2_1.log)
+I/flutter (11799): [SPIKE] SQLITE PASS: {id: 1, value: hello-from-android}
+I/flutter (11799): [SPIKE] FIREBASE PASS: {value: hello-firebase}
+
+# Run 2 (spike_run_pass2_2.log)
+I/flutter (12000): [SPIKE] SQLITE PASS: {id: 1, value: hello-from-android}
+I/flutter (12000): [SPIKE] FIREBASE PASS: {value: hello-firebase}
+
+# Run 3 (spike_run_pass2_3.log)
+I/flutter (12153): [SPIKE] SQLITE PASS: {id: 1, value: hello-from-android}
+I/flutter (12153): [SPIKE] FIREBASE PASS: {value: hello-firebase}
+```
+
+Không có dòng `FAIL` nào trong cả 3 file log (`grep -n "FAIL" spike_run_pass2_1.log spike_run_pass2_2.log spike_run_pass2_3.log` trả về rỗng). Sau khi thu bằng chứng, toàn bộ process (`flutter run` process tree cả 3 lần, và `firebase emulators:start` process tree) đã bị dừng qua `taskkill /T /F`; `netstat -ano | grep LISTENING | grep -E ":9099|:8080|:4000"` trả về rỗng, xác nhận không còn gì lắng nghe trên các port đó.
+
+**Verdict GO ở đầu tài liệu này giữ nguyên** — 3-run stability evidence chỉ củng cố thêm độ tin cậy, không thay đổi kết luận.
