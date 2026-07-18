@@ -53,7 +53,7 @@ Plans:
 
 ### Phase 1: Shared Foundation
 
-**Goal**: One locked `core/` layer exists — schema, Firestore design, providers, routing, theme, base repository, team docs — so all 5 developers can build features in parallel without diverging or conflicting
+**Goal:** As the 5-person developer team, I want one locked shared `core/` layer (schema, providers, routing, theme, base repository, team docs), so that we can build our five feature modules in parallel without diverging or conflicting.
 **Mode:** mvp
 **Depends on**: Phase 0
 **Requirements**: FND-05, FND-06, FND-07, FND-08, FND-09, FND-10, FND-11, FND-12
@@ -65,8 +65,29 @@ Plans:
   4. The app launches into a 5-tab bottom nav shell via GoRouter, applies the "Academic Precision" light/dark theme, and redirects unauthenticated users to login automatically
   5. A new developer can clone the repo, follow `DEVELOPER_GUIDE.md`/`CONTRIBUTING.md`/`GIT_WORKFLOW.md`/`ENVIRONMENT.md`, and get the app running with the base repository's cache-first read / Firestore-first write pattern understood
 
-**Plans**: TBD
+**Plans**: 8 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+
+- [ ] 01-01-PLAN.md — Scaffold the real Flutter project at repo root (delete spike_platform), pin validated dependencies, Academic Precision theme, 5-tab GoRouter shell with placeholder screens — runnable independently of everything else
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 01-02-PLAN.md — SQLite 18-table schema + sync metadata, DatabaseService, integration-tested on Android
+- [ ] 01-03-PLAN.md — Firestore 5-collection schema, role-based security rules, composite indexes, local Emulator Suite wiring, rules integration test
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 01-04-PLAN.md — [CHECKPOINT] Human creates the real shared Firebase project, runs flutterfire configure, deploys rules/indexes (does not block any other Phase 1 work)
+- [ ] 01-05-PLAN.md — 7 core Riverpod providers + bonus themeModeProvider, Firebase init in main.dart (local emulator only), real auth-redirect wiring in the router
+- [ ] 01-06-PLAN.md — BaseSyncRepository<TModel> — cache-first read / Firestore-first write pattern, proven with fakes
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
+- [ ] 01-07-PLAN.md — Team docs: ENVIRONMENT.md, GIT_WORKFLOW.md, CONTRIBUTING.md, DEVELOPER_GUIDE.md
+- [ ] 01-08-PLAN.md — [CHECKPOINT] Human confirms the walking skeleton runs and matches the Academic Precision design system
 
 ### Phase 2: Auth, Profile & Admin
 
@@ -187,7 +208,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 (Ph
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 0. Platform Spike | 3/3 | Complete   | 2026-07-18 |
-| 1. Shared Foundation | 0/TBD | Not started | - |
+| 1. Shared Foundation | 0/8 | Not started | - |
 | 2. Auth, Profile & Admin | 0/TBD | Not started | - |
 | 3. Flashcard Set | 0/TBD | Not started | - |
 | 4. Learning Mode | 0/TBD | Not started | - |
