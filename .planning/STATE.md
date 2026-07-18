@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Hoàn tất Plan 00-01 (platform scaffold), sẵn sàng Plan 00-02
-last_updated: "2026-07-18T15:20:49.496Z"
+stopped_at: Hoàn tất Plan 00-02 (Firebase + SQLite spike logic), sẵn sàng Plan 00-03
+last_updated: "2026-07-18T15:28:54.218Z"
 last_activity: 2026-07-18
 progress:
   total_phases: 8
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-07-18)
 ## Current Position
 
 Phase: 00 (platform-spike) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-07-18
 
-Progress: [███░░░░░░░] 33%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [███░░░░░░░] 33%
 
 *Updated after each plan completion*
 | Phase 00-platform-spike P01 | 30 | 3 tasks | 11 files |
+| Phase 00-platform-spike P02 | 10min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,8 @@ Recent decisions affecting current work:
 - 2026-07-18: Switched `sqflite_common_ffi` → plain `sqflite` for local CSDL. Rationale: `sqflite_common_ffi` was only mandatory as the Windows-compatibility enabler; CLAUDE.md's Technology Stack table already lists `sqflite` itself as "Mandatory per PRM393", so dropping the FFI package while keeping `sqflite` still satisfies the course's local-database requirement.
 - [Phase 00-01]: sqflite pin xuống ^2.4.2 (thay vì ^2.4.3 trong CLAUDE.md) vì sqflite 2.4.3 yêu cầu Dart SDK ^3.12.0, toolchain hiện tại (Flutter 3.41.9) chỉ bundle Dart 3.11.5
 - [Phase 00-01]: minSdk = 24 (không phải 23) trong build.gradle.kts vì Flutter tool tự động revert mọi minSdk 16-23 về flutter.minSdkVersion (=24) ở mỗi lần build
+- [Phase 00-platform-spike]: [Phase 00-02]: Dùng adjacent string-literal concatenation ('X: ' '$value') thay vì '+' để vừa lint-clean vừa thoả literal grep check trong acceptance criteria
+- [Phase 00-platform-spike]: [Phase 00-02]: Sửa test/widget_test.dart (Rule 3) vì file mặc định từ flutter create tham chiếu MyApp đã bị Task 3 xoá, làm hỏng flutter analyze toàn project
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-07-18T15:20:49.486Z
-Stopped at: Hoàn tất Plan 00-01 (platform scaffold), sẵn sàng Plan 00-02
+Last session: 2026-07-18T15:28:54.204Z
+Stopped at: Hoàn tất Plan 00-02 (Firebase + SQLite spike logic), sẵn sàng Plan 00-03
 Resume file: None

@@ -45,7 +45,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 00-02-PLAN.md — Implement sqlite_service.dart + firebase_service.dart round-trip logic, wire main.dart spike screen (auto-run + re-run buttons)
+- [x] 00-02-PLAN.md — Implement sqlite_service.dart + firebase_service.dart round-trip logic, wire main.dart spike screen (auto-run + re-run buttons)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -186,7 +186,7 @@ Phases execute in numeric order: 0 → 1 → 2 → 3 → 4 → 5 → 6 → 7 (Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 0. Platform Spike | 1/3 | In Progress|  |
+| 0. Platform Spike | 2/3 | In Progress|  |
 | 1. Shared Foundation | 0/TBD | Not started | - |
 | 2. Auth, Profile & Admin | 0/TBD | Not started | - |
 | 3. Flashcard Set | 0/TBD | Not started | - |
