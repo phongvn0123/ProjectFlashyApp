@@ -35,29 +35,29 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
-  # State management (MANDATORY per PRM393 / CLAUDE.md)
+  # State management (MANDATORY per PRM393)
   flutter_riverpod: ^3.3.2
   riverpod_annotation: ^4.0.3
 
-  # Local database (MANDATORY per PRM393 / CLAUDE.md)
+  # Local database (MANDATORY per PRM393)
   # Pinned to ^2.4.2, NOT ^2.4.3 — sqflite 2.4.3 requires Dart SDK ^3.12.0,
   # unavailable on Flutter 3.41.9 (bundles Dart 3.11.5). See Phase 0 finding.
   sqflite: ^2.4.2
   path: ^1.9.1
 
-  # Firebase (MANDATORY per PRM393 / CLAUDE.md)
+  # Firebase (MANDATORY per PRM393)
   firebase_core: ^4.12.1
   firebase_auth: ^6.5.6
   cloud_firestore: ^6.7.1
 
-  # Persistent local storage (MANDATORY per PRM393 / CLAUDE.md)
+  # Persistent local storage (MANDATORY per PRM393)
   shared_preferences: ^2.5.5
 
   # Navigation
   go_router: ^17.3.0
 
   # Data models & serialization
-  # freezed_annotation bumped to ^3.0.0 (CLAUDE.md pins ^2.4.4, which conflicts
+  # freezed_annotation bumped to ^3.0.0 to avoid dependency conflicts
   # with freezed ^3.2.5 + riverpod_generator ^4.0.4, both of which require
   # freezed_annotation ^3.0.0 transitively via riverpod_analyzer_utils). See
   # deviation note in 01-01-SUMMARY.md.
@@ -76,7 +76,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
   # Code generation (dev-only) — DEFERRED, see deviation note in
-  # 01-01-SUMMARY.md: riverpod_generator ^4.0.4 (CLAUDE.md pin) requires
+  # 01-01-SUMMARY.md: riverpod_generator ^4.0.4 requires
   # analyzer ^12.0.0 -> meta ^1.18.0, but the Flutter 3.41.9 SDK's bundled
   # flutter_test pins meta to 1.17.0. Every riverpod_generator 4.x version
   # low enough to avoid that conflict instead pins riverpod to an exact
