@@ -43,6 +43,7 @@ dependencies:
   # Pinned to ^2.4.2, NOT ^2.4.3 — sqflite 2.4.3 requires Dart SDK ^3.12.0,
   # unavailable on Flutter 3.41.9 (bundles Dart 3.11.5). See Phase 0 finding.
   sqflite: ^2.4.2
+  path: ^1.9.1
 
   # Firebase (MANDATORY per PRM393 / CLAUDE.md)
   firebase_core: ^4.12.1
@@ -65,9 +66,6 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter
-
-  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to

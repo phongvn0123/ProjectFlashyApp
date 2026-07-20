@@ -2,13 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-/// Persistent 5-tab bottom navigation shell.
-///
-/// Wraps the [StatefulShellRoute.indexedStack] branch content; per
-/// DESIGN.md Components > Navigation: "88px height ... icons 24px,
-/// inkMuted48 inactive, Action Blue active" (active/inactive colors come
-/// from the applied [ThemeData.colorScheme] via [NavigationBar]'s default
-/// Material 3 styling).
 class BottomNavShell extends ConsumerWidget {
   const BottomNavShell({required this.navigationShell, super.key});
 
