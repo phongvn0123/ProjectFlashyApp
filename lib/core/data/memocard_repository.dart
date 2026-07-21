@@ -572,20 +572,56 @@ class MemocardRepository {
     return rows.map(Classroom.fromMap).toList();
   }
 
-  Future<List<TeacherQuiz>> assignedQuizzesForStudent(String studentId) async {
+  Future<List<StudentAssignedQuiz>> assignedQuizzesForStudent(
+    String studentId,
+  ) async {
     await _db.ensureQuizPublishingSchema();
+    await _db.ensureStudentQuizSchema();
     final db = await _db.database;
     final rows = await db.rawQuery(
       '''
-      SELECT DISTINCT q.* FROM quizzes q
+      SELECT
+        q.*,
+        GROUP_CONCAT(DISTINCT c.id) AS classroom_id,
+        GROUP_CONCAT(DISTINCT c.name) AS classroom_name,
+        COALESCE(NULLIF(u.full_name, ''), u.username) AS teacher_name,
+        MAX(a.published_at) AS published_at,
+        EXISTS (
+          SELECT 1 FROM quiz_attempts qa
+          WHERE qa.user_id = ?
+            AND qa.quiz_id = q.id
+            AND qa.status = 'completed'
+        ) AS is_completed,
+        (
+          SELECT qa.score FROM quiz_attempts qa
+          WHERE qa.user_id = ?
+            AND qa.quiz_id = q.id
+            AND qa.status = 'completed'
+          ORDER BY qa.completed_at DESC, qa.id DESC
+          LIMIT 1
+        ) AS latest_score,
+        (
+          SELECT qa.total FROM quiz_attempts qa
+          WHERE qa.user_id = ?
+            AND qa.quiz_id = q.id
+            AND qa.status = 'completed'
+          ORDER BY qa.completed_at DESC, qa.id DESC
+          LIMIT 1
+        ) AS latest_total
+      FROM quizzes q
       JOIN quiz_classroom_assignments a ON a.quiz_id = q.id
       JOIN class_members m ON m.class_id = a.classroom_id
-      WHERE m.user_id = ? AND q.status = 'published'
-      ORDER BY q.id DESC
+      JOIN classrooms c ON c.id = a.classroom_id
+      JOIN users u ON u.id = q.teacher_id
+      WHERE m.user_id = ?
+        AND m.role = 'student'
+        AND q.status = 'published'
+      GROUP BY q.id
+      ORDER BY MAX(a.published_at) DESC, q.title
       ''',
-      [studentId],
+      [studentId, studentId, studentId, studentId],
     );
-    return rows.map(TeacherQuiz.fromMap).toList();
+    return rows.map(StudentAssignedQuiz.fromMap).toList();
   }
 
   Future<List<TeacherQuiz>> quizzesByTeacher(String teacherId) async {
@@ -772,16 +808,187 @@ class MemocardRepository {
     String userId,
     String setId,
     int score,
-    int total,
-  ) async {
+    int total, {
+    String? quizId,
+  }) async {
+    await _db.ensureStudentQuizSchema();
     final db = await _db.database;
     await db.insert('quiz_attempts', {
       'id': _id('attempt'),
       'user_id': userId,
       'set_id': setId,
+      'quiz_id': quizId,
       'score': score,
       'total': total,
+      'status': 'completed',
+      'started_at': DateTime.now().toIso8601String(),
+      'completed_at': DateTime.now().toIso8601String(),
     });
+  }
+
+  Future<QuizAttemptSession> startQuizAttempt({
+    required String userId,
+    required TeacherQuiz quiz,
+  }) async {
+    await _db.ensureStudentQuizSchema();
+    final db = await _db.database;
+    return db.transaction((txn) async {
+      final completed = await txn.query(
+        'quiz_attempts',
+        columns: ['id'],
+        where: 'user_id = ? AND quiz_id = ? AND status = ?',
+        whereArgs: [userId, quiz.id, 'completed'],
+        limit: 1,
+      );
+      if (completed.isNotEmpty) {
+        throw StateError('Bài kiểm tra này đã được hoàn thành.');
+      }
+
+      final active = await txn.query(
+        'quiz_attempts',
+        columns: ['id', 'started_at'],
+        where: 'user_id = ? AND quiz_id = ? AND status = ?',
+        whereArgs: [userId, quiz.id, 'in_progress'],
+        limit: 1,
+      );
+      if (active.isNotEmpty) {
+        final startedAt = DateTime.tryParse(
+          (active.first['started_at'] as String?) ?? '',
+        );
+        return QuizAttemptSession(
+          id: active.first['id'] as String,
+          startedAt: startedAt ?? DateTime.now(),
+        );
+      }
+
+      final now = DateTime.now();
+      final attemptId = _id('attempt');
+      await txn.insert('quiz_attempts', {
+        'id': attemptId,
+        'user_id': userId,
+        'set_id': quiz.setId,
+        'quiz_id': quiz.id,
+        'score': 0,
+        'total': quiz.questionCount,
+        'status': 'in_progress',
+        'started_at': now.toIso8601String(),
+      });
+      return QuizAttemptSession(id: attemptId, startedAt: now);
+    });
+  }
+
+  Future<void> completeQuizAttempt({
+    required String attemptId,
+    required int score,
+    required int total,
+    required List<QuizQuestion> questions,
+    required List<int?> selectedAnswers,
+  }) async {
+    await _db.ensureStudentQuizSchema();
+    await _db.ensureQuizResultSchema();
+    final db = await _db.database;
+    await db.transaction((txn) async {
+      for (var index = 0; index < questions.length; index++) {
+        final question = questions[index];
+        if (question.id == null) continue;
+        await txn.insert('quiz_attempt_answers', {
+          'attempt_id': attemptId,
+          'question_id': question.id,
+          'selected_index': selectedAnswers[index],
+          'correct_index': question.correctIndex,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
+      }
+      await txn.update(
+        'quiz_attempts',
+        {
+          'score': score,
+          'total': total,
+          'status': 'completed',
+          'completed_at': DateTime.now().toIso8601String(),
+        },
+        where: 'id = ? AND status = ?',
+        whereArgs: [attemptId, 'in_progress'],
+      );
+    });
+  }
+
+  Future<ClassQuizPerformance> classQuizPerformance({
+    required String quizId,
+    required String classroomId,
+  }) async {
+    await _db.ensureStudentQuizSchema();
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT
+        u.id AS student_id,
+        COALESCE(NULLIF(u.full_name, ''), u.username) AS student_name,
+        qa.id AS attempt_id,
+        qa.score,
+        qa.total,
+        qa.completed_at
+      FROM class_members m
+      JOIN users u ON u.id = m.user_id
+      LEFT JOIN quiz_attempts qa ON qa.id = (
+        SELECT qa2.id FROM quiz_attempts qa2
+        WHERE qa2.user_id = u.id
+          AND qa2.quiz_id = ?
+          AND qa2.status = 'completed'
+        ORDER BY qa2.completed_at DESC, qa2.id DESC
+        LIMIT 1
+      )
+      WHERE m.class_id = ? AND m.role = 'student'
+      ORDER BY
+        CASE WHEN qa.id IS NULL THEN 1 ELSE 0 END,
+        CAST(qa.score AS REAL) / NULLIF(qa.total, 0) DESC,
+        student_name
+      ''',
+      [quizId, classroomId],
+    );
+    final students = rows.map(StudentQuizResult.fromMap).toList();
+    final completedScores = students
+        .map((student) => student.scoreOutOfTen)
+        .whereType<double>()
+        .toList();
+    return ClassQuizPerformance(
+      students: students,
+      assignedCount: students.length,
+      completedCount: completedScores.length,
+      notStartedCount: students.length - completedScores.length,
+      averageScore: completedScores.isEmpty
+          ? null
+          : completedScores.reduce((a, b) => a + b) / completedScores.length,
+      highestScore: completedScores.isEmpty
+          ? null
+          : completedScores.reduce((a, b) => a > b ? a : b),
+      lowestScore: completedScores.isEmpty
+          ? null
+          : completedScores.reduce((a, b) => a < b ? a : b),
+    );
+  }
+
+  Future<List<QuizAnswerReview>> quizAttemptAnswerReviews(
+    String attemptId,
+  ) async {
+    await _db.ensureQuizResultSchema();
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT
+        q.prompt,
+        q.correct_answer,
+        q.options_json,
+        q.order_index,
+        a.selected_index,
+        a.correct_index
+      FROM quiz_attempt_answers a
+      JOIN quiz_questions_demo q ON q.id = a.question_id
+      WHERE a.attempt_id = ?
+      ORDER BY q.order_index
+      ''',
+      [attemptId],
+    );
+    return rows.map(QuizAnswerReview.fromMap).toList();
   }
 
   Future<List<Map<String, Object?>>> quizHistory(String userId) async {
@@ -792,6 +999,7 @@ class MemocardRepository {
       FROM quiz_attempts q
       JOIN flashcard_sets s ON s.id = q.set_id
       WHERE q.user_id = ?
+        AND q.status = 'completed'
       ORDER BY q.id DESC
     ''',
       [userId],

@@ -13,7 +13,7 @@ class AppDatabase {
     final path = p.join(await getDatabasesPath(), 'memocard.db');
     _database = await openDatabase(
       path,
-      version: 6,
+      version: 9,
       onCreate: _create,
       onUpgrade: _upgrade,
     );
@@ -147,11 +147,24 @@ class AppDatabase {
         id TEXT PRIMARY KEY,
         user_id TEXT NOT NULL,
         set_id TEXT NOT NULL,
+        quiz_id TEXT,
         score INTEGER NOT NULL,
         total INTEGER NOT NULL,
+        status TEXT NOT NULL DEFAULT 'completed',
+        started_at TEXT,
+        completed_at TEXT,
         server_id TEXT,
         dirty_at TEXT,
         synced_at TEXT
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE quiz_attempt_answers (
+        attempt_id TEXT NOT NULL,
+        question_id TEXT NOT NULL,
+        selected_index INTEGER,
+        correct_index INTEGER NOT NULL,
+        PRIMARY KEY(attempt_id, question_id)
       )
     ''');
   }
@@ -248,10 +261,51 @@ class AppDatabase {
     if (oldVersion < 6) {
       await _ensureQuizPublishingSchema(db);
     }
+    if (oldVersion < 7) {
+      await _ensureStudentQuizSchema(db);
+    }
+    if (oldVersion < 8) {
+      await _ensureStudentQuizSchema(db);
+    }
+    if (oldVersion < 9) {
+      await _ensureQuizResultSchema(db);
+    }
   }
 
   Future<void> ensureQuizPublishingSchema() async {
     await _ensureQuizPublishingSchema(await database);
+  }
+
+  Future<void> ensureStudentQuizSchema() async {
+    await _ensureStudentQuizSchema(await database);
+  }
+
+  Future<void> ensureQuizResultSchema() async {
+    await _ensureQuizResultSchema(await database);
+  }
+
+  Future<void> _ensureQuizResultSchema(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS quiz_attempt_answers (
+        attempt_id TEXT NOT NULL,
+        question_id TEXT NOT NULL,
+        selected_index INTEGER,
+        correct_index INTEGER NOT NULL,
+        PRIMARY KEY(attempt_id, question_id)
+      )
+    ''');
+  }
+
+  Future<void> _ensureStudentQuizSchema(Database db) async {
+    await _addColumnIfMissing(db, 'quiz_attempts', 'quiz_id', 'TEXT');
+    await _addColumnIfMissing(
+      db,
+      'quiz_attempts',
+      'status',
+      "TEXT NOT NULL DEFAULT 'completed'",
+    );
+    await _addColumnIfMissing(db, 'quiz_attempts', 'started_at', 'TEXT');
+    await _addColumnIfMissing(db, 'quiz_attempts', 'completed_at', 'TEXT');
   }
 
   Future<void> _ensureQuizPublishingSchema(Database db) async {
