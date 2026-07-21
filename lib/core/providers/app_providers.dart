@@ -116,6 +116,11 @@ final teacherQuizzesProvider = FutureProvider.autoDispose
       return ref.watch(repositoryProvider).quizzesByTeacher(teacherId);
     });
 
+final archivedTeacherQuizzesProvider = FutureProvider.autoDispose
+    .family<List<TeacherQuiz>, String>((ref, teacherId) {
+      return ref.watch(repositoryProvider).archivedQuizzesByTeacher(teacherId);
+    });
+
 final teacherQuizProvider = FutureProvider.autoDispose
     .family<TeacherQuiz?, String>((ref, quizId) {
       return ref.watch(repositoryProvider).quizById(quizId);
@@ -124,4 +129,29 @@ final teacherQuizProvider = FutureProvider.autoDispose
 final teacherQuizQuestionsProvider = FutureProvider.autoDispose
     .family<List<TeacherQuizQuestion>, String>((ref, quizId) {
       return ref.watch(repositoryProvider).quizQuestions(quizId);
+    });
+
+final teacherQuizSourceCardCountProvider = FutureProvider.autoDispose
+    .family<int, String>((ref, quizId) {
+      return ref.watch(repositoryProvider).quizSourceCardCount(quizId);
+    });
+
+final availableQuizClassroomsProvider = FutureProvider.autoDispose
+    .family<List<Classroom>, ({String teacherId, String quizId})>((
+      ref,
+      request,
+    ) {
+      return ref
+          .watch(repositoryProvider)
+          .availableClassroomsForQuiz(request.teacherId, request.quizId);
+    });
+
+final assignedQuizClassroomsProvider = FutureProvider.autoDispose
+    .family<List<Classroom>, String>((ref, quizId) {
+      return ref.watch(repositoryProvider).assignedClassroomsForQuiz(quizId);
+    });
+
+final assignedStudentQuizzesProvider = FutureProvider.autoDispose
+    .family<List<TeacherQuiz>, String>((ref, studentId) {
+      return ref.watch(repositoryProvider).assignedQuizzesForStudent(studentId);
     });

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/models/memocard_models.dart';
 import '../../../../core/providers/app_providers.dart';
+import 'create_quiz_from_sets_page.dart';
+import 'publish_quiz_page.dart';
 
 class QuizPlaceholderPage extends ConsumerWidget {
   const QuizPlaceholderPage({super.key});
@@ -45,7 +47,7 @@ class _TeacherQuizPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sets = ref.watch(setsProvider(''));
     final quizzes = ref.watch(teacherQuizzesProvider(user.id));
-    final classes = ref.watch(classroomProvider(user.id));
+    final archivedQuizzes = ref.watch(archivedTeacherQuizzesProvider(user.id));
 
     return Scaffold(
       appBar: const _QuizAppBar(),
@@ -61,36 +63,57 @@ class _TeacherQuizPage extends ConsumerWidget {
             'Giáo viên tạo bài kiểm tra từ bộ thẻ. Khi xuất bản phải chọn một lớp cụ thể.',
           ),
           const SizedBox(height: 20),
-          Text('Tạo từ bộ thẻ', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 8),
+          Text(
+            'Tạo bài kiểm tra',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 12),
           sets.when(
             loading: () => const LinearProgressIndicator(),
             error: (error, stackTrace) => Text('$error'),
-            data: (items) => Column(
-              children: items
-                  .map(
-                    (set) => Card(
-                      child: ListTile(
-                        title: Text(set.title),
-                        subtitle: Text('${set.cardCount} thẻ'),
-                        trailing: const Icon(Icons.add_task),
-                        enabled: set.cardCount >= 4,
-                        onTap: () => classes.when(
-                          loading: () {},
-                          error: (error, stackTrace) => ScaffoldMessenger.of(
+            data: (items) => FilledButton.icon(
+              onPressed: items.isEmpty
+                  ? null
+                  : () async {
+                      final created =
+                          await Navigator.of(
                             context,
-                          ).showSnackBar(SnackBar(content: Text('$error'))),
-                          data: (ownedClasses) => _showCreateQuizDialog(
-                            context,
-                            ref,
-                            set,
-                            ownedClasses,
+                            rootNavigator: true,
+                          ).push<bool>(
+                            MaterialPageRoute<bool>(
+                              builder: (_) => CreateQuizFromSetsPage(
+                                teacher: user,
+                                sets: items,
+                              ),
+                            ),
+                          );
+                      if (created != true || !context.mounted) return;
+                      ref.invalidate(teacherQuizzesProvider);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Tạo bài kiểm tra thành công. Bài kiểm tra đã được lưu ở trạng thái Nháp.',
                           ),
                         ),
-                      ),
-                    ),
-                  )
-                  .toList(),
+                      );
+                    },
+              icon: const Icon(Icons.add_task),
+              label: const Text('Tạo bài kiểm tra từ bộ thẻ'),
+            ),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => _ArchivedQuizzesPage(teacher: user),
+              ),
+            ),
+            icon: const Icon(Icons.inventory_2_outlined),
+            label: Text(
+              archivedQuizzes.maybeWhen(
+                data: (items) => 'Mở kho lưu trữ (${items.length})',
+                orElse: () => 'Mở kho lưu trữ',
+              ),
             ),
           ),
           const SizedBox(height: 20),
@@ -108,45 +131,71 @@ class _TeacherQuizPage extends ConsumerWidget {
                   child: ListTile(title: Text('Chưa tạo bài kiểm tra nào')),
                 );
               }
-              return classes.when(
-                loading: () => const LinearProgressIndicator(),
-                error: (error, stackTrace) => Text('$error'),
-                data: (ownedClasses) => Column(
-                  children: items
-                      .map(
-                        (quiz) => Card(
-                          child: ListTile(
-                            title: Text(quiz.title),
-                            subtitle: Text(_quizSubtitle(quiz, ownedClasses)),
-                            trailing: Wrap(
-                              spacing: 4,
-                              children: [
-                                IconButton(
-                                  tooltip: 'Cập nhật',
-                                  icon: const Icon(Icons.edit),
-                                  onPressed: () => Navigator.of(context).push(
+              return Column(
+                children: items
+                    .map(
+                      (quiz) => Card(
+                        child: ListTile(
+                          title: Text(quiz.title),
+                          subtitle: Text(_quizSubtitle(quiz)),
+                          trailing: Wrap(
+                            spacing: 4,
+                            children: [
+                              IconButton(
+                                tooltip: 'Cập nhật',
+                                icon: const Icon(Icons.edit),
+                                onPressed: () async {
+                                  final updated = await Navigator.of(context)
+                                      .push<bool>(
+                                        MaterialPageRoute<bool>(
+                                          builder: (_) => _TeacherQuizEditPage(
+                                            quizId: quiz.id,
+                                          ),
+                                        ),
+                                      );
+                                  if (updated != true || !context.mounted) {
+                                    return;
+                                  }
+                                  ref.invalidate(teacherQuizzesProvider);
+                                  ref.invalidate(teacherQuizProvider(quiz.id));
+                                  ref.invalidate(
+                                    teacherQuizQuestionsProvider(quiz.id),
+                                  );
+                                  Navigator.of(context).push(
                                     MaterialPageRoute<void>(
-                                      builder: (_) =>
-                                          _TeacherQuizEditPage(quizId: quiz.id),
+                                      builder: (_) => _TeacherQuizDetailPage(
+                                        quizId: quiz.id,
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                const Icon(Icons.chevron_right),
-                              ],
-                            ),
-                            onTap: () => Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) => _TeacherQuizDetailPage(
-                                  quizId: quiz.id,
-                                  classes: ownedClasses,
-                                ),
+                                  );
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Cập nhật bài kiểm tra thành công',
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
+                              IconButton(
+                                tooltip: 'Xóa / lưu trữ',
+                                icon: const Icon(Icons.delete_outline),
+                                onPressed: () =>
+                                    _confirmArchive(context, ref, quiz),
+                              ),
+                              const Icon(Icons.chevron_right),
+                            ],
+                          ),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) =>
+                                  _TeacherQuizDetailPage(quizId: quiz.id),
                             ),
                           ),
                         ),
-                      )
-                      .toList(),
-                ),
+                      ),
+                    )
+                    .toList(),
               );
             },
           ),
@@ -155,123 +204,168 @@ class _TeacherQuizPage extends ConsumerWidget {
     );
   }
 
-  String _quizSubtitle(TeacherQuiz quiz, List<Classroom> classes) {
-    final className = _className(classes, quiz.assignedClassId);
+  String _quizSubtitle(TeacherQuiz quiz) {
     return quiz.status == 'published'
-        ? '${quiz.questionCount} câu - đã giao: $className'
+        ? '${quiz.questionCount} câu - đã xuất bản'
         : '${quiz.questionCount} câu - nháp, chưa giao lớp';
   }
 
-  Future<void> _showCreateQuizDialog(
+  Future<void> _confirmArchive(
     BuildContext context,
     WidgetRef ref,
-    FlashcardSet set,
-    List<Classroom> classes,
+    TeacherQuiz quiz,
   ) async {
-    final title = TextEditingController(text: 'Kiểm tra: ${set.title}');
-    var status = 'draft';
-    String? selectedClassId = classes.isEmpty ? null : classes.first.id;
-
-    await showDialog<void>(
+    final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (dialogContext, setDialogState) => AlertDialog(
-          title: const Text('Tạo bài kiểm tra'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: title,
-                decoration: const InputDecoration(labelText: 'Tiêu đề'),
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Xóa bài kiểm tra?'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Bài kiểm tra sẽ được chuyển vào kho lưu trữ, không bị xóa vĩnh viễn.',
+            ),
+            const SizedBox(height: 12),
+            Text(quiz.title, style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text('Số câu hỏi: ${quiz.questionCount}'),
+            Text('Thời gian: ${quiz.timeLimitMinutes} phút'),
+            Text(
+              'Trạng thái: ${quiz.status == 'published' ? 'Đã xuất bản' : 'Nháp'}',
+            ),
+            if (quiz.status == 'published') ...[
+              const SizedBox(height: 8),
+              const Text(
+                'Bài kiểm tra sẽ được gỡ khỏi tất cả lớp đã nhận.',
+                style: TextStyle(fontWeight: FontWeight.w600),
               ),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
-                initialValue: status,
-                decoration: const InputDecoration(labelText: 'Trạng thái'),
-                items: const [
-                  DropdownMenuItem(value: 'draft', child: Text('Nháp')),
-                  DropdownMenuItem(
-                    value: 'published',
-                    child: Text('Xuất bản cho lớp'),
-                  ),
-                ],
-                onChanged: (value) =>
-                    setDialogState(() => status = value ?? 'draft'),
-              ),
-              if (status == 'published') ...[
-                const SizedBox(height: 12),
-                if (classes.isEmpty)
-                  const Text('Bạn cần tạo lớp trước khi xuất bản bài kiểm tra.')
-                else
-                  DropdownButtonFormField<String>(
-                    initialValue: selectedClassId,
-                    decoration: const InputDecoration(
-                      labelText: 'Lớp nhận bài',
-                    ),
-                    items: classes
-                        .map(
-                          (item) => DropdownMenuItem(
-                            value: item.id,
-                            child: Text(item.name),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (value) =>
-                        setDialogState(() => selectedClassId = value),
-                  ),
-              ],
             ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Hủy'),
-            ),
-            FilledButton(
-              onPressed: () async {
-                if (title.text.trim().isEmpty) return;
-                if (status == 'published' &&
-                    (classes.isEmpty || selectedClassId == null)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Tạo hoặc chọn lớp trước khi xuất bản'),
-                    ),
-                  );
-                  return;
-                }
-                await ref
-                    .read(repositoryProvider)
-                    .createQuiz(
-                      teacherId: user.id,
-                      setId: set.id,
-                      title: title.text,
-                      questionCount: set.cardCount,
-                      status: status,
-                      assignedClassId: selectedClassId,
-                    );
-                ref.invalidate(teacherQuizzesProvider);
-                if (dialogContext.mounted) Navigator.pop(dialogContext);
-              },
-              child: const Text('Lưu'),
-            ),
           ],
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Hủy'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Xác nhận xóa'),
+          ),
+        ],
       ),
     );
-    title.dispose();
+    if (confirmed != true || !context.mounted) return;
+
+    final archived = await ref
+        .read(repositoryProvider)
+        .archiveQuiz(quizId: quiz.id, teacherId: user.id);
+    if (!context.mounted) return;
+    if (!archived) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Không thể lưu trữ bài kiểm tra.')),
+      );
+      return;
+    }
+    ref.invalidate(teacherQuizzesProvider);
+    ref.invalidate(archivedTeacherQuizzesProvider);
+    ref.invalidate(assignedQuizClassroomsProvider(quiz.id));
+    ref.invalidate(availableQuizClassroomsProvider);
+    ref.invalidate(assignedStudentQuizzesProvider);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Đã chuyển bài kiểm tra vào kho lưu trữ.')),
+    );
+  }
+}
+
+class _ArchivedQuizzesPage extends ConsumerWidget {
+  const _ArchivedQuizzesPage({required this.teacher});
+
+  final AppUser teacher;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final archivedQuizzes = ref.watch(
+      archivedTeacherQuizzesProvider(teacher.id),
+    );
+    return Scaffold(
+      appBar: AppBar(title: const Text('Kho lưu trữ bài kiểm tra')),
+      body: archivedQuizzes.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stackTrace) => Center(child: Text('$error')),
+        data: (quizzes) {
+          if (quizzes.isEmpty) {
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Text('Chưa có bài kiểm tra nào được lưu trữ.'),
+              ),
+            );
+          }
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: quizzes.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              final quiz = quizzes[index];
+              return Card(
+                child: ListTile(
+                  leading: const Icon(Icons.inventory_2_outlined),
+                  title: Text(quiz.title),
+                  subtitle: Text(
+                    '${quiz.questionCount} câu • Đã gỡ khỏi danh sách và lớp học',
+                  ),
+                  trailing: IconButton(
+                    tooltip: 'Khôi phục',
+                    icon: const Icon(Icons.restore),
+                    onPressed: () => _restore(context, ref, quiz),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _restore(
+    BuildContext context,
+    WidgetRef ref,
+    TeacherQuiz quiz,
+  ) async {
+    final restored = await ref
+        .read(repositoryProvider)
+        .restoreQuiz(quizId: quiz.id, teacherId: teacher.id);
+    if (!context.mounted) return;
+    if (!restored) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Không thể khôi phục bài kiểm tra.')),
+      );
+      return;
+    }
+    ref.invalidate(archivedTeacherQuizzesProvider);
+    ref.invalidate(teacherQuizzesProvider);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Đã khôi phục bài kiểm tra về trạng thái Nháp.'),
+      ),
+    );
   }
 }
 
 class _TeacherQuizDetailPage extends ConsumerWidget {
-  const _TeacherQuizDetailPage({required this.quizId, required this.classes});
+  const _TeacherQuizDetailPage({required this.quizId});
 
   final String quizId;
-  final List<Classroom> classes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final quizValue = ref.watch(teacherQuizProvider(quizId));
     final questionsValue = ref.watch(teacherQuizQuestionsProvider(quizId));
+    final assignedClassesValue = ref.watch(
+      assignedQuizClassroomsProvider(quizId),
+    );
     return Scaffold(
       appBar: AppBar(title: const Text('Chi tiết bài kiểm tra')),
       body: quizValue.when(
@@ -307,38 +401,81 @@ class _TeacherQuizDetailPage extends ConsumerWidget {
                       trailing: Text(_orderLabel(quiz.questionOrder)),
                     ),
                     ListTile(
-                      title: const Text('Thứ tự câu trả lời'),
-                      trailing: Text(_answerOrderLabel(quiz.answerOrder)),
-                    ),
-                    ListTile(
                       title: const Text('Số câu hỏi'),
                       trailing: Text('${quiz.questionCount}'),
                     ),
                     ListTile(
-                      title: const Text('Lớp được giao'),
-                      trailing: Text(_className(classes, quiz.assignedClassId)),
+                      title: const Text('Các lớp đã nhận bài'),
+                      subtitle: assignedClassesValue.when(
+                        loading: () => const Text('Đang tải...'),
+                        error: (error, stackTrace) => Text('$error'),
+                        data: (assignedClasses) => Text(
+                          assignedClasses.isEmpty
+                              ? 'Chưa xuất bản cho lớp nào'
+                              : assignedClasses
+                                    .map((classroom) => classroom.name)
+                                    .join(', '),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 16),
               FilledButton.icon(
-                onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => _TeacherQuizEditPage(quizId: quiz.id),
-                  ),
-                ),
+                onPressed: () async {
+                  final updated = await Navigator.of(context).push<bool>(
+                    MaterialPageRoute<bool>(
+                      builder: (_) => _TeacherQuizEditPage(quizId: quiz.id),
+                    ),
+                  );
+                  if (updated != true || !context.mounted) return;
+                  ref.invalidate(teacherQuizProvider(quiz.id));
+                  ref.invalidate(teacherQuizQuestionsProvider(quiz.id));
+                  ref.invalidate(teacherQuizzesProvider);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Cập nhật bài kiểm tra thành công'),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.edit),
                 label: const Text('Cập nhật'),
               ),
-              if (quiz.status != 'published') ...[
-                const SizedBox(height: 8),
-                OutlinedButton.icon(
-                  onPressed: () => _showPublishDialog(context, ref, quiz),
-                  icon: const Icon(Icons.publish),
-                  label: const Text('Xuất bản cho lớp'),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: () async {
+                  final published =
+                      await Navigator.of(
+                        context,
+                        rootNavigator: true,
+                      ).push<bool>(
+                        MaterialPageRoute<bool>(
+                          builder: (_) => PublishQuizPage(
+                            quiz: quiz,
+                            teacherId: quiz.teacherId,
+                          ),
+                        ),
+                      );
+                  if (published != true || !context.mounted) return;
+                  ref.invalidate(teacherQuizProvider(quiz.id));
+                  ref.invalidate(teacherQuizzesProvider);
+                  ref.invalidate(assignedQuizClassroomsProvider(quiz.id));
+                  ref.invalidate(availableQuizClassroomsProvider);
+                  ref.invalidate(assignedStudentQuizzesProvider);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Xuất bản bài kiểm tra thành công.'),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.publish),
+                label: Text(
+                  quiz.status == 'published'
+                      ? 'Xuất bản thêm cho lớp'
+                      : 'Xuất bản cho lớp',
                 ),
-              ],
+              ),
               const SizedBox(height: 20),
               Text('Câu hỏi', style: Theme.of(context).textTheme.titleLarge),
               questionsValue.when(
@@ -361,59 +498,6 @@ class _TeacherQuizDetailPage extends ConsumerWidget {
       ),
     );
   }
-
-  Future<void> _showPublishDialog(
-    BuildContext context,
-    WidgetRef ref,
-    TeacherQuiz quiz,
-  ) async {
-    String? selectedClassId = classes.isEmpty ? null : classes.first.id;
-    await showDialog<void>(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (dialogContext, setDialogState) => AlertDialog(
-          title: const Text('Chọn lớp để xuất bản'),
-          content: classes.isEmpty
-              ? const Text('Bạn cần tạo lớp trước khi xuất bản bài kiểm tra.')
-              : DropdownButtonFormField<String>(
-                  initialValue: selectedClassId,
-                  decoration: const InputDecoration(labelText: 'Lớp nhận bài'),
-                  items: classes
-                      .map(
-                        (item) => DropdownMenuItem(
-                          value: item.id,
-                          child: Text(item.name),
-                        ),
-                      )
-                      .toList(),
-                  onChanged: (value) =>
-                      setDialogState(() => selectedClassId = value),
-                ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Hủy'),
-            ),
-            FilledButton(
-              onPressed: selectedClassId == null
-                  ? null
-                  : () async {
-                      await ref
-                          .read(repositoryProvider)
-                          .publishQuiz(quiz.id, selectedClassId!);
-                      ref.invalidate(teacherQuizzesProvider);
-                      ref.invalidate(teacherQuizProvider(quiz.id));
-                      if (dialogContext.mounted) {
-                        Navigator.pop(dialogContext);
-                      }
-                    },
-              child: const Text('Xuất bản'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class _TeacherQuizEditPage extends ConsumerStatefulWidget {
@@ -429,14 +513,19 @@ class _TeacherQuizEditPage extends ConsumerStatefulWidget {
 class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
   final _title = TextEditingController();
   final _timeLimit = TextEditingController();
+  final _questionCount = TextEditingController();
   bool _initialized = false;
+  bool _questionsInitialized = false;
+  bool _isSaving = false;
   String _questionOrder = 'sequential';
-  String _answerOrder = 'fixed';
+  String? _questionCountError;
+  List<TeacherQuizQuestion> _draftQuestions = const [];
 
   @override
   void dispose() {
     _title.dispose();
     _timeLimit.dispose();
+    _questionCount.dispose();
     super.dispose();
   }
 
@@ -445,6 +534,9 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
     final quizValue = ref.watch(teacherQuizProvider(widget.quizId));
     final questionsValue = ref.watch(
       teacherQuizQuestionsProvider(widget.quizId),
+    );
+    final sourceCardCountValue = ref.watch(
+      teacherQuizSourceCardCountProvider(widget.quizId),
     );
 
     return Scaffold(
@@ -457,6 +549,17 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
             return const Center(child: Text('Không tìm thấy bài kiểm tra.'));
           }
           _initForm(quiz);
+          questionsValue.maybeWhen(data: _initQuestions, orElse: () {});
+          final currentQuestionCount = _questionsInitialized
+              ? _draftQuestions.length
+              : questionsValue.maybeWhen(
+                  data: (questions) => questions.length,
+                  orElse: () => quiz.questionCount,
+                );
+          final sourceCardCount = sourceCardCountValue.maybeWhen<int?>(
+            data: (count) => count,
+            orElse: () => null,
+          );
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -475,6 +578,40 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
                 ),
               ),
               const SizedBox(height: 12),
+              TextField(
+                controller: _questionCount,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Số câu hỏi',
+                  errorText: _questionCountError,
+                  helperText: _questionCountError == null
+                      ? _questionCountHint(
+                          currentQuestionCount,
+                          sourceCardCount,
+                        )
+                      : null,
+                ),
+                onChanged: (value) {
+                  final requested = int.tryParse(value.trim());
+                  setState(() {
+                    _questionCountError =
+                        sourceCardCount != null &&
+                            requested != null &&
+                            requested > sourceCardCount
+                        ? 'Chỉ có tối đa $sourceCardCount câu từ bộ thẻ nguồn'
+                        : null;
+                  });
+                },
+              ),
+              if (sourceCardCountValue.hasError)
+                const Padding(
+                  padding: EdgeInsets.only(top: 6),
+                  child: Text(
+                    'Không đọc được số thẻ nguồn.',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: _questionOrder,
                 decoration: const InputDecoration(labelText: 'Thứ tự câu hỏi'),
@@ -482,21 +619,10 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
                   DropdownMenuItem(value: 'sequential', child: Text('Tuần tự')),
                   DropdownMenuItem(value: 'random', child: Text('Ngẫu nhiên')),
                 ],
-                onChanged: (value) =>
-                    setState(() => _questionOrder = value ?? 'sequential'),
-              ),
-              const SizedBox(height: 12),
-              DropdownButtonFormField<String>(
-                initialValue: _answerOrder,
-                decoration: const InputDecoration(
-                  labelText: 'Thứ tự câu trả lời',
-                ),
-                items: const [
-                  DropdownMenuItem(value: 'fixed', child: Text('Cố định')),
-                  DropdownMenuItem(value: 'random', child: Text('Ngẫu nhiên')),
-                ],
-                onChanged: (value) =>
-                    setState(() => _answerOrder = value ?? 'fixed'),
+                onChanged: (value) => setState(() {
+                  _questionOrder = value ?? 'sequential';
+                  _questionCountError = null;
+                }),
               ),
               const SizedBox(height: 20),
               Row(
@@ -509,15 +635,32 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
                   ),
                   IconButton.filledTonal(
                     tooltip: 'Thêm câu hỏi từ bộ thẻ',
-                    onPressed: () async {
-                      await ref
-                          .read(repositoryProvider)
-                          .addQuestionFromSet(widget.quizId);
-                      ref.invalidate(
-                        teacherQuizQuestionsProvider(widget.quizId),
-                      );
-                      ref.invalidate(teacherQuizProvider(widget.quizId));
-                    },
+                    onPressed: !_questionsInitialized
+                        ? null
+                        : () async {
+                            final generated = await ref
+                                .read(repositoryProvider)
+                                .generateAdditionalQuizQuestions(
+                                  quizId: widget.quizId,
+                                  existingQuestions: _draftQuestions,
+                                  count: 1,
+                                );
+                            if (!context.mounted) return;
+                            if (generated.isEmpty) {
+                              _showMessage(
+                                'Không còn câu hỏi mới trong các bộ thẻ nguồn.',
+                              );
+                              return;
+                            }
+                            setState(() {
+                              _draftQuestions = [
+                                ..._draftQuestions,
+                                ...generated,
+                              ];
+                              _questionCount.text = '${_draftQuestions.length}';
+                              _questionCountError = null;
+                            });
+                          },
                     icon: const Icon(Icons.add),
                   ),
                 ],
@@ -526,13 +669,14 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
                 loading: () => const LinearProgressIndicator(),
                 error: (error, stackTrace) => Text('$error'),
                 data: (questions) {
-                  if (questions.isEmpty) {
+                  _initQuestions(questions);
+                  if (_draftQuestions.isEmpty) {
                     return const Card(
                       child: ListTile(title: Text('Chưa có câu hỏi')),
                     );
                   }
                   return Column(
-                    children: questions
+                    children: _draftQuestions
                         .map(
                           (question) => Card(
                             child: ListTile(
@@ -541,19 +685,15 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
                               trailing: IconButton(
                                 tooltip: 'Xóa câu hỏi',
                                 icon: const Icon(Icons.delete_outline),
-                                onPressed: () async {
-                                  await ref
-                                      .read(repositoryProvider)
-                                      .deleteQuizQuestion(
-                                        question.id,
-                                        widget.quizId,
-                                      );
-                                  ref.invalidate(
-                                    teacherQuizQuestionsProvider(widget.quizId),
-                                  );
-                                  ref.invalidate(
-                                    teacherQuizProvider(widget.quizId),
-                                  );
+                                onPressed: () {
+                                  setState(() {
+                                    _draftQuestions = _draftQuestions
+                                        .where((item) => item.id != question.id)
+                                        .toList();
+                                    _questionCount.text =
+                                        '${_draftQuestions.length}';
+                                    _questionCountError = null;
+                                  });
                                 },
                               ),
                             ),
@@ -565,13 +705,13 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
               ),
               const SizedBox(height: 20),
               FilledButton.icon(
-                onPressed: () => _save(
-                  questionsValue.maybeWhen(
-                    data: (questions) => questions,
-                    orElse: () => const <TeacherQuizQuestion>[],
-                  ),
-                ),
-                icon: const Icon(Icons.save),
+                onPressed: _isSaving ? null : _save,
+                icon: _isSaving
+                    ? const SizedBox.square(
+                        dimension: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.save),
                 label: const Text('Lưu'),
               ),
             ],
@@ -586,13 +726,41 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
     _initialized = true;
     _title.text = quiz.title;
     _timeLimit.text = '${quiz.timeLimitMinutes}';
+    _questionCount.text = '${quiz.questionCount}';
     _questionOrder = quiz.questionOrder;
-    _answerOrder = quiz.answerOrder;
   }
 
-  Future<void> _save(List<TeacherQuizQuestion> questions) async {
+  void _initQuestions(List<TeacherQuizQuestion> questions) {
+    if (_questionsInitialized) return;
+    _questionsInitialized = true;
+    _draftQuestions = List<TeacherQuizQuestion>.of(questions);
+  }
+
+  String _questionCountHint(int currentCount, int? sourceCardCount) {
+    if (sourceCardCount == null) return 'Đang kiểm tra bộ thẻ nguồn...';
+    final requested = int.tryParse(_questionCount.text.trim());
+    if (requested == null || requested == currentCount) {
+      return 'Hiện có $currentCount câu • Tối đa $sourceCardCount câu';
+    }
+    if (requested > currentCount && requested <= sourceCardCount) {
+      return 'Khi lưu, hệ thống sẽ tự động tạo thêm '
+          '${requested - currentCount} câu.';
+    }
+    if (requested < currentCount && _questionOrder == 'random') {
+      return 'Khi lưu, hệ thống sẽ tự động xóa ngẫu nhiên '
+          '${currentCount - requested} câu.';
+    }
+    if (requested < currentCount) {
+      return 'Hãy chọn xóa ${currentCount - requested} câu cụ thể '
+          'trong danh sách bên dưới.';
+    }
+    return 'Tối đa $sourceCardCount câu từ các bộ thẻ nguồn';
+  }
+
+  Future<void> _save() async {
     final title = _title.text.trim();
     final timeLimit = int.tryParse(_timeLimit.text.trim());
+    final questionCount = int.tryParse(_questionCount.text.trim());
     if (title.isEmpty) {
       _showMessage('Tiêu đề không được để trống');
       return;
@@ -601,26 +769,70 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
       _showMessage('Giới hạn thời gian phải từ 1 đến 180 phút');
       return;
     }
-    if (questions.isEmpty) {
-      _showMessage('Bài kiểm tra phải có ít nhất 1 câu hỏi');
+    final sourceCardCount = await ref
+        .read(repositoryProvider)
+        .quizSourceCardCount(widget.quizId);
+    if (!mounted) return;
+    if (questionCount == null ||
+        questionCount < 1 ||
+        questionCount > sourceCardCount) {
+      setState(() {
+        _questionCountError = 'Số câu hỏi phải từ 1 đến $sourceCardCount';
+      });
       return;
     }
-    await ref
-        .read(repositoryProvider)
-        .updateQuiz(
+    if (questionCount < _draftQuestions.length &&
+        _questionOrder == 'sequential') {
+      setState(() {
+        _questionCountError =
+            'Hãy chọn xóa ${_draftQuestions.length - questionCount} câu cụ thể '
+            'bằng nút thùng rác trước khi lưu.';
+      });
+      return;
+    }
+    setState(() => _isSaving = true);
+    try {
+      final repository = ref.read(repositoryProvider);
+      var questionsToSave = List<TeacherQuizQuestion>.of(_draftQuestions);
+      if (questionCount > questionsToSave.length) {
+        final missingCount = questionCount - questionsToSave.length;
+        final generated = await repository.generateAdditionalQuizQuestions(
           quizId: widget.quizId,
-          title: title,
-          timeLimitMinutes: timeLimit,
-          questionOrder: _questionOrder,
-          answerOrder: _answerOrder,
+          existingQuestions: questionsToSave,
+          count: missingCount,
         );
-    ref.invalidate(teacherQuizProvider(widget.quizId));
-    ref.invalidate(teacherQuizzesProvider);
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Cập nhật bài kiểm tra thành công')),
-    );
-    Navigator.pop(context);
+        if (generated.length != missingCount) {
+          throw StateError('Không đủ thẻ nguồn để tạo $questionCount câu hỏi.');
+        }
+        questionsToSave = [...questionsToSave, ...generated];
+      } else if (questionCount < questionsToSave.length) {
+        final shuffled = List<TeacherQuizQuestion>.of(questionsToSave)
+          ..shuffle();
+        final idsToRemove = shuffled
+            .take(questionsToSave.length - questionCount)
+            .map((question) => question.id)
+            .toSet();
+        questionsToSave = questionsToSave
+            .where((question) => !idsToRemove.contains(question.id))
+            .toList();
+      }
+      await repository.updateQuiz(
+        quizId: widget.quizId,
+        title: title,
+        timeLimitMinutes: timeLimit,
+        questionOrder: _questionOrder,
+        questions: questionsToSave,
+      );
+      ref.invalidate(teacherQuizProvider(widget.quizId));
+      ref.invalidate(teacherQuizQuestionsProvider(widget.quizId));
+      ref.invalidate(teacherQuizzesProvider);
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (error) {
+      if (!mounted) return;
+      setState(() => _isSaving = false);
+      _showMessage('Không thể cập nhật bài kiểm tra: $error');
+    }
   }
 
   void _showMessage(String message) {
@@ -650,44 +862,69 @@ class _StudentQuizPage extends ConsumerWidget {
           const Text('Vai trò học sinh: làm bài kiểm tra đã được giao.'),
           const SizedBox(height: 12),
           ref
-              .watch(setsProvider(''))
+              .watch(assignedStudentQuizzesProvider(user.id))
               .when(
                 loading: () => const LinearProgressIndicator(),
                 error: (error, stackTrace) => Text('$error'),
-                data: (sets) => Column(
-                  children: sets
-                      .map(
-                        (set) => Card(
-                          child: ListTile(
-                            title: Text(set.title),
-                            subtitle: Text(
-                              set.cardCount < 4
-                                  ? 'Cần tối thiểu 4 thẻ'
-                                  : '${set.cardCount} câu hỏi - làm bài',
-                            ),
-                            trailing: const Icon(Icons.play_arrow),
-                            enabled: set.cardCount >= 4,
-                            onTap: () async {
-                              final questions = await ref
-                                  .read(repositoryProvider)
-                                  .generateQuiz(set.id);
-                              if (!context.mounted) return;
-                              await Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (_) => _QuizRunPage(
-                                    set: set,
-                                    questions: questions,
-                                    userId: user.id,
+                data: (quizzes) {
+                  if (quizzes.isEmpty) {
+                    return const Card(
+                      child: ListTile(
+                        leading: Icon(Icons.assignment_outlined),
+                        title: Text('Chưa có bài kiểm tra nào được giao'),
+                      ),
+                    );
+                  }
+                  return Column(
+                    children: quizzes
+                        .map(
+                          (quiz) => Card(
+                            child: ListTile(
+                              title: Text(quiz.title),
+                              subtitle: Text(
+                                '${quiz.questionCount} câu • '
+                                '${quiz.timeLimitMinutes} phút',
+                              ),
+                              trailing: const Icon(Icons.play_arrow),
+                              onTap: () async {
+                                final storedQuestions = await ref
+                                    .read(repositoryProvider)
+                                    .quizQuestions(quiz.id);
+                                final questions = storedQuestions
+                                    .map(
+                                      (question) => QuizQuestion(
+                                        prompt: question.prompt,
+                                        options: question.options.isEmpty
+                                            ? [question.correctAnswer]
+                                            : question.options,
+                                        correctIndex: question.options.isEmpty
+                                            ? 0
+                                            : question.correctIndex,
+                                      ),
+                                    )
+                                    .toList();
+                                if (quiz.questionOrder == 'random') {
+                                  questions.shuffle();
+                                }
+                                if (!context.mounted) return;
+                                await Navigator.of(context).push(
+                                  MaterialPageRoute<void>(
+                                    builder: (_) => _QuizRunPage(
+                                      title: quiz.title,
+                                      setId: quiz.setId,
+                                      questions: questions,
+                                      userId: user.id,
+                                    ),
                                   ),
-                                ),
-                              );
-                              ref.invalidate(quizHistoryProvider);
-                            },
+                                );
+                                ref.invalidate(quizHistoryProvider);
+                              },
+                            ),
                           ),
-                        ),
-                      )
-                      .toList(),
-                ),
+                        )
+                        .toList(),
+                  );
+                },
               ),
           const SizedBox(height: 20),
           Text(
@@ -718,12 +955,14 @@ class _StudentQuizPage extends ConsumerWidget {
 
 class _QuizRunPage extends ConsumerStatefulWidget {
   const _QuizRunPage({
-    required this.set,
+    required this.title,
+    required this.setId,
     required this.questions,
     required this.userId,
   });
 
-  final FlashcardSet set;
+  final String title;
+  final String setId;
   final List<QuizQuestion> questions;
   final String userId;
 
@@ -744,7 +983,7 @@ class _QuizRunPageState extends ConsumerState<_QuizRunPage> {
       );
     }
     return Scaffold(
-      appBar: AppBar(title: Text(widget.set.title)),
+      appBar: AppBar(title: Text(widget.title)),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: _done ? _result(context) : _question(context),
@@ -807,7 +1046,7 @@ class _QuizRunPageState extends ConsumerState<_QuizRunPage> {
           .read(repositoryProvider)
           .saveQuizAttempt(
             widget.userId,
-            widget.set.id,
+            widget.setId,
             _score,
             widget.questions.length,
           );
@@ -820,16 +1059,4 @@ class _QuizRunPageState extends ConsumerState<_QuizRunPage> {
 
 String _orderLabel(String value) {
   return value == 'random' ? 'Ngẫu nhiên' : 'Tuần tự';
-}
-
-String _answerOrderLabel(String value) {
-  return value == 'random' ? 'Ngẫu nhiên' : 'Cố định';
-}
-
-String _className(List<Classroom> classes, String? classId) {
-  if (classId == null) return 'Chưa chọn lớp';
-  for (final item in classes) {
-    if (item.id == classId) return item.name;
-  }
-  return 'Lớp không còn tồn tại';
 }

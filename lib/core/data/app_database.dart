@@ -13,7 +13,7 @@ class AppDatabase {
     final path = p.join(await getDatabasesPath(), 'memocard.db');
     _database = await openDatabase(
       path,
-      version: 4,
+      version: 6,
       onCreate: _create,
       onUpgrade: _upgrade,
     );
@@ -119,9 +119,27 @@ class AppDatabase {
         prompt TEXT NOT NULL,
         correct_answer TEXT NOT NULL,
         order_index INTEGER NOT NULL,
+        options_json TEXT NOT NULL DEFAULT '[]',
+        correct_index INTEGER NOT NULL DEFAULT 0,
         server_id TEXT,
         dirty_at TEXT,
         synced_at TEXT
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE quiz_source_sets (
+        quiz_id TEXT NOT NULL,
+        set_id TEXT NOT NULL,
+        order_index INTEGER NOT NULL,
+        PRIMARY KEY(quiz_id, set_id)
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE quiz_classroom_assignments (
+        quiz_id TEXT NOT NULL,
+        classroom_id TEXT NOT NULL,
+        published_at TEXT NOT NULL,
+        PRIMARY KEY(quiz_id, classroom_id)
       )
     ''');
     await db.execute('''
@@ -201,6 +219,57 @@ class AppDatabase {
         )
       ''');
     }
+    if (oldVersion < 5) {
+      await _addColumnIfMissing(
+        db,
+        'quiz_questions_demo',
+        'options_json',
+        "TEXT NOT NULL DEFAULT '[]'",
+      );
+      await _addColumnIfMissing(
+        db,
+        'quiz_questions_demo',
+        'correct_index',
+        'INTEGER NOT NULL DEFAULT 0',
+      );
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS quiz_source_sets (
+          quiz_id TEXT NOT NULL,
+          set_id TEXT NOT NULL,
+          order_index INTEGER NOT NULL,
+          PRIMARY KEY(quiz_id, set_id)
+        )
+      ''');
+      await db.execute('''
+        INSERT OR IGNORE INTO quiz_source_sets (quiz_id, set_id, order_index)
+        SELECT id, set_id, 0 FROM quizzes
+      ''');
+    }
+    if (oldVersion < 6) {
+      await _ensureQuizPublishingSchema(db);
+    }
+  }
+
+  Future<void> ensureQuizPublishingSchema() async {
+    await _ensureQuizPublishingSchema(await database);
+  }
+
+  Future<void> _ensureQuizPublishingSchema(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS quiz_classroom_assignments (
+        quiz_id TEXT NOT NULL,
+        classroom_id TEXT NOT NULL,
+        published_at TEXT NOT NULL,
+        PRIMARY KEY(quiz_id, classroom_id)
+      )
+    ''');
+    await db.execute('''
+      INSERT OR IGNORE INTO quiz_classroom_assignments
+        (quiz_id, classroom_id, published_at)
+      SELECT id, assigned_class_id, datetime('now')
+      FROM quizzes
+      WHERE status = 'published' AND assigned_class_id IS NOT NULL
+    ''');
   }
 
   Future<void> _addColumnIfMissing(

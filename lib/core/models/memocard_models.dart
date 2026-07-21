@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class AppUser {
   const AppUser({
     required this.id,
@@ -201,6 +203,8 @@ class TeacherQuizQuestion {
     required this.prompt,
     required this.correctAnswer,
     required this.orderIndex,
+    this.options = const [],
+    this.correctIndex = 0,
   });
 
   final String id;
@@ -208,6 +212,8 @@ class TeacherQuizQuestion {
   final String prompt;
   final String correctAnswer;
   final int orderIndex;
+  final List<String> options;
+  final int correctIndex;
 
   Map<String, Object?> toMap() => {
     'id': id,
@@ -215,6 +221,8 @@ class TeacherQuizQuestion {
     'prompt': prompt,
     'correct_answer': correctAnswer,
     'order_index': orderIndex,
+    'options_json': jsonEncode(options),
+    'correct_index': correctIndex,
   };
 
   factory TeacherQuizQuestion.fromMap(Map<String, Object?> map) =>
@@ -224,5 +232,16 @@ class TeacherQuizQuestion {
         prompt: map['prompt'] as String,
         correctAnswer: map['correct_answer'] as String,
         orderIndex: (map['order_index'] as int?) ?? 0,
+        options: _decodeStringList(map['options_json']),
+        correctIndex: (map['correct_index'] as int?) ?? 0,
       );
+}
+
+List<String> _decodeStringList(Object? value) {
+  if (value is! String || value.isEmpty) return const [];
+  try {
+    return (jsonDecode(value) as List<dynamic>).cast<String>();
+  } catch (_) {
+    return const [];
+  }
 }
