@@ -13,7 +13,7 @@ class AppDatabase {
     final path = p.join(await getDatabasesPath(), 'memocard.db');
     _database = await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _create,
       onUpgrade: _upgrade,
     );
@@ -59,6 +59,15 @@ class AppDatabase {
         synced_at TEXT
       )
     ''');
+    //phuoc
+    await db.execute('''
+  CREATE TABLE favorite_flashcard_sets (
+    user_id TEXT NOT NULL,
+    set_id TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY(user_id, set_id)
+  )
+''');
     await db.execute('''
       CREATE TABLE learning_sessions (
         id TEXT PRIMARY KEY,
@@ -200,6 +209,17 @@ class AppDatabase {
           synced_at TEXT
         )
       ''');
+    }
+    //phuoc
+    if (oldVersion < 5) {
+      await db.execute('''
+    CREATE TABLE IF NOT EXISTS favorite_flashcard_sets (
+      user_id TEXT NOT NULL,
+      set_id TEXT NOT NULL,
+      created_at TEXT NOT NULL,
+      PRIMARY KEY(user_id, set_id)
+    )
+  ''');
     }
   }
 

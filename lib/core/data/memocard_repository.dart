@@ -244,6 +244,115 @@ class MemocardRepository {
     });
     return set;
   }
+  //phuoc
+  Future<FlashcardSet?> setById(String setId) async {
+    final db = await _db.database;
+
+    final rows = await db.query(
+      'flashcard_sets',
+      where: 'id = ?',
+      whereArgs: [setId],
+      limit: 1,
+    );
+
+    if (rows.isEmpty) {
+      return null;
+    }
+
+    return FlashcardSet.fromMap(rows.first);
+  }
+  Future<bool> isSetFavorite({
+    required String userId,
+    required String setId,
+  }) async {
+    final db = await _db.database;
+
+    final rows = await db.query(
+      'favorite_flashcard_sets',
+      where: 'user_id = ? AND set_id = ?',
+      whereArgs: [userId, setId],
+      limit: 1,
+    );
+
+    return rows.isNotEmpty;
+  }
+  Future<bool> toggleSetFavorite({
+    required String userId,
+    required String setId,
+  }) async {
+    final db = await _db.database;
+
+    return db.transaction((txn) async {
+      final existing = await txn.query(
+        'favorite_flashcard_sets',
+        where: 'user_id = ? AND set_id = ?',
+        whereArgs: [userId, setId],
+        limit: 1,
+      );
+
+      if (existing.isNotEmpty) {
+        await txn.delete(
+          'favorite_flashcard_sets',
+          where: 'user_id = ? AND set_id = ?',
+          whereArgs: [userId, setId],
+        );
+
+        return false;
+      }
+
+      await txn.insert(
+        'favorite_flashcard_sets',
+        {
+          'user_id': userId,
+          'set_id': setId,
+          'created_at': DateTime.now().toIso8601String(),
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+
+      return true;
+    });
+  }
+  Future<Set<String>> favoriteSetIds(String userId) async {
+    final db = await _db.database;
+
+    final rows = await db.query(
+      'favorite_flashcard_sets',
+      columns: ['set_id'],
+      where: 'user_id = ?',
+      whereArgs: [userId],
+      orderBy: 'created_at DESC',
+    );
+
+    return rows.map((row) => row['set_id'] as String).toSet();
+  }
+  Future<List<FlashcardSet>> favoriteSets(
+      String userId, {
+        String query = '',
+      }) async {
+    final db = await _db.database;
+    final normalizedQuery = query.trim();
+
+    final rows = await db.rawQuery(
+      '''
+    SELECT s.*
+    FROM flashcard_sets s
+    INNER JOIN favorite_flashcard_sets f
+      ON f.set_id = s.id
+    WHERE f.user_id = ?
+      AND (? = '' OR s.title LIKE ?)
+    ORDER BY f.created_at DESC
+    ''',
+      [
+        userId,
+        normalizedQuery,
+        '%$normalizedQuery%',
+      ],
+    );
+
+    return rows.map(FlashcardSet.fromMap).toList();
+  }
+  //hetphuoc
 
   Future<List<FlashcardSet>> sets({String query = ''}) async {
     final db = await _db.database;

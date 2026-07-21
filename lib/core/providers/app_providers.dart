@@ -85,6 +85,26 @@ final setsProvider = FutureProvider.autoDispose
       return repo.ensureSeedData().then((_) => repo.sets(query: query));
     });
 
+final favoriteSetIdsProvider = FutureProvider.autoDispose
+    .family<Set<String>, String>((ref, userId) {
+  return ref.watch(repositoryProvider).favoriteSetIds(userId);
+});
+//phuoc
+final favoriteSetsProvider = FutureProvider.autoDispose
+    .family<List<FlashcardSet>, ({String userId, String query})>(
+      (ref, params) {
+    return ref.watch(repositoryProvider).favoriteSets(
+      params.userId,
+      query: params.query,
+    );
+  },
+);
+
+final flashcardSetProvider = FutureProvider.autoDispose
+    .family<FlashcardSet?, String>((ref, setId) {
+  return ref.watch(repositoryProvider).setById(setId);
+});
+//hetp
 final cardsProvider = FutureProvider.autoDispose
     .family<List<Flashcard>, String>((ref, setId) {
       return ref.watch(repositoryProvider).cards(setId);
