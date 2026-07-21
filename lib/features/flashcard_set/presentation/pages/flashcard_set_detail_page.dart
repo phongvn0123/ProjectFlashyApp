@@ -3,12 +3,61 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'create_flashcard_set_page.dart';
 import '../../../../core/models/memocard_models.dart';
 import '../../../../core/providers/app_providers.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
-class FlashcardSetDetailPage extends ConsumerWidget {
+class FlashcardSetDetailPage extends ConsumerStatefulWidget {
   const FlashcardSetDetailPage({
     super.key,
     required this.setId,
   });
+
+  final String setId;
+
+  @override
+  ConsumerState<FlashcardSetDetailPage> createState() =>
+      _FlashcardSetDetailPageState();
+}
+
+class _FlashcardSetDetailPageState
+    extends ConsumerState<FlashcardSetDetailPage> {
+  late final FlutterTts _flutterTts;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _flutterTts = FlutterTts();
+    _flutterTts.setLanguage('en-US');
+    _flutterTts.setSpeechRate(0.45);
+    _flutterTts.setVolume(1.0);
+    _flutterTts.setPitch(1.0);
+  }
+
+  @override
+  void dispose() {
+    _flutterTts.stop();
+    super.dispose();
+  }
+
+  Future<void> _speak(String text) async {
+    final value = text.trim();
+
+    if (value.isEmpty) return;
+
+    try {
+      await _flutterTts.stop();
+      await _flutterTts.setLanguage('en-US');
+      await _flutterTts.speak(value);
+    } catch (error) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Không thể phát âm: $error'),
+        ),
+      );
+    }
+  }
 
   Future<bool?> _confirmDelete(
       BuildContext context,
@@ -45,13 +94,17 @@ class FlashcardSetDetailPage extends ConsumerWidget {
     );
   }
 
-  final String setId;
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final user = ref.watch(authControllerProvider).asData?.value;
-    final setAsync = ref.watch(flashcardSetProvider(setId));
-    final cardsAsync = ref.watch(cardsProvider(setId));
+
+    final setAsync = ref.watch(
+      flashcardSetProvider(widget.setId),
+    );
+
+    final cardsAsync = ref.watch(
+      cardsProvider(widget.setId),
+    );
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FF),
@@ -94,12 +147,21 @@ class FlashcardSetDetailPage extends ConsumerWidget {
 
           return RefreshIndicator(
             onRefresh: () async {
-              ref.invalidate(flashcardSetProvider(setId));
-              ref.invalidate(cardsProvider(setId));
+              ref.invalidate(
+                flashcardSetProvider(widget.setId),
+              );
+              ref.invalidate(
+                cardsProvider(widget.setId),
+              );
             },
             child: ListView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 30),
+              padding: const EdgeInsets.fromLTRB(
+                20,
+                12,
+                20,
+                30,
+              ),
               children: [
                 _SetInformationCard(
                   set: set,
@@ -139,32 +201,38 @@ class FlashcardSetDetailPage extends ConsumerWidget {
                     ),
                     if (isOwner) ...[
                       const SizedBox(width: 10),
-
                       IconButton.filledTonal(
                         onPressed: cardsAsync.asData == null
                             ? null
                             : () async {
-                          final updated = await Navigator.of(context).push<bool>(
+                          final updated =
+                          await Navigator.of(context).push<bool>(
                             MaterialPageRoute(
-                              builder: (_) => CreateFlashcardSetPage(
-                                initialSet: set,
-                                initialCards: cardsAsync.asData!.value,
-                              ),
+                              builder: (_) =>
+                                  CreateFlashcardSetPage(
+                                    initialSet: set,
+                                    initialCards:
+                                    cardsAsync.asData!.value,
+                                  ),
                             ),
                           );
 
                           if (updated == true) {
-                            ref.invalidate(flashcardSetProvider(setId));
-                            ref.invalidate(cardsProvider(setId));
+                            ref.invalidate(
+                              flashcardSetProvider(
+                                widget.setId,
+                              ),
+                            );
+                            ref.invalidate(
+                              cardsProvider(widget.setId),
+                            );
                             ref.invalidate(setsProvider);
                           }
                         },
                         tooltip: 'Chỉnh sửa',
                         icon: const Icon(Icons.edit_outlined),
                       ),
-
                       const SizedBox(width: 8),
-
                       IconButton.filledTonal(
                         onPressed: () async {
                           final confirmed = await _confirmDelete(
@@ -175,7 +243,9 @@ class FlashcardSetDetailPage extends ConsumerWidget {
                           if (confirmed != true) return;
 
                           try {
-                            await ref.read(repositoryProvider).deleteSet(set.id);
+                            await ref
+                                .read(repositoryProvider)
+                                .deleteSet(set.id);
 
                             if (!context.mounted) return;
 
@@ -204,7 +274,8 @@ class FlashcardSetDetailPage extends ConsumerWidget {
                 const SizedBox(height: 24),
                 Text(
                   'Danh sách thẻ',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  style:
+                  Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -221,7 +292,8 @@ class FlashcardSetDetailPage extends ConsumerWidget {
                   error: (error, stackTrace) {
                     return _MessageCard(
                       icon: Icons.error_outline,
-                      message: 'Không thể tải danh sách thẻ.\n$error',
+                      message:
+                      'Không thể tải danh sách thẻ.\n$error',
                     );
                   },
                   data: (cards) {
@@ -234,12 +306,17 @@ class FlashcardSetDetailPage extends ConsumerWidget {
 
                     return Column(
                       children: [
-                        for (int index = 0;
+                        for (
+                        int index = 0;
                         index < cards.length;
-                        index++) ...[
+                        index++
+                        ) ...[
                           _FlashcardItem(
                             card: cards[index],
                             index: index,
+                            onSpeak: () {
+                              _speak(cards[index].front);
+                            },
                           ),
                           if (index != cards.length - 1)
                             const SizedBox(height: 12),
@@ -256,7 +333,6 @@ class FlashcardSetDetailPage extends ConsumerWidget {
     );
   }
 }
-
 class _SetInformationCard extends StatelessWidget {
   const _SetInformationCard({
     required this.set,
@@ -348,10 +424,12 @@ class _FlashcardItem extends StatelessWidget {
   const _FlashcardItem({
     required this.card,
     required this.index,
+    required this.onSpeak,
   });
 
   final Flashcard card;
   final int index;
+  final VoidCallback onSpeak;
 
   @override
   Widget build(BuildContext context) {
@@ -385,13 +463,26 @@ class _FlashcardItem extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 5),
-          Text(
-            card.front,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF202124),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  card.front,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF202124),
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: onSpeak,
+                tooltip: 'Phát âm tiếng Anh',
+                icon: const Icon(
+                  Icons.volume_up_outlined,
+                ),
+              ),
+            ],
           ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 14),

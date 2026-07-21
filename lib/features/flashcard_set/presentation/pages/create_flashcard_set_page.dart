@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-// Sửa đường dẫn import này theo file detail/library của bạn.
+import '../../../../core/services/translation_service.dart';
 import '../../../../core/providers/app_providers.dart';
 import '../../../../core/models/memocard_models.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 class CreateFlashcardSetPage extends ConsumerStatefulWidget {
   const CreateFlashcardSetPage({
     super.key,
@@ -31,12 +31,21 @@ class _CreateFlashcardSetPageState
   //   _CardInput(),
   // ];
   final List<_CardInput> _cards = [];
+  final Set<_CardInput> _translatingCards = {};
+  late final TranslationService _translationService;
+  late final FlutterTts _flutterTts;
   String _visibility = 'public';
   bool _isSaving = false;
   @override
   void initState() {
     super.initState();
+    _translationService = TranslationService();
+    _flutterTts = FlutterTts();
 
+    _flutterTts.setLanguage('en-US');
+    _flutterTts.setSpeechRate(0.45);
+    _flutterTts.setVolume(1.0);
+    _flutterTts.setPitch(1.0);
     final initialSet = widget.initialSet;
 
     if (initialSet != null) {
@@ -64,6 +73,8 @@ class _CreateFlashcardSetPageState
   }
   @override
   void dispose() {
+    _flutterTts.stop();
+    _translationService.dispose();
     _titleController.dispose();
     _descriptionController.dispose();
 
@@ -95,7 +106,104 @@ class _CreateFlashcardSetPageState
 
     setState(() {});
   }
+  Future<void> _speakEnglish(_CardInput card) async {
+    final text = card.frontController.text.trim();
 
+    if (text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Hãy nhập nội dung mặt trước trước.'),
+        ),
+      );
+      return;
+    }
+
+    try {
+      await _flutterTts.stop();
+      await _flutterTts.setLanguage('en-US');
+      await _flutterTts.speak(text);
+    } catch (error) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Không thể phát âm: $error'),
+        ),
+      );
+    }
+  }
+  Future<void> _translateCard(_CardInput card) async {
+    final sourceText = card.frontController.text.trim();
+    final currentBackText = card.backController.text.trim();
+
+    if (sourceText.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Hãy nhập nội dung mặt trước trước.',
+          ),
+        ),
+      );
+      return;
+    }
+
+    // Không ghi đè nếu mặt sau đã có nội dung.
+    if (currentBackText.isNotEmpty) {
+      return;
+    }
+
+    // Không gọi API lặp lại khi thẻ đang dịch.
+    if (_translatingCards.contains(card)) {
+      return;
+    }
+
+    setState(() {
+      _translatingCards.add(card);
+    });
+
+    try {
+      final translatedText =
+      await _translationService.translateEnglishToVietnamese(
+        sourceText,
+      );
+
+      if (!mounted) return;
+
+      // Người dùng có thể đã tự nhập trong lúc chờ API.
+      // Khi đó không ghi đè nội dung của họ.
+      if (card.backController.text.trim().isEmpty) {
+        card.backController.text = translatedText;
+
+        card.backController.selection = TextSelection.collapsed(
+          offset: translatedText.length,
+        );
+      }
+    } on TranslationException catch (error) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.message),
+        ),
+      );
+    } catch (error) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Không thể dịch nội dung: $error',
+          ),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _translatingCards.remove(card);
+        });
+      }
+    }
+  }
   Future<void> _saveSet() async {
     if (_isSaving) return;
 
@@ -346,6 +454,13 @@ class _CreateFlashcardSetPageState
                 input: _cards[index],
                 canDelete: _cards.length > 1,
                 onDelete: () => _removeCard(index),
+                onSpeak: () {
+                  _speakEnglish(_cards[index]);
+                },
+                onTranslate: () {
+                  _translateCard(_cards[index]);
+                },
+                isTranslating: _translatingCards.contains(_cards[index]),
               ),
               const SizedBox(height: 14),
             ],
@@ -411,16 +526,22 @@ class _CreateFlashcardSetPageState
 
 class _FlashcardInputCard extends StatelessWidget {
   const _FlashcardInputCard({
-    required this.number,
-    required this.input,
-    required this.canDelete,
-    required this.onDelete,
+  required this.number,
+  required this.input,
+  required this.canDelete,
+  required this.onDelete,
+  required this.onSpeak,
+  required this.onTranslate,
+  required this.isTranslating,
   });
 
   final int number;
   final _CardInput input;
   final bool canDelete;
   final VoidCallback onDelete;
+  final VoidCallback onTranslate;
+  final bool isTranslating;
+  final VoidCallback onSpeak;
 
   @override
   Widget build(BuildContext context) {
@@ -490,9 +611,14 @@ class _FlashcardInputCard extends StatelessWidget {
           TextField(
             controller: input.frontController,
             textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               hintText: 'Nhập từ hoặc câu hỏi...',
-              border: UnderlineInputBorder(),
+              border: const UnderlineInputBorder(),
+              suffixIcon: IconButton(
+                onPressed: onSpeak,
+                tooltip: 'Phát âm tiếng Anh',
+                icon: const Icon(Icons.volume_up_outlined),
+              ),
             ),
           ),
 
@@ -510,9 +636,25 @@ class _FlashcardInputCard extends StatelessWidget {
           TextField(
             controller: input.backController,
             textInputAction: TextInputAction.done,
-            decoration: const InputDecoration(
+
+            onTap: onTranslate,
+
+            decoration: InputDecoration(
               hintText: 'Nhập nghĩa hoặc câu trả lời...',
-              border: UnderlineInputBorder(),
+              border: const UnderlineInputBorder(),
+
+              suffixIcon: isTranslating
+                  ? const Padding(
+                padding: EdgeInsets.all(12),
+                child: SizedBox(
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                  ),
+                ),
+              )
+                  : const Icon(Icons.translate),
             ),
           ),
         ],
@@ -552,6 +694,7 @@ class _CardInput {
   final TextEditingController backController;
 
   void dispose() {
+
     frontController.dispose();
     backController.dispose();
   }
