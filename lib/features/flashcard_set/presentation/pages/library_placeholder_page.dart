@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'favorite_flashcard_sets_page.dart';
 import '../../../../core/models/memocard_models.dart';
 import '../../../../core/providers/app_providers.dart';
 import 'flashcard_set_detail_page.dart';
@@ -381,9 +381,27 @@ class _LibraryPlaceholderPageState
         const SizedBox(width: 8),
         _LibraryFilterButton(
           label: 'Yêu thích',
-          selected: _selectedFilter == LibraryFilter.favorite,
-          onPressed: () {
-            _changeFilter(LibraryFilter.favorite);
+          selected: false,
+          onPressed: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) =>
+                const FavoriteFlashcardSetsPage(),
+              ),
+            );
+
+            if (!mounted) return;
+
+            final user =
+                ref.read(authControllerProvider).asData?.value;
+
+            ref.invalidate(setsProvider);
+
+            if (user != null) {
+              ref.invalidate(
+                favoriteSetIdsProvider(user.id),
+              );
+            }
           },
         ),
       ],
