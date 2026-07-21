@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/presentation/pages/admin_user_management_page.dart';
+import '../../features/auth/presentation/pages/edit_profile_page.dart';
 import '../../features/auth/presentation/pages/login_placeholder_page.dart';
 import '../../features/auth/presentation/pages/profile_placeholder_page.dart';
 import '../../features/classroom/presentation/pages/classroom_placeholder_page.dart';
@@ -24,6 +26,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: kLoginRoute,
         builder: (context, state) => const LoginPlaceholderPage(),
+      ),
+      GoRoute(
+        path: kAdminUsersRoute,
+        builder: (context, state) => const AdminUserManagementPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
@@ -67,6 +73,12 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: kProfileRoute,
                 builder: (context, state) => const ProfilePlaceholderPage(),
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    builder: (context, state) => const EditProfilePage(),
+                  ),
+                ],
               ),
             ],
           ),

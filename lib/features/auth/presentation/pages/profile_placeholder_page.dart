@@ -15,7 +15,31 @@ class ProfilePlaceholderPage extends ConsumerWidget {
       appBar: AppBar(title: const Text('Cá nhân')),
       body: auth.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stackTrace) => Center(child: Text('$error')),
+        error: (error, stackTrace) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                const SizedBox(height: 16),
+                Text(
+                  '$error',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.red),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.invalidate(authControllerProvider);
+                    context.go(kLoginRoute);
+                  },
+                  child: const Text('Quay lại Đăng nhập'),
+                ),
+              ],
+            ),
+          ),
+        ),
         data: (user) {
           if (user == null) {
             return _SignedOut(onLogin: () => context.go(kLoginRoute));
@@ -55,6 +79,12 @@ class ProfilePlaceholderPage extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               OutlinedButton.icon(
+                onPressed: () => context.push(kEditProfileRoute),
+                icon: const Icon(Icons.edit),
+                label: const Text('Chỉnh sửa hồ sơ'),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
                 onPressed: () async {
                   await ref.read(authControllerProvider.notifier).logout();
                   if (context.mounted) context.go(kLoginRoute);
@@ -63,60 +93,26 @@ class ProfilePlaceholderPage extends ConsumerWidget {
                 label: const Text('Đăng xuất'),
               ),
               if (user.role == 'admin') ...[
-                const SizedBox(height: 20),
-                Text(
-                  'Quản trị người dùng',
-                  style: Theme.of(context).textTheme.headlineSmall,
+                const SizedBox(height: 24),
+                const Divider(),
+                const SizedBox(height: 12),
+                const Text(
+                  'Quản trị hệ thống',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 8),
-                ref
-                    .watch(usersProvider)
-                    .when(
-                      loading: () => const LinearProgressIndicator(),
-                      error: (error, stackTrace) => Text('$error'),
-                      data: (users) => Column(
-                        children: users
-                            .map(
-                              (item) => Card(
-                                child: ListTile(
-                                  title: Text(item.username),
-                                  subtitle: Text(
-                                    '${item.email} - ${item.status}',
-                                  ),
-                                  trailing: DropdownButton<String>(
-                                    value: item.role,
-                                    items: const [
-                                      DropdownMenuItem(
-                                        value: 'student',
-                                        child: Text('Học sinh'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 'teacher',
-                                        child: Text('Giáo viên'),
-                                      ),
-                                      DropdownMenuItem(
-                                        value: 'admin',
-                                        child: Text('Admin'),
-                                      ),
-                                    ],
-                                    onChanged: item.id == user.id
-                                        ? null
-                                        : (role) async {
-                                            await ref
-                                                .read(repositoryProvider)
-                                                .updateUserRole(
-                                                  item.id,
-                                                  role ?? item.role,
-                                                );
-                                            ref.invalidate(usersProvider);
-                                          },
-                                  ),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
+                const SizedBox(height: 12),
+                ListTile(
+                  leading: const CircleAvatar(
+                    backgroundColor: Colors.orange,
+                    child: Icon(Icons.admin_panel_settings, color: Colors.white),
+                  ),
+                  title: const Text('Quản lý người dùng'),
+                  subtitle: const Text('Xem danh sách, tìm kiếm, khóa/xóa tài khoản'),
+                  trailing: const Icon(Icons.chevron_right),
+                  tileColor: Colors.orange.withOpacity(0.05),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  onTap: () => context.push(kAdminUsersRoute),
+                ),
               ],
             ],
           );

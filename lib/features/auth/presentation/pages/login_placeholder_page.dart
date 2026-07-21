@@ -13,6 +13,7 @@ class LoginPlaceholderPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPlaceholderPage> {
+  final _formKey = GlobalKey<FormState>();
   final _account = TextEditingController();
   final _email = TextEditingController();
   final _username = TextEditingController();
@@ -30,16 +31,18 @@ class _LoginPageState extends ConsumerState<LoginPlaceholderPage> {
   }
 
   Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+
     final auth = ref.read(authControllerProvider.notifier);
     if (_register) {
       await auth.register(
-        username: _username.text,
-        email: _email.text,
+        username: _username.text.trim(),
+        email: _email.text.trim(),
         password: _password.text,
         role: _role,
       );
     } else {
-      await auth.login(_account.text, _password.text);
+      await auth.login(_account.text.trim(), _password.text);
     }
     if (!mounted) return;
     final current = ref
@@ -53,67 +56,91 @@ class _LoginPageState extends ConsumerState<LoginPlaceholderPage> {
     final auth = ref.watch(authControllerProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Memocard')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Text(
-            _register ? 'Đăng ký tài khoản' : 'Đăng nhập',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 16),
-          SegmentedButton<bool>(
-            segments: const [
-              ButtonSegment(value: false, label: Text('Đăng nhập')),
-              ButtonSegment(value: true, label: Text('Đăng ký')),
-            ],
-            selected: {_register},
-            onSelectionChanged: (value) =>
-                setState(() => _register = value.first),
-          ),
-          const SizedBox(height: 16),
-          if (_register) ...[
-            TextField(
-              controller: _username,
-              decoration: const InputDecoration(labelText: 'Username'),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            Text(
+              _register ? 'Đăng ký tài khoản' : 'Đăng nhập',
+              style: Theme.of(context).textTheme.headlineMedium,
             ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _email,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            const SizedBox(height: 12),
-            DropdownButtonFormField<String>(
-              initialValue: _role,
-              decoration: const InputDecoration(labelText: 'Vai trò'),
-              items: const [
-                DropdownMenuItem(value: 'student', child: Text('Học sinh')),
-                DropdownMenuItem(value: 'teacher', child: Text('Giáo viên')),
-                DropdownMenuItem(value: 'admin', child: Text('Admin')),
+            const SizedBox(height: 16),
+            SegmentedButton<bool>(
+              segments: const [
+                ButtonSegment(value: false, label: Text('Đăng nhập')),
+                ButtonSegment(value: true, label: Text('Đăng ký')),
               ],
-              onChanged: (value) => setState(() => _role = value ?? 'student'),
+              selected: {_register},
+              onSelectionChanged: (value) =>
+                  setState(() => _register = value.first),
             ),
-          ] else
-            TextField(
-              controller: _account,
-              decoration: const InputDecoration(
-                labelText: 'Email hoặc username',
+            const SizedBox(height: 16),
+            if (_register) ...[
+              TextFormField(
+                controller: _username,
+                decoration: const InputDecoration(labelText: 'Username'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Vui lòng nhập username';
+                  if (value.length < 3) return 'Username phải từ 3 ký tự';
+                  return null;
+                },
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _email,
+                decoration: const InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Vui lòng nhập email';
+                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                    return 'Email không hợp lệ';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 12),
+              DropdownButtonFormField<String>(
+                value: _role,
+                decoration: const InputDecoration(labelText: 'Vai trò'),
+                items: const [
+                  DropdownMenuItem(value: 'student', child: Text('Học sinh')),
+                  DropdownMenuItem(value: 'teacher', child: Text('Giáo viên')),
+                  DropdownMenuItem(value: 'admin', child: Text('Admin')),
+                ],
+                onChanged: (value) => setState(() => _role = value ?? 'student'),
+              ),
+            ] else
+              TextFormField(
+                controller: _account,
+                decoration: const InputDecoration(
+                  labelText: 'Email hoặc username',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) return 'Vui lòng nhập tài khoản';
+                  return null;
+                },
+              ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _password,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Mật khẩu'),
+              validator: (value) {
+                if (value == null || value.isEmpty) return 'Vui lòng nhập mật khẩu';
+                if (value.length < 6) return 'Mật khẩu phải từ 6 ký tự';
+                return null;
+              },
+            ),
+            const SizedBox(height: 18),
+            ElevatedButton(
+              onPressed: auth.isLoading ? null : _submit,
+              child: Text(
+                auth.isLoading
+                    ? 'Đang xử lý...'
+                    : (_register ? 'Tạo tài khoản' : 'Đăng nhập'),
               ),
             ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _password,
-            obscureText: true,
-            decoration: const InputDecoration(labelText: 'Mật khẩu'),
-          ),
-          const SizedBox(height: 18),
-          ElevatedButton(
-            onPressed: auth.isLoading ? null : _submit,
-            child: Text(
-              auth.isLoading
-                  ? 'Đang xử lý...'
-                  : (_register ? 'Tạo tài khoản' : 'Đăng nhập'),
-            ),
-          ),
           if (auth.hasError) ...[
             const SizedBox(height: 12),
             Text(
@@ -162,8 +189,9 @@ class _LoginPageState extends ConsumerState<LoginPlaceholderPage> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
 
 class _DemoLoginButton extends StatelessWidget {

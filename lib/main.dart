@@ -1,10 +1,23 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/data/notification_service.dart';
 import 'core/router/router.dart';
 import 'core/theme/app_theme.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Khởi tạo Firebase
+  try {
+    await Firebase.initializeApp();
+    // Khởi tạo Notification Service
+    await NotificationService.instance.init();
+  } catch (e) {
+    debugPrint('Firebase initialization failed: $e');
+  }
+
   runApp(const ProviderScope(child: MemocardApp()));
 }
 

@@ -165,6 +165,17 @@ class MemocardRepository {
     required String role,
   }) async {
     final db = await _db.database;
+
+    // Kiểm tra trùng lặp
+    final existing = await db.query(
+      'users',
+      where: 'username = ? OR email = ?',
+      whereArgs: [username.trim(), email.trim()],
+    );
+    if (existing.isNotEmpty) {
+      throw Exception('Username hoặc Email đã tồn tại');
+    }
+
     final user = AppUser(
       id: _id('user'),
       username: username.trim(),
@@ -207,6 +218,49 @@ class MemocardRepository {
     await db.update(
       'users',
       {'role': role},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  Future<void> updateUserStatus(String userId, String status) async {
+    final db = await _db.database;
+    await db.update(
+      'users',
+      {'status': status},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  Future<void> deleteUser(String userId) async {
+    final db = await _db.database;
+    await db.transaction((txn) async {
+      await txn.delete('users', where: 'id = ?', whereArgs: [userId]);
+      // Cleanup related data if necessary, e.g., learning sessions
+      await txn.delete('learning_sessions', where: 'user_id = ?', whereArgs: [userId]);
+      await txn.delete('quiz_attempts', where: 'user_id = ?', whereArgs: [userId]);
+    });
+  }
+
+  Future<void> updateProfile({
+    required String userId,
+    required String fullName,
+  }) async {
+    final db = await _db.database;
+    await db.update(
+      'users',
+      {'full_name': fullName},
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  Future<void> changePassword(String userId, String newPassword) async {
+    final db = await _db.database;
+    await db.update(
+      'users',
+      {'password': newPassword},
       where: 'id = ?',
       whereArgs: [userId],
     );

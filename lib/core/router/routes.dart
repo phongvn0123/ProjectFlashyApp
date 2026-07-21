@@ -10,4 +10,6 @@ const String kLibraryRoute = '/library';
 const String kClassroomRoute = '/classroom';
 const String kQuizRoute = '/quiz';
 const String kProfileRoute = '/profile';
+const String kEditProfileRoute = '/profile/edit';
+const String kAdminUsersRoute = '/admin/users';
 const String kLoginRoute = '/auth/login';

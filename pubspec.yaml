@@ -49,6 +49,7 @@ dependencies:
   firebase_core: ^4.12.1
   firebase_auth: ^6.5.6
   cloud_firestore: ^6.7.1
+  firebase_messaging: ^16.0.1
 
   # Persistent local storage (MANDATORY per PRM393)
   shared_preferences: ^2.5.5
