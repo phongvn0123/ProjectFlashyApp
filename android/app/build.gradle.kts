@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.prm393.gr6.flashly_app"
+    namespace = "com.memocard.memocard"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,10 +21,13 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.prm393.gr6.flashly_app"
+        applicationId = "com.memocard.memocard"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // Explicit minSdk = 24 (Phase 0 finding): Flutter's MinSdkVersionMigration
+        // silently reverts any value 16-23 back to flutter.minSdkVersion (=24) on
+        // every build, so pin the explicit value here instead of the alias.
+        minSdk = 24
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
