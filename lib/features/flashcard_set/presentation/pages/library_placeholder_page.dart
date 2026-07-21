@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/models/memocard_models.dart';
 import '../../../../core/providers/app_providers.dart';
+import 'flashcard_set_detail_page.dart';
 
 enum LibraryFilter {
   all,
@@ -234,11 +235,10 @@ class _LibraryPlaceholderPageState
                             }
                           },
                           onPressed: () {
-                            // Bước 3 sẽ thay bằng màn chi tiết thật.
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Bạn vừa chọn: ${set.title}',
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => FlashcardSetDetailPage(
+                                  setId: set.id,
                                 ),
                               ),
                             );
