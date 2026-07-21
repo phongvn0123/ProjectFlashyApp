@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class AppUser {
   const AppUser({
     required this.id,
@@ -132,11 +134,13 @@ class Classroom {
 
 class QuizQuestion {
   const QuizQuestion({
+    this.id,
     required this.prompt,
     required this.options,
     required this.correctIndex,
   });
 
+  final String? id;
   final String prompt;
   final List<String> options;
   final int correctIndex;
@@ -194,6 +198,147 @@ class TeacherQuiz {
   );
 }
 
+class StudentAssignedQuiz {
+  const StudentAssignedQuiz({
+    required this.quiz,
+    required this.teacherName,
+    required this.classroomId,
+    required this.classroomName,
+    required this.publishedAt,
+    required this.isCompleted,
+    this.latestScore,
+    this.latestTotal,
+  });
+
+  final TeacherQuiz quiz;
+  final String teacherName;
+  final String classroomId;
+  final String classroomName;
+  final DateTime? publishedAt;
+  final bool isCompleted;
+  final int? latestScore;
+  final int? latestTotal;
+
+  factory StudentAssignedQuiz.fromMap(Map<String, Object?> map) {
+    final publishedAtValue = map['published_at'] as String?;
+    return StudentAssignedQuiz(
+      quiz: TeacherQuiz.fromMap(map),
+      teacherName: (map['teacher_name'] as String?) ?? '',
+      classroomId: map['classroom_id'] as String,
+      classroomName: (map['classroom_name'] as String).replaceAll(',', ', '),
+      publishedAt: publishedAtValue == null
+          ? null
+          : DateTime.tryParse(publishedAtValue),
+      isCompleted: ((map['is_completed'] as int?) ?? 0) == 1,
+      latestScore: map['latest_score'] as int?,
+      latestTotal: map['latest_total'] as int?,
+    );
+  }
+}
+
+class QuizAttemptSession {
+  const QuizAttemptSession({required this.id, required this.startedAt});
+
+  final String id;
+  final DateTime startedAt;
+}
+
+class StudentQuizResult {
+  const StudentQuizResult({
+    required this.studentId,
+    required this.studentName,
+    required this.status,
+    this.attemptId,
+    this.score,
+    this.total,
+    this.submittedAt,
+  });
+
+  final String studentId;
+  final String studentName;
+  final String status;
+  final String? attemptId;
+  final int? score;
+  final int? total;
+  final DateTime? submittedAt;
+
+  double? get scoreOutOfTen {
+    if (score == null || total == null || total == 0) return null;
+    return score! / total! * 10;
+  }
+
+  factory StudentQuizResult.fromMap(Map<String, Object?> map) {
+    final submittedAtValue = map['completed_at'] as String?;
+    return StudentQuizResult(
+      studentId: map['student_id'] as String,
+      studentName: map['student_name'] as String,
+      status: map['attempt_id'] == null ? 'not_started' : 'completed',
+      attemptId: map['attempt_id'] as String?,
+      score: map['score'] as int?,
+      total: map['total'] as int?,
+      submittedAt: submittedAtValue == null
+          ? null
+          : DateTime.tryParse(submittedAtValue),
+    );
+  }
+}
+
+class ClassQuizPerformance {
+  const ClassQuizPerformance({
+    required this.students,
+    required this.assignedCount,
+    required this.completedCount,
+    required this.notStartedCount,
+    required this.averageScore,
+    required this.highestScore,
+    required this.lowestScore,
+  });
+
+  final List<StudentQuizResult> students;
+  final int assignedCount;
+  final int completedCount;
+  final int notStartedCount;
+  final double? averageScore;
+  final double? highestScore;
+  final double? lowestScore;
+}
+
+class QuizAnswerReview {
+  const QuizAnswerReview({
+    required this.prompt,
+    required this.selectedAnswer,
+    required this.correctAnswer,
+    required this.isCorrect,
+    required this.orderIndex,
+  });
+
+  final String prompt;
+  final String? selectedAnswer;
+  final String correctAnswer;
+  final bool isCorrect;
+  final int orderIndex;
+
+  factory QuizAnswerReview.fromMap(Map<String, Object?> map) {
+    final options = _decodeStringList(map['options_json']);
+    final selectedIndex = map['selected_index'] as int?;
+    final correctIndex = (map['correct_index'] as int?) ?? 0;
+    return QuizAnswerReview(
+      prompt: map['prompt'] as String,
+      selectedAnswer:
+          selectedIndex != null &&
+              selectedIndex >= 0 &&
+              selectedIndex < options.length
+          ? options[selectedIndex]
+          : null,
+      correctAnswer: correctIndex >= 0 && correctIndex < options.length
+          ? options[correctIndex]
+          : map['correct_answer'] as String,
+      isCorrect: selectedIndex != null && selectedIndex == correctIndex,
+      orderIndex: (map['order_index'] as int?) ?? 0,
+    );
+  }
+}
+
 class TeacherQuizQuestion {
   const TeacherQuizQuestion({
     required this.id,
@@ -201,6 +346,8 @@ class TeacherQuizQuestion {
     required this.prompt,
     required this.correctAnswer,
     required this.orderIndex,
+    this.options = const [],
+    this.correctIndex = 0,
   });
 
   final String id;
@@ -208,6 +355,8 @@ class TeacherQuizQuestion {
   final String prompt;
   final String correctAnswer;
   final int orderIndex;
+  final List<String> options;
+  final int correctIndex;
 
   Map<String, Object?> toMap() => {
     'id': id,
@@ -215,6 +364,8 @@ class TeacherQuizQuestion {
     'prompt': prompt,
     'correct_answer': correctAnswer,
     'order_index': orderIndex,
+    'options_json': jsonEncode(options),
+    'correct_index': correctIndex,
   };
 
   factory TeacherQuizQuestion.fromMap(Map<String, Object?> map) =>
@@ -224,5 +375,16 @@ class TeacherQuizQuestion {
         prompt: map['prompt'] as String,
         correctAnswer: map['correct_answer'] as String,
         orderIndex: (map['order_index'] as int?) ?? 0,
+        options: _decodeStringList(map['options_json']),
+        correctIndex: (map['correct_index'] as int?) ?? 0,
       );
+}
+
+List<String> _decodeStringList(Object? value) {
+  if (value is! String || value.isEmpty) return const [];
+  try {
+    return (jsonDecode(value) as List<dynamic>).cast<String>();
+  } catch (_) {
+    return const [];
+  }
 }
