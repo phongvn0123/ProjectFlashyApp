@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/memocard_models.dart';
 import '../../../../core/providers/app_providers.dart';
 import 'create_quiz_from_sets_page.dart';
+import 'class_quiz_results_page.dart';
 import 'publish_quiz_page.dart';
+import 'student_quiz_page.dart';
 
 class QuizPlaceholderPage extends ConsumerWidget {
   const QuizPlaceholderPage({super.key});
@@ -22,7 +24,7 @@ class QuizPlaceholderPage extends ConsumerWidget {
     }
     return user.role == 'teacher' || user.role == 'admin'
         ? _TeacherQuizPage(user: user)
-        : _StudentQuizPage(user: user);
+        : StudentQuizPage(user: user);
   }
 }
 
@@ -422,6 +424,17 @@ class _TeacherQuizDetailPage extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              OutlinedButton.icon(
+                onPressed: () =>
+                    Navigator.of(context, rootNavigator: true).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => QuizClassroomsResultsPage(quiz: quiz),
+                      ),
+                    ),
+                icon: const Icon(Icons.analytics_outlined),
+                label: const Text('Xem kết quả lớp'),
+              ),
+              const SizedBox(height: 8),
               FilledButton.icon(
                 onPressed: () async {
                   final updated = await Navigator.of(context).push<bool>(
@@ -842,6 +855,8 @@ class _TeacherQuizEditPageState extends ConsumerState<_TeacherQuizEditPage> {
   }
 }
 
+// Kept temporarily for compatibility with the previous student quiz flow.
+// ignore: unused_element
 class _StudentQuizPage extends ConsumerWidget {
   const _StudentQuizPage({required this.user});
 
