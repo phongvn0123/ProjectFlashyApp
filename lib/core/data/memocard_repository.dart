@@ -352,6 +352,74 @@ class MemocardRepository {
 
     return rows.map(FlashcardSet.fromMap).toList();
   }
+  Future<void> deleteSet(String setId) async {
+    final db = await _db.database;
+
+    await db.transaction((txn) async {
+      await txn.delete(
+        'favorite_flashcard_sets',
+        where: 'set_id = ?',
+        whereArgs: [setId],
+      );
+
+      await txn.delete(
+        'flashcards',
+        where: 'set_id = ?',
+        whereArgs: [setId],
+      );
+
+      await txn.delete(
+        'flashcard_sets',
+        where: 'id = ?',
+        whereArgs: [setId],
+      );
+    });
+  }
+
+  Future<void> updateSet({
+    required String setId,
+    required String title,
+    required String description,
+    required String visibility,
+    required List<(String, String)> cards,
+  }) async {
+    final db = await _db.database;
+
+    await db.transaction((txn) async {
+      // Cập nhật thông tin bộ thẻ.
+      await txn.update(
+        'flashcard_sets',
+        {
+          'title': title.trim(),
+          'description': description.trim(),
+          'visibility': visibility,
+          'card_count': cards.length,
+        },
+        where: 'id = ?',
+        whereArgs: [setId],
+      );
+
+      // Xóa các thẻ cũ.
+      await txn.delete(
+        'flashcards',
+        where: 'set_id = ?',
+        whereArgs: [setId],
+      );
+
+      // Thêm lại danh sách thẻ mới.
+      for (final card in cards) {
+        await txn.insert(
+          'flashcards',
+          Flashcard(
+            id: _id('card'),
+            setId: setId,
+            front: card.$1.trim(),
+            back: card.$2.trim(),
+          ).toMap(),
+        );
+      }
+    });
+  }
   //hetphuoc
 
   Future<List<FlashcardSet>> sets({String query = ''}) async {

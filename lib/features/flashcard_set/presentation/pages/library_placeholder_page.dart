@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/models/memocard_models.dart';
 import '../../../../core/providers/app_providers.dart';
 import 'flashcard_set_detail_page.dart';
+import 'create_flashcard_set_page.dart';
 
 enum LibraryFilter {
   all,
@@ -234,14 +235,21 @@ class _LibraryPlaceholderPageState
                               );
                             }
                           },
-                          onPressed: () {
-                            Navigator.of(context).push(
+                          onPressed: () async {                            final deleted = await Navigator.of(context).push<bool>(
                               MaterialPageRoute(
                                 builder: (_) => FlashcardSetDetailPage(
                                   setId: set.id,
                                 ),
                               ),
                             );
+
+                            if (deleted == true) {
+                              ref.invalidate(setsProvider);
+
+                              if (user != null) {
+                                ref.invalidate(favoriteSetIdsProvider(user.id));
+                              }
+                            }
                           },
                         );
                       },
@@ -269,13 +277,16 @@ class _LibraryPlaceholderPageState
           ),
         ),
         FilledButton.icon(
-          onPressed: () {
-            // Bước 4 sẽ mở màn tạo bộ thẻ.
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Màn tạo bộ thẻ sẽ được thêm ở bước 4'),
+          onPressed: () async {
+            final created = await Navigator.of(context).push<bool>(
+              MaterialPageRoute(
+                builder: (_) => const CreateFlashcardSetPage(),
               ),
             );
+
+            if (created == true) {
+              ref.invalidate(setsProvider);
+            }
           },
           style: FilledButton.styleFrom(
             backgroundColor: const Color(0xFF3C4043),

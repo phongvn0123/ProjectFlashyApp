@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'create_flashcard_set_page.dart';
 import '../../../../core/models/memocard_models.dart';
 import '../../../../core/providers/app_providers.dart';
 
@@ -9,6 +9,41 @@ class FlashcardSetDetailPage extends ConsumerWidget {
     super.key,
     required this.setId,
   });
+
+  Future<bool?> _confirmDelete(
+      BuildContext context,
+      String setTitle,
+      ) {
+    return showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Xóa bộ thẻ?'),
+          content: Text(
+            'Bạn có chắc muốn xóa "$setTitle" không?\n\n'
+                'Toàn bộ thẻ ghi nhớ trong bộ này cũng sẽ bị xóa.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(false);
+              },
+              child: const Text('Hủy'),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(true);
+              },
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.red,
+              ),
+              child: const Text('Xóa'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   final String setId;
 
@@ -104,18 +139,64 @@ class FlashcardSetDetailPage extends ConsumerWidget {
                     ),
                     if (isOwner) ...[
                       const SizedBox(width: 10),
+
                       IconButton.filledTonal(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Màn chỉnh sửa sẽ được thêm sau',
+                        onPressed: cardsAsync.asData == null
+                            ? null
+                            : () async {
+                          final updated = await Navigator.of(context).push<bool>(
+                            MaterialPageRoute(
+                              builder: (_) => CreateFlashcardSetPage(
+                                initialSet: set,
+                                initialCards: cardsAsync.asData!.value,
                               ),
                             ),
                           );
+
+                          if (updated == true) {
+                            ref.invalidate(flashcardSetProvider(setId));
+                            ref.invalidate(cardsProvider(setId));
+                            ref.invalidate(setsProvider);
+                          }
                         },
                         tooltip: 'Chỉnh sửa',
                         icon: const Icon(Icons.edit_outlined),
+                      ),
+
+                      const SizedBox(width: 8),
+
+                      IconButton.filledTonal(
+                        onPressed: () async {
+                          final confirmed = await _confirmDelete(
+                            context,
+                            set.title,
+                          );
+
+                          if (confirmed != true) return;
+
+                          try {
+                            await ref.read(repositoryProvider).deleteSet(set.id);
+
+                            if (!context.mounted) return;
+
+                            Navigator.of(context).pop(true);
+                          } catch (error) {
+                            if (!context.mounted) return;
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Không thể xóa bộ thẻ: $error',
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        tooltip: 'Xóa bộ thẻ',
+                        icon: const Icon(
+                          Icons.delete_outline,
+                          color: Colors.red,
+                        ),
                       ),
                     ],
                   ],
