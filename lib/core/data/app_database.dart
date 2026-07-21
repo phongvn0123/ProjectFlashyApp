@@ -13,7 +13,7 @@ class AppDatabase {
     final path = p.join(await getDatabasesPath(), 'memocard.db');
     _database = await openDatabase(
       path,
-      version: 4,
+      version: 5,
       onCreate: _create,
       onUpgrade: _upgrade,
     );
@@ -77,6 +77,7 @@ class AppDatabase {
         id TEXT PRIMARY KEY,
         teacher_id TEXT NOT NULL,
         name TEXT NOT NULL,
+        description TEXT,
         join_code TEXT NOT NULL UNIQUE,
         is_join_enabled INTEGER NOT NULL,
         server_id TEXT,
@@ -95,6 +96,7 @@ class AppDatabase {
         PRIMARY KEY(class_id, user_id)
       )
     ''');
+    await _createClassroomFeatureTables(db);
     await db.execute('''
       CREATE TABLE quizzes (
         id TEXT PRIMARY KEY,
@@ -201,6 +203,53 @@ class AppDatabase {
         )
       ''');
     }
+    if (oldVersion < 5) {
+      await _addColumnIfMissing(db, 'classrooms', 'description', 'TEXT');
+      await _createClassroomFeatureTables(db);
+    }
+  }
+
+  Future<void> _createClassroomFeatureTables(Database db) async {
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS assigned_sets (
+        id TEXT PRIMARY KEY,
+        class_id TEXT NOT NULL,
+        set_id TEXT NOT NULL,
+        assigned_by_id TEXT NOT NULL,
+        due_at TEXT,
+        created_at TEXT NOT NULL,
+        server_id TEXT,
+        dirty_at TEXT,
+        synced_at TEXT
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS assignment_progress (
+        id TEXT PRIMARY KEY,
+        assigned_set_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'completed',
+        completed_at TEXT,
+        server_id TEXT,
+        dirty_at TEXT,
+        synced_at TEXT,
+        UNIQUE(assigned_set_id, user_id)
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS class_activities (
+        id TEXT PRIMARY KEY,
+        class_id TEXT NOT NULL,
+        user_id TEXT NOT NULL,
+        action TEXT NOT NULL,
+        target_id TEXT,
+        message TEXT,
+        timestamp TEXT NOT NULL,
+        server_id TEXT,
+        dirty_at TEXT,
+        synced_at TEXT
+      )
+    ''');
   }
 
   Future<void> _addColumnIfMissing(

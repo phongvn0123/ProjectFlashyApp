@@ -141,6 +141,7 @@ class MemocardRepository {
         id: 'class_demo_10a1',
         teacherId: 'demo_teacher',
         name: 'Lớp 10A1 - Ghi nhớ thuật ngữ',
+        description: 'Lớp demo học thuật ngữ và từ vựng',
         joinCode: '123456',
         isJoinEnabled: true,
       );
@@ -155,7 +156,77 @@ class MemocardRepository {
         'user_id': 'demo_student',
         'role': 'student',
       });
+
+      final now = DateTime.now();
+      await txn.insert('assigned_sets', {
+        'id': 'assign_demo_ielts',
+        'class_id': classroom.id,
+        'set_id': 'set_ielts_vocab',
+        'assigned_by_id': 'demo_teacher',
+        'due_at': now.add(const Duration(days: 5)).toIso8601String(),
+        'created_at': now.subtract(const Duration(days: 2)).toIso8601String(),
+      });
+      await txn.insert('class_activities', {
+        'id': 'act_demo_1',
+        'class_id': classroom.id,
+        'user_id': 'demo_teacher',
+        'action': 'assign_set',
+        'target_id': 'assign_demo_ielts',
+        'message': "đã giao 'Từ vựng IELTS cơ bản'",
+        'timestamp': now.subtract(const Duration(hours: 2)).toIso8601String(),
+      });
+      await txn.insert('class_activities', {
+        'id': 'act_demo_2',
+        'class_id': classroom.id,
+        'user_id': 'demo_student',
+        'action': 'join',
+        'target_id': null,
+        'message': 'đã tham gia lớp',
+        'timestamp': now.subtract(const Duration(days: 1)).toIso8601String(),
+      });
     });
+  }
+
+  /// Seeds classroom extras when DB already existed before Feature 4 tables.
+  Future<void> ensureClassroomExtras() async {
+    final db = await _db.database;
+    final assigned = await db.query('assigned_sets', limit: 1);
+    if (assigned.isNotEmpty) return;
+    final classRows = await db.query(
+      'classrooms',
+      where: 'id = ?',
+      whereArgs: ['class_demo_10a1'],
+      limit: 1,
+    );
+    if (classRows.isEmpty) return;
+
+    final now = DateTime.now();
+    await db.insert('assigned_sets', {
+      'id': 'assign_demo_ielts',
+      'class_id': 'class_demo_10a1',
+      'set_id': 'set_ielts_vocab',
+      'assigned_by_id': 'demo_teacher',
+      'due_at': now.add(const Duration(days: 5)).toIso8601String(),
+      'created_at': now.subtract(const Duration(days: 2)).toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    await db.insert('class_activities', {
+      'id': 'act_demo_1',
+      'class_id': 'class_demo_10a1',
+      'user_id': 'demo_teacher',
+      'action': 'assign_set',
+      'target_id': 'assign_demo_ielts',
+      'message': "đã giao 'Từ vựng IELTS cơ bản'",
+      'timestamp': now.subtract(const Duration(hours: 2)).toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    await db.insert('class_activities', {
+      'id': 'act_demo_2',
+      'class_id': 'class_demo_10a1',
+      'user_id': 'demo_student',
+      'action': 'join',
+      'target_id': null,
+      'message': 'đã tham gia lớp',
+      'timestamp': now.subtract(const Duration(days: 1)).toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
   Future<AppUser> register({
@@ -303,7 +374,7 @@ class MemocardRepository {
       id: _id('class'),
       teacherId: teacherId,
       name: name.trim(),
-      joinCode: (100000 + Random().nextInt(900000)).toString(),
+      joinCode: await _generateUniqueJoinCode(db),
       isJoinEnabled: true,
     );
     await db.insert('classrooms', classroom.toMap());
@@ -312,11 +383,18 @@ class MemocardRepository {
       'user_id': teacherId,
       'role': 'teacher',
     });
+    await _logActivity(
+      classId: classroom.id,
+      userId: teacherId,
+      action: 'create_class',
+      message: 'đã tạo lớp học',
+    );
     return classroom;
   }
 
   Future<List<Classroom>> classrooms(String userId) async {
     final db = await _db.database;
+    await ensureClassroomExtras();
     final rows = await db.rawQuery(
       '''
       SELECT c.* FROM classrooms c
@@ -327,6 +405,50 @@ class MemocardRepository {
       [userId],
     );
     return rows.map(Classroom.fromMap).toList();
+  }
+
+  Future<Classroom?> classroomById(String classId) async {
+    final db = await _db.database;
+    final rows = await db.query(
+      'classrooms',
+      where: 'id = ?',
+      whereArgs: [classId],
+      limit: 1,
+    );
+    return rows.isEmpty ? null : Classroom.fromMap(rows.first);
+  }
+
+  Future<ClassroomPreview?> previewJoinByCode(String joinCode) async {
+    final db = await _db.database;
+    final rows = await db.query(
+      'classrooms',
+      where: 'join_code = ? AND is_join_enabled = 1',
+      whereArgs: [joinCode.trim()],
+      limit: 1,
+    );
+    if (rows.isEmpty) return null;
+    final classroom = Classroom.fromMap(rows.first);
+    return _previewForClassroom(classroom);
+  }
+
+  Future<ClassroomPreview?> classroomPreview(String classId) async {
+    final classroom = await classroomById(classId);
+    if (classroom == null) return null;
+    return _previewForClassroom(classroom);
+  }
+
+  Future<ClassroomPreview> _previewForClassroom(Classroom classroom) async {
+    final teacher = await userById(classroom.teacherId);
+    final studentCount = await memberCount(classroom.id, role: 'student');
+    final setCount = await assignedSetCount(classroom.id);
+    return ClassroomPreview(
+      classroom: classroom,
+      teacherName: teacher?.fullName.isNotEmpty == true
+          ? teacher!.fullName
+          : (teacher?.username ?? 'Giáo viên'),
+      studentCount: studentCount,
+      setCount: setCount,
+    );
   }
 
   Future<Classroom?> joinClass(String userId, String joinCode) async {
@@ -344,7 +466,443 @@ class MemocardRepository {
       'user_id': userId,
       'role': 'student',
     }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    await _logActivity(
+      classId: classroom.id,
+      userId: userId,
+      action: 'join',
+      message: 'đã tham gia lớp',
+    );
     return classroom;
+  }
+
+  Future<void> updateClass({
+    required String classId,
+    required String name,
+    String description = '',
+  }) async {
+    final db = await _db.database;
+    await db.update(
+      'classrooms',
+      {'name': name.trim(), 'description': description.trim()},
+      where: 'id = ?',
+      whereArgs: [classId],
+    );
+  }
+
+  Future<void> deleteClass(String classId) async {
+    final db = await _db.database;
+    await db.transaction((txn) async {
+      final assigned = await txn.query(
+        'assigned_sets',
+        where: 'class_id = ?',
+        whereArgs: [classId],
+      );
+      for (final row in assigned) {
+        final assignedId = row['id'] as String;
+        await txn.delete(
+          'assignment_progress',
+          where: 'assigned_set_id = ?',
+          whereArgs: [assignedId],
+        );
+      }
+      await txn.delete(
+        'assigned_sets',
+        where: 'class_id = ?',
+        whereArgs: [classId],
+      );
+      await txn.delete(
+        'class_activities',
+        where: 'class_id = ?',
+        whereArgs: [classId],
+      );
+      await txn.delete(
+        'class_members',
+        where: 'class_id = ?',
+        whereArgs: [classId],
+      );
+      await txn.delete('classrooms', where: 'id = ?', whereArgs: [classId]);
+    });
+  }
+
+  Future<String> regenerateJoinCode(String classId) async {
+    final db = await _db.database;
+    final code = await _generateUniqueJoinCode(db);
+    await db.update(
+      'classrooms',
+      {'join_code': code},
+      where: 'id = ?',
+      whereArgs: [classId],
+    );
+    return code;
+  }
+
+  Future<void> setJoinEnabled(String classId, bool enabled) async {
+    final db = await _db.database;
+    await db.update(
+      'classrooms',
+      {'is_join_enabled': enabled ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [classId],
+    );
+  }
+
+  Future<List<ClassMember>> membersOf(String classId) async {
+    final db = await _db.database;
+    final rows = await db.rawQuery(
+      '''
+      SELECT u.id, u.username, u.email, u.full_name, m.role
+      FROM class_members m
+      JOIN users u ON u.id = m.user_id
+      WHERE m.class_id = ?
+      ORDER BY m.role DESC, u.full_name, u.username
+    ''',
+      [classId],
+    );
+    return rows
+        .map(
+          (row) => ClassMember(
+            userId: row['id'] as String,
+            username: row['username'] as String,
+            email: row['email'] as String,
+            fullName: (row['full_name'] as String?) ?? '',
+            role: row['role'] as String,
+          ),
+        )
+        .toList();
+  }
+
+  Future<int> memberCount(String classId, {String? role}) async {
+    final db = await _db.database;
+    if (role == null) {
+      return Sqflite.firstIntValue(
+            await db.rawQuery(
+              'SELECT COUNT(*) FROM class_members WHERE class_id = ?',
+              [classId],
+            ),
+          ) ??
+          0;
+    }
+    return Sqflite.firstIntValue(
+          await db.rawQuery(
+            'SELECT COUNT(*) FROM class_members WHERE class_id = ? AND role = ?',
+            [classId, role],
+          ),
+        ) ??
+        0;
+  }
+
+  Future<void> addMemberByEmail({
+    required String classId,
+    required String email,
+    required String actorId,
+  }) async {
+    final db = await _db.database;
+    final users = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email.trim()],
+      limit: 1,
+    );
+    if (users.isEmpty) {
+      throw Exception('Không tìm thấy người dùng với email này');
+    }
+    final user = AppUser.fromMap(users.first);
+    await db.insert('class_members', {
+      'class_id': classId,
+      'user_id': user.id,
+      'role': 'student',
+    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    await _logActivity(
+      classId: classId,
+      userId: actorId,
+      action: 'add_member',
+      targetId: user.id,
+      message: 'đã thêm ${user.fullName.isNotEmpty ? user.fullName : user.username}',
+    );
+  }
+
+  Future<void> removeMember({
+    required String classId,
+    required String userId,
+    required String actorId,
+  }) async {
+    final db = await _db.database;
+    final classroom = await classroomById(classId);
+    if (classroom != null && classroom.teacherId == userId) {
+      throw Exception('Không thể xóa giáo viên phụ trách lớp');
+    }
+    await db.delete(
+      'class_members',
+      where: 'class_id = ? AND user_id = ?',
+      whereArgs: [classId, userId],
+    );
+    await _logActivity(
+      classId: classId,
+      userId: actorId,
+      action: 'remove_member',
+      targetId: userId,
+      message: 'đã xóa một thành viên khỏi lớp',
+    );
+  }
+
+  Future<void> leaveClass({
+    required String classId,
+    required String userId,
+  }) async {
+    final db = await _db.database;
+    final classroom = await classroomById(classId);
+    if (classroom != null && classroom.teacherId == userId) {
+      throw Exception('Giáo viên không thể rời lớp. Hãy xóa lớp nếu cần.');
+    }
+    await db.delete(
+      'class_members',
+      where: 'class_id = ? AND user_id = ?',
+      whereArgs: [classId, userId],
+    );
+    await _logActivity(
+      classId: classId,
+      userId: userId,
+      action: 'leave',
+      message: 'đã rời lớp',
+    );
+  }
+
+  Future<int> assignedSetCount(String classId) async {
+    final db = await _db.database;
+    return Sqflite.firstIntValue(
+          await db.rawQuery(
+            'SELECT COUNT(*) FROM assigned_sets WHERE class_id = ?',
+            [classId],
+          ),
+        ) ??
+        0;
+  }
+
+  Future<List<AssignedSetItem>> assignedSetsForClass(String classId) async {
+    final db = await _db.database;
+    await ensureClassroomExtras();
+    final studentCount = await memberCount(classId, role: 'student');
+    final rows = await db.rawQuery(
+      '''
+      SELECT a.id, a.class_id, a.set_id, a.assigned_by_id, a.due_at, a.created_at,
+             s.title AS set_title, s.card_count,
+             (SELECT COUNT(*) FROM assignment_progress p
+              WHERE p.assigned_set_id = a.id) AS completed_count
+      FROM assigned_sets a
+      JOIN flashcard_sets s ON s.id = a.set_id
+      WHERE a.class_id = ?
+      ORDER BY a.created_at DESC
+    ''',
+      [classId],
+    );
+    return rows
+        .map(
+          (row) => AssignedSetItem(
+            id: row['id'] as String,
+            classId: row['class_id'] as String,
+            setId: row['set_id'] as String,
+            setTitle: row['set_title'] as String,
+            cardCount: (row['card_count'] as int?) ?? 0,
+            assignedById: row['assigned_by_id'] as String,
+            dueAt: row['due_at'] as String?,
+            createdAt: row['created_at'] as String,
+            completedCount: (row['completed_count'] as int?) ?? 0,
+            studentCount: studentCount,
+          ),
+        )
+        .toList();
+  }
+
+  Future<AssignedSetItem> assignSet({
+    required String classId,
+    required String setId,
+    required String assignedById,
+    DateTime? dueAt,
+  }) async {
+    final db = await _db.database;
+    final setRows = await db.query(
+      'flashcard_sets',
+      where: 'id = ?',
+      whereArgs: [setId],
+      limit: 1,
+    );
+    if (setRows.isEmpty) {
+      throw Exception('Không tìm thấy bộ thẻ');
+    }
+    final set = FlashcardSet.fromMap(setRows.first);
+    final assignedId = _id('assign');
+    final createdAt = DateTime.now().toIso8601String();
+    await db.insert('assigned_sets', {
+      'id': assignedId,
+      'class_id': classId,
+      'set_id': setId,
+      'assigned_by_id': assignedById,
+      'due_at': dueAt?.toIso8601String(),
+      'created_at': createdAt,
+    });
+    await _logActivity(
+      classId: classId,
+      userId: assignedById,
+      action: 'assign_set',
+      targetId: assignedId,
+      message: "đã giao '${set.title}'",
+    );
+    final studentCount = await memberCount(classId, role: 'student');
+    return AssignedSetItem(
+      id: assignedId,
+      classId: classId,
+      setId: setId,
+      setTitle: set.title,
+      cardCount: set.cardCount,
+      assignedById: assignedById,
+      dueAt: dueAt?.toIso8601String(),
+      createdAt: createdAt,
+      completedCount: 0,
+      studentCount: studentCount,
+    );
+  }
+
+  Future<void> unassignSet(String assignedSetId, String actorId) async {
+    final db = await _db.database;
+    final rows = await db.query(
+      'assigned_sets',
+      where: 'id = ?',
+      whereArgs: [assignedSetId],
+      limit: 1,
+    );
+    if (rows.isEmpty) return;
+    final classId = rows.first['class_id'] as String;
+    await db.transaction((txn) async {
+      await txn.delete(
+        'assignment_progress',
+        where: 'assigned_set_id = ?',
+        whereArgs: [assignedSetId],
+      );
+      await txn.delete(
+        'assigned_sets',
+        where: 'id = ?',
+        whereArgs: [assignedSetId],
+      );
+    });
+    await _logActivity(
+      classId: classId,
+      userId: actorId,
+      action: 'unassign_set',
+      targetId: assignedSetId,
+      message: 'đã gỡ một bộ thẻ đã giao',
+    );
+  }
+
+  Future<List<ClassActivity>> activitiesForClass(String classId) async {
+    final db = await _db.database;
+    await ensureClassroomExtras();
+    final rows = await db.rawQuery(
+      '''
+      SELECT a.*, u.full_name, u.username
+      FROM class_activities a
+      JOIN users u ON u.id = a.user_id
+      WHERE a.class_id = ?
+      ORDER BY a.timestamp DESC
+      LIMIT 50
+    ''',
+      [classId],
+    );
+    return rows
+        .map(
+          (row) => ClassActivity(
+            id: row['id'] as String,
+            classId: row['class_id'] as String,
+            userId: row['user_id'] as String,
+            action: row['action'] as String,
+            targetId: row['target_id'] as String?,
+            message: (row['message'] as String?) ?? '',
+            timestamp: row['timestamp'] as String,
+            actorName: ((row['full_name'] as String?)?.isNotEmpty == true)
+                ? row['full_name'] as String
+                : (row['username'] as String? ?? ''),
+          ),
+        )
+        .toList();
+  }
+
+  Future<double> classCompletionRate(String classId) async {
+    final items = await assignedSetsForClass(classId);
+    if (items.isEmpty) return 0;
+    final totalRatio = items.fold<double>(
+      0,
+      (sum, item) => sum + item.progressRatio,
+    );
+    return totalRatio / items.length;
+  }
+
+  Future<String> _generateUniqueJoinCode(Database db) async {
+    final random = Random();
+    for (var i = 0; i < 20; i++) {
+      final code = (100000 + random.nextInt(900000)).toString();
+      final existing = await db.query(
+        'classrooms',
+        where: 'join_code = ?',
+        whereArgs: [code],
+        limit: 1,
+      );
+      if (existing.isEmpty) return code;
+    }
+    return DateTime.now().millisecondsSinceEpoch.toString().substring(7);
+  }
+
+  Future<void> markAssignmentCompleted({
+    required String assignedSetId,
+    required String userId,
+    required String classId,
+  }) async {
+    final db = await _db.database;
+    await db.insert('assignment_progress', {
+      'id': _id('progress'),
+      'assigned_set_id': assignedSetId,
+      'user_id': userId,
+      'status': 'completed',
+      'completed_at': DateTime.now().toIso8601String(),
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
+    await _logActivity(
+      classId: classId,
+      userId: userId,
+      action: 'complete_set',
+      targetId: assignedSetId,
+      message: 'đã hoàn thành một bộ thẻ được giao',
+    );
+  }
+
+  Future<bool> hasCompletedAssignment({
+    required String assignedSetId,
+    required String userId,
+  }) async {
+    final db = await _db.database;
+    final rows = await db.query(
+      'assignment_progress',
+      where: 'assigned_set_id = ? AND user_id = ?',
+      whereArgs: [assignedSetId, userId],
+      limit: 1,
+    );
+    return rows.isNotEmpty;
+  }
+
+  Future<void> _logActivity({
+    required String classId,
+    required String userId,
+    required String action,
+    String? targetId,
+    String message = '',
+  }) async {
+    final db = await _db.database;
+    await db.insert('class_activities', {
+      'id': _id('act'),
+      'class_id': classId,
+      'user_id': userId,
+      'action': action,
+      'target_id': targetId,
+      'message': message,
+      'timestamp': DateTime.now().toIso8601String(),
+    });
   }
 
   Future<List<QuizQuestion>> generateQuiz(String setId) async {

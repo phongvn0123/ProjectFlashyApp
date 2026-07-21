@@ -105,6 +105,7 @@ class Classroom {
     required this.name,
     required this.joinCode,
     required this.isJoinEnabled,
+    this.description = '',
   });
 
   final String id;
@@ -112,11 +113,13 @@ class Classroom {
   final String name;
   final String joinCode;
   final bool isJoinEnabled;
+  final String description;
 
   Map<String, Object?> toMap() => {
     'id': id,
     'teacher_id': teacherId,
     'name': name,
+    'description': description,
     'join_code': joinCode,
     'is_join_enabled': isJoinEnabled ? 1 : 0,
   };
@@ -125,9 +128,124 @@ class Classroom {
     id: map['id'] as String,
     teacherId: map['teacher_id'] as String,
     name: map['name'] as String,
+    description: (map['description'] as String?) ?? '',
     joinCode: map['join_code'] as String,
     isJoinEnabled: ((map['is_join_enabled'] as int?) ?? 1) == 1,
   );
+
+  Classroom copyWith({
+    String? name,
+    String? description,
+    String? joinCode,
+    bool? isJoinEnabled,
+  }) {
+    return Classroom(
+      id: id,
+      teacherId: teacherId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      joinCode: joinCode ?? this.joinCode,
+      isJoinEnabled: isJoinEnabled ?? this.isJoinEnabled,
+    );
+  }
+}
+
+class ClassMember {
+  const ClassMember({
+    required this.userId,
+    required this.username,
+    required this.email,
+    required this.fullName,
+    required this.role,
+  });
+
+  final String userId;
+  final String username;
+  final String email;
+  final String fullName;
+  final String role;
+
+  String get displayName => fullName.isNotEmpty ? fullName : username;
+}
+
+class AssignedSetItem {
+  const AssignedSetItem({
+    required this.id,
+    required this.classId,
+    required this.setId,
+    required this.setTitle,
+    required this.cardCount,
+    required this.assignedById,
+    required this.createdAt,
+    required this.completedCount,
+    required this.studentCount,
+    this.dueAt,
+  });
+
+  final String id;
+  final String classId;
+  final String setId;
+  final String setTitle;
+  final int cardCount;
+  final String assignedById;
+  final String createdAt;
+  final String? dueAt;
+  final int completedCount;
+  final int studentCount;
+
+  double get progressRatio =>
+      studentCount == 0 ? 0 : completedCount / studentCount;
+
+  /// nearing | ongoing | completed
+  String get statusLabel {
+    if (studentCount > 0 && completedCount >= studentCount) {
+      return 'completed';
+    }
+    if (dueAt != null && dueAt!.isNotEmpty) {
+      final due = DateTime.tryParse(dueAt!);
+      if (due != null) {
+        final daysLeft = due.difference(DateTime.now()).inDays;
+        if (daysLeft <= 3) return 'nearing';
+      }
+    }
+    return 'ongoing';
+  }
+}
+
+class ClassActivity {
+  const ClassActivity({
+    required this.id,
+    required this.classId,
+    required this.userId,
+    required this.action,
+    required this.timestamp,
+    required this.actorName,
+    this.targetId,
+    this.message = '',
+  });
+
+  final String id;
+  final String classId;
+  final String userId;
+  final String action;
+  final String? targetId;
+  final String message;
+  final String timestamp;
+  final String actorName;
+}
+
+class ClassroomPreview {
+  const ClassroomPreview({
+    required this.classroom,
+    required this.teacherName,
+    required this.studentCount,
+    required this.setCount,
+  });
+
+  final Classroom classroom;
+  final String teacherName;
+  final int studentCount;
+  final int setCount;
 }
 
 class QuizQuestion {

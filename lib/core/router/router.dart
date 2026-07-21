@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/auth/presentation/pages/login_placeholder_page.dart';
 import '../../features/auth/presentation/pages/profile_placeholder_page.dart';
-import '../../features/classroom/presentation/pages/classroom_placeholder_page.dart';
+import '../../features/classroom/presentation/pages/classroom_page.dart';
 import '../../features/flashcard_set/presentation/pages/library_placeholder_page.dart';
 import '../../features/home/presentation/pages/home_placeholder_page.dart';
 import '../../features/quiz/presentation/pages/quiz_placeholder_page.dart';
@@ -50,7 +50,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: kClassroomRoute,
-                builder: (context, state) => const ClassroomPlaceholderPage(),
+                builder: (context, state) => const ClassroomPage(),
               ),
             ],
           ),
